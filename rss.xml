@@ -1,4 +1,194 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 29 Aug 2020 08:59:10 GMT</lastBuildDate><item><title><![CDATA[GitHub Actions による GatsbyJS 製サイトの自動デプロイ]]></title><description><![CDATA[GatsbyJS is 何 ? WordPress・Contentful 等の各種 CMS、ローカルの Markdown・YAML 等のファイル、API・Database 等をデータソースとして、 GraphQL…]]></description><link>https://ks6088ts.github.io/20200829_hello-gatsby-blog/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200829_hello-gatsby-blog/</guid><pubDate>Fri, 28 Aug 2020 07:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;GatsbyJS is 何 ?&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 25 Sep 2020 05:54:02 GMT</lastBuildDate><item><title><![CDATA[Jetson Nano 入門 ~セットアップ編~]]></title><description><![CDATA[Jetson Nano 入門 Jetson Nano OS セットアップ セットアップ手順の概要はNVIDIA Jetson Nano Developer Kit 事始め の記事が詳しい。 Write Image to the microSD Card も参考にする。 sd…]]></description><link>https://ks6088ts.github.io/20200925_jetson-nano-handson/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200925_jetson-nano-handson/</guid><pubDate>Fri, 25 Sep 2020 07:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Jetson Nano 入門&lt;/h1&gt;
+&lt;h2&gt;Jetson Nano OS セットアップ&lt;/h2&gt;
+&lt;p&gt;セットアップ手順の概要は&lt;a href=&quot;https://note.com/npaka/n/n1abcb5f3f7fe#WzbEC&quot;&gt;NVIDIA Jetson Nano Developer Kit 事始め&lt;/a&gt; の記事が詳しい。&lt;br&gt;
+&lt;a href=&quot;https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#write&quot;&gt;Write Image to the microSD Card&lt;/a&gt; も参考にする。&lt;br&gt;
+sd カードは SD Card Formatter などで事前にフォーマットし、&lt;br&gt;
+balenaEtcher で Jetson nano 向けの JetPack イメージを sd カードに書き込む。&lt;/p&gt;
+&lt;h2&gt;リモート接続&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;ログイン&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# GUI ログインに切り替え&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl set-default graphical.target
+&lt;span class=&quot;token comment&quot;&gt;# CLI ログインに切り替え&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl set-default multi-user.target
+&lt;span class=&quot;token comment&quot;&gt;# ターゲットの確認&lt;/span&gt;
+systemctl get-default
+&lt;span class=&quot;token comment&quot;&gt;# GUI 起動&lt;/span&gt;
+startx&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;VNC&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# xrdp を入れて接続しても　アプリが落ちて接続できない&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# Xfce を入れて接続すると、接続できるが demo の実行が不安定だったり&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# 結局描画が遅いものの安定している VNC を採用。&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# VNC サーバのセットアップ&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# https://qiita.com/iwatake2222/items/a3bd8d0527dec431ef0f&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; update -y
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y tigervnc-common tigervnc-standalone-server tigervnc-scraping-server
+vncpasswd
+&lt;span class=&quot;token comment&quot;&gt;# Would you like to enter a view-only password (y/n)? と聞かれるが、nでよい。&lt;/span&gt;
+x0vncserver -display :0 -passwordfile ~/.vnc/passwd
+&lt;span class=&quot;token comment&quot;&gt;# 別途、X環境を作る場合は、vncserver :1 などにする&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;ディスプレイの解像度調整&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;HDMI をディスプレイに接続していない状態で VNC 接続すると、解像度が 640x480 になってしまうので、&lt;br&gt;
+&lt;a href=&quot;https://forums.developer.nvidia.com/t/jetson-tx1-desktop-sharing-resolution-problem-without-real-monitor/48041/11&quot;&gt;Jetson TX1 Desktop Sharing Resolution Problem Without Real Monitor&lt;/a&gt; を参考に &lt;code class=&quot;language-text&quot;&gt;/etc/X11/xorg.conf&lt;/code&gt; に追記する。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;vi&lt;/span&gt; /etc/X11/xorg.conf
+&lt;span class=&quot;token comment&quot;&gt;# 以下を追記する&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# ---&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# Section &quot;Monitor&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    Identifier &quot;DSI-0&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    Option    &quot;Ignore&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# EndSection&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Section &quot;Screen&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    Identifier    &quot;Default Screen&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    Monitor        &quot;Configured Monitor&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    Device        &quot;Default Device&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    SubSection &quot;Display&quot;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#        Depth    24&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#        Virtual 1280 800&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#    EndSubSection&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# EndSection&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# ---&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;作業環境&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# CUI:&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# SSH で接続&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;user&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;@&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;ip address&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; update -y
+
+&lt;span class=&quot;token comment&quot;&gt;# CUI:&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# VSCode の Remote-SSH 拡張を使う&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# コマンドパレットから Remote-SSH: Connect to Host で接続できる&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# ターミナルは ```ctrl+shift+@``` で起動できる&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# GUI&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# @Mac: Finder から移動&gt;サーバへ接続&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#       vnc://&amp;lt;ip address&gt;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# @Win: VNC Viewer から接続&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;公開鍵認証&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# host PC 側で鍵生成&lt;/span&gt;
+ssh-keygen -t rsa
+
+&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; ~/.ssh/config
+&lt;span class=&quot;token comment&quot;&gt;# Host 192.168.3.15&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#   HostName 192.168.3.15&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#   User ks6088ts&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;#   IdentityFile C:\Users\ks6088ts\.ssh\id_rsa&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# リモートPC の ~/.ssh/authorized_keys に公開鍵を追記&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;設定変更&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;言語設定を日本語にする&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# パッケージのインストール&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y language-pack-ja
+
+&lt;span class=&quot;token comment&quot;&gt;# 言語設定の変更&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; update-locale &lt;span class=&quot;token assign-left variable&quot;&gt;&lt;span class=&quot;token environment constant&quot;&gt;LANG&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;ja_JP.UTF-8 &lt;span class=&quot;token comment&quot;&gt;# 日本語&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; update-locale &lt;span class=&quot;token assign-left variable&quot;&gt;&lt;span class=&quot;token environment constant&quot;&gt;LANG&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;en_US.UTF-8 &lt;span class=&quot;token comment&quot;&gt;# 英語&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;ターミナルの起動&lt;/strong&gt;&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;ctrl+alt+t&lt;/code&gt; で起動できる&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;swap の追加&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# 4G の swap ファイルを作成&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;dd&lt;/span&gt; &lt;span class=&quot;token assign-left variable&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/dev/zero &lt;span class=&quot;token assign-left variable&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;/var/swapfile &lt;span class=&quot;token assign-left variable&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;1G &lt;span class=&quot;token assign-left variable&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# swap ファイルを利用&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;chmod&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;600&lt;/span&gt; /var/swapfile
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mkswap&lt;/span&gt; /var/swapfile
+
+&lt;span class=&quot;token comment&quot;&gt;# 起動時にマウントする&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;vi&lt;/span&gt; /etc/fstab
+&lt;span class=&quot;token comment&quot;&gt;# 以下を追記&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# /var/swapfile none swap swap 0 0&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# swap ファイルを有効化&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;swapon&lt;/span&gt; /var/swapfile
+
+&lt;span class=&quot;token comment&quot;&gt;# swap の確認&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;free&lt;/span&gt; -m
+&lt;span class=&quot;token function&quot;&gt;swapon&lt;/span&gt; -s&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;AC アダプタ利用&lt;/strong&gt;&lt;br&gt;
+J48 ヘッダにジャンパピンを取り付けて microUSB コネクタによる受電を停止させ、&lt;br&gt;
+4-5V 供給電源アダプタを J25 電源ジャックに接続する。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MicroUSB ポート接続&lt;/strong&gt;&lt;br&gt;
+Windows 10 の場合、デバイスドライバのインストールが始まり、インストールが完了するとネットワークが自動的に構成される。&lt;br&gt;
+デフォルトでは &lt;code class=&quot;language-text&quot;&gt;192.168.55.100&lt;/code&gt; が割りあたるが、念のため IP は固定しておく。
+JetsonNano の IP アドレスは &lt;code class=&quot;language-text&quot;&gt;192.168.55.1&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;冷却ファンの取付&lt;/strong&gt;&lt;br&gt;
+5V 2 ピンの角冷却ファンを取り付ける。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# 現在の回転速度を確認(2ピンだと制御線が無いので 0 が返った)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; /sys/devices/pwm-fan/target_pwm
+
+&lt;span class=&quot;token comment&quot;&gt;# 最大速度で回す(0が停止)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sh&lt;/span&gt; -c &lt;span class=&quot;token string&quot;&gt;&apos;echo 255 &gt; /sys/devices/pwm-fan/target_pwm&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# 自動制御&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# https://github.com/Pyrestone/jetson-fan-ctl&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;パワーモード&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# 設定(0: MAXN, 1:5W)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; nvpmodel -m &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# 確認&lt;/span&gt;
+nvpmodel -q --verbose
+
+&lt;span class=&quot;token comment&quot;&gt;# パワーモード設定ファイル&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; /etc/nvpmodel.conf&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;パフォーマンス&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# 動作状況の取得&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; jetson_clocks --show
+
+&lt;span class=&quot;token comment&quot;&gt;# パフォーマンス最大化&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; jetson_clocks
+
+&lt;span class=&quot;token comment&quot;&gt;# 戻す(5W-&gt;MAXN)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; nvpmodel -m &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; nvpmodel -m &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;CPU/GPU 使用率&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;tegrastats --interval &lt;span class=&quot;token number&quot;&gt;3000&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# jetson-stats の導入&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y python-pip
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; -H pip &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; jetson-stats
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; systemctl restart jetson_stats.service
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; jtop
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; jetson_stats stop
+&lt;span class=&quot;token function&quot;&gt;service&lt;/span&gt; jetson_stats status&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;温度&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; /sys/devices/virtual/thermal/thermal_zone*/type &lt;span class=&quot;token comment&quot;&gt;# 温度ゾーン名称&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; /sys/devices/virtual/thermal/thermal_zone*/temp &lt;span class=&quot;token comment&quot;&gt;# 温度&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;WiFi&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;nmcli connection show &lt;span class=&quot;token comment&quot;&gt;# 現在のネットワーク接続状況&lt;/span&gt;
+nmcli device wifi list &lt;span class=&quot;token comment&quot;&gt;# SSID 一覧を列挙&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; nmcli device wifi connect SSID password PASSWORD &lt;span class=&quot;token comment&quot;&gt;# 接続&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;購入機材のまとめ&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;(本) Jetson Nano 超入門&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;入門書をざっと読むと話が早いです。まとまってるし全体を俯瞰しやすかったので、「Jetson Nano 超入門」を買いました(AC アダプタからの電源供給どうやるの？で詰まった)。&lt;br&gt;
+著者のからあげさんはよくブログでも(一方的に)お世話になっているので安心と信頼の品質でした。&lt;br&gt;
+エディタ回りの説明は少しクドイ感はあるものの、セットアップに苦労しなくて済んだので買って間違いないです。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4800712513&amp;linkId=0a3628a342b408eeba9cad6fa96ae284&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;strong&gt;Jetson Nano 本体 開発キット&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.nvidia.com/ja-jp/autonomous-machines/embedded-systems/jetson-nano/&quot;&gt;NVIDIA Jetson Nano&lt;/a&gt; 本体は、スイッチサイエンスや Amazon で購入可能です。Amazon で一気に買い集めると楽でした。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B07T6LYQZ6&amp;linkId=7fe6abd76de5f595618cec21d11e4dad&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;strong&gt;MicroSD カード&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Samsung EVO Plus マイクロ SDHC カードを使っています。&lt;br&gt;
+安いし今のところ問題ありません。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B06XSV23T1&amp;linkId=71a82c051781865b4fa61c76b8304328&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;strong&gt;AC アダプタ&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;MicroUSB でも給電はできますが、安定動作やハイパフォーマンスでの動作のためには必要です。&lt;br&gt;
+Jetson Nano 向けには以下の要件を満たすものを選ぶ必要があります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;出力 4-5V&lt;/li&gt;
+&lt;li&gt;PSE マーク付き&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://3.bp.blogspot.com/-BxCUNq07lFo/TvHQwff9zoI/AAAAAAAAA7w/Q1elU_nRWA8/s1600/centerplus.png&quot;&gt;センタープラスのマーク&lt;/a&gt;付き&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ちょうど良さそうだったのはサクル株式会社の AC アダプター。&lt;br&gt;
+他のブログ等でも紹介されていたし、自分も動作確認できました。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B015RKFAA2&amp;linkId=ec30ca1e18c883944415febce1ecea37&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;strong&gt;アクリルケース &amp;#x26; 冷却ファン&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ボードむき出しでショートしたら嫌なのでアクリルケースを買いました。&lt;br&gt;
+ついでに冷却ファンもついてくるこちらのセットはお得なので買いです。&lt;br&gt;
+組み立て手順は youtube に公式動画(&lt;a href=&quot;https://youtu.be/_IotICwMcMM&quot;&gt;NVIDIA Jetson Nano Case Assembling video&lt;/a&gt;)が上がっていて親切です。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B07VLXHZLF&amp;linkId=cbac1ebaa4d0911c2f9a95b1f66e5b79&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;strong&gt;WiFi USB ドングル&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;有線 LAN は邪魔くさいので PC に MicroUSB で通信して耐えてたんですが、&lt;br&gt;
+Jetson Nano から外部インターネットに出るのに若干設定がめんどくさいということで、結局 WiFi USB ドングルを購入しました。&lt;br&gt;
+安いし他のブログでも紹介されていたので TP-Link の TL-WN725N を買いました。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B008IFXQFU&amp;linkId=a265f32fdc5f3b9188d690a4057a86eb&quot;&gt;&lt;/iframe&gt;</content:encoded></item><item><title><![CDATA[GitHub Actions による GatsbyJS 製サイトの自動デプロイ]]></title><description><![CDATA[GatsbyJS is 何 ? WordPress・Contentful 等の各種 CMS、ローカルの Markdown・YAML 等のファイル、API・Database 等をデータソースとして、 GraphQL…]]></description><link>https://ks6088ts.github.io/20200829_hello-gatsby-blog/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200829_hello-gatsby-blog/</guid><pubDate>Fri, 28 Aug 2020 07:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;GatsbyJS is 何 ?&lt;/h1&gt;
 &lt;p&gt;WordPress・Contentful 等の各種 CMS、ローカルの Markdown・YAML 等のファイル、API・Database 等をデータソースとして、&lt;br&gt;
 GraphQL を通じて統一的に扱う事ができる静的サイトジェネレータです。&lt;br&gt;
 複数のデータソースを扱えることから、既存のブログシステムから GatsbyJS による静的サイトへの乗り換えも容易です。&lt;br&gt;
