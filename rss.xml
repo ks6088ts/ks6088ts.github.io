@@ -1,4 +1,100 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 25 Sep 2020 05:54:02 GMT</lastBuildDate><item><title><![CDATA[Jetson Nano 入門 ~セットアップ編~]]></title><description><![CDATA[Jetson Nano 入門 Jetson Nano OS セットアップ セットアップ手順の概要はNVIDIA Jetson Nano Developer Kit 事始め の記事が詳しい。 Write Image to the microSD Card も参考にする。 sd…]]></description><link>https://ks6088ts.github.io/20200925_jetson-nano-handson/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200925_jetson-nano-handson/</guid><pubDate>Fri, 25 Sep 2020 07:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Jetson Nano 入門&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 03 Oct 2020 08:27:47 GMT</lastBuildDate><item><title><![CDATA[VSCode 入門 ~入門から拡張開発(TypeScript で書いて GitHub Actions で CI を回す)~]]></title><description><![CDATA[本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(プログラマーのためのVisual Studio Codeの教科書)もでていたりで、GitHub Actions で CI…]]></description><link>https://ks6088ts.github.io/20201002_vscode-extension/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201002_vscode-extension/</guid><pubDate>Sat, 03 Oct 2020 18:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。&lt;br&gt;
+特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(&lt;a href=&quot;https://amzn.to/3nglNTO&quot;&gt;プログラマーのためのVisual Studio Codeの教科書&lt;/a&gt;)もでていたりで、GitHub Actions で CI 回しながら TypeScript で開発する環境が簡単にセットアップできた。&lt;br&gt;
+今回実装したコードはこちら。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/ks6088ts/sandbox-vscode-extension&quot;&gt;ks6088ts/sandbox-vscode-extension&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;VSCode 入門&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://itnews.org/news_contents/the-era-of-visual-studio-code&quot;&gt;Visual Studio Code時代の到来&lt;/a&gt; という仰々しい記事を読んで、興味本位で使い始めた。&lt;br&gt;
+まずはただのエディタとしてごくごく普通の使い方で。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【キーボードショートカットは覚えろ】&lt;/strong&gt;&lt;br&gt;
+しばらくして、よく使うキーボードショートカットは覚えておくと良いと思った。&lt;br&gt;
+日頃開発しててだるいと思ったときが覚えるべき時。&lt;br&gt;
+&lt;a href=&quot;https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-reference&quot;&gt;Keyboard Shortcuts Reference&lt;/a&gt;に各 OS ごとのチートシートがまとまっている。&lt;br&gt;
+大抵のショートカットは他のエディタと似たようなものだが、あえて挙げると以下のコマンドをよく使うので覚えた(キー入力は Mac のもの)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Show Command Palette: &lt;code class=&quot;language-text&quot;&gt;cmd+shift+p&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Show Extensions: &lt;code class=&quot;language-text&quot;&gt;cmd+shift+x&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;User Settings: &lt;code class=&quot;language-text&quot;&gt;cmd+,&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;【コマンドパレットを使え】&lt;/strong&gt;&lt;br&gt;
+少し作業をしてみると判るが、覚えることを減らしたい場合、&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;コマンドパレット開く-&amp;gt; テキストボックスに入力する&lt;/code&gt;という単純作業で大抵のことはインクリメンタルに見つけることができる。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【拡張機能を使い倒せ】&lt;/strong&gt;&lt;br&gt;
+インストールする拡張機能としては、自分が普段使う言語の拡張パッケージだったり、&lt;br&gt;
+Docker や Git 関連の基礎的な開発ツール支援の機能を入れた。  &lt;/p&gt;
+&lt;p&gt;導入することのメリットは、以下の通り。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;インテリセンスが効くので入力スピード・精度が上がる&lt;/li&gt;
+&lt;li&gt;間違っているところは VSCode が怒ってくれるのでデバッグ効率がよくなる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;また、自分が不慣れな言語であってもインテリセンス頼りに開発して、しばらくすると習得することができ、いわば補助輪的役割も果たしてくれる。  &lt;/p&gt;
+&lt;p&gt;インストールは GUI ベースでもできるがとてもだるいので、&lt;code class=&quot;language-text&quot;&gt;code --install-extension &amp;lt;extension&amp;gt;&lt;/code&gt; で CUI インストールが楽。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【設定を管理しろ】&lt;/strong&gt;&lt;br&gt;
+VSCode 全体の設定やインストールする拡張機能などを端末をまたいで共有するため、&lt;a href=&quot;https://twitter.com/code/status/1293976193260085248&quot;&gt;公式が Setting Sync の機能をリリースした&lt;/a&gt;ので、クラウド側で管理することが可能になった。&lt;br&gt;
+一方で、機能に振り回されること無く開発環境を構築できるようにしておきたかったため、自分はスクリプト化してバージョン管理する原始的なアプローチもとっている。&lt;br&gt;
+&lt;a href=&quot;https://karaage.hatenadiary.jp/entry/2019/02/27/073000&quot;&gt;VS CodeをGitHubとスクリプト使って半自動で楽々セットアップ&lt;/a&gt; を参考に、以下のようにワンライナーでお手軽にインストールしている。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;curl&lt;/span&gt; -s https://raw.githubusercontent.com/ks6088ts/dotfiles/master/scripts/install-vscode-extensions.sh &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; /bin/bash&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;VSCode 拡張を作ってみる&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;【scaffold を使え】&lt;/strong&gt;&lt;br&gt;
+いわゆる Get Started 的なドキュメントは公式の &lt;a href=&quot;https://code.visualstudio.com/api/get-started/your-first-extension&quot;&gt;Your First Extension&lt;/a&gt; にまとまっている。&lt;br&gt;
+JavaScript の開発は不慣れなので公式がクオリティの高い scaffold を用意してくれているのは助かる。&lt;br&gt;
+開発元が MS だから当然なのかもしれないが TypeScript のサポートもある。  &lt;/p&gt;
+&lt;p&gt;公式ドキュメントを参考に、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;npm&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -g yo generator-code
+yo code
+&lt;span class=&quot;token comment&quot;&gt;# TypeScript を選択&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;でひな形は作成できた。&lt;br&gt;
+実用上は拡張機能にユーザが設定値を差し込めるようにするなどの細かい部分も知りたいし、&lt;br&gt;
+ネットの記事だけだとどうしても網羅性が低くなってしまうため書籍をいくつか読んでみたところ、&lt;br&gt;
+&lt;a href=&quot;https://amzn.to/3nglNTO&quot;&gt;プログラマーのためのVisual Studio Codeの教科書 (Compass Booksシリーズ)&lt;/a&gt; が最も参考になったため購入した。  &lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B087Q2P56J&amp;linkId=c0cdcb609b15a1a0cc5b0eae0eed1db3&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;この本では拡張機能の開発だけでなく、GitHub Actions で CI を回す方法まで記載されていた。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【GitHub Actions で CI 回すのに嵌った】&lt;/strong&gt;&lt;br&gt;
+Windows/Mac/Ubuntu といつものように回そうとした際、以下のエラーを吐いて&lt;a href=&quot;https://github.com/ks6088ts/sandbox-vscode-extension/runs/1196859391?check_suite_focus=true#step:5:33&quot;&gt;Ubuntu のテストで失敗&lt;/a&gt;した。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;npm run test
+
+&amp;gt; sandbox-vscode-extension@0.0.1 pretest /home/runner/work/sandbox-vscode-extension/sandbox-vscode-extension
+&amp;gt; npm run compile &amp;amp;&amp;amp; npm run lint
+
+
+&amp;gt; sandbox-vscode-extension@0.0.1 compile /home/runner/work/sandbox-vscode-extension/sandbox-vscode-extension
+&amp;gt; tsc -p ./
+
+
+&amp;gt; sandbox-vscode-extension@0.0.1 lint /home/runner/work/sandbox-vscode-extension/sandbox-vscode-extension
+&amp;gt; eslint src --ext ts
+
+
+&amp;gt; sandbox-vscode-extension@0.0.1 test /home/runner/work/sandbox-vscode-extension/sandbox-vscode-extension
+&amp;gt; node ./out/test/runTest.js
+
+Downloading VS Code 1.49.2 from https://update.code.visualstudio.com/1.49.2/linux-x64/stable
+Downloaded VS Code 1.49.2 into .vscode-test/vscode-1.49.2
+/dev/fd/3: No such file or directory
+
+Server response: 
+
+
+Failed to run tests
+Exit code:   null
+Done
+
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! sandbox-vscode-extension@0.0.1 test: `node ./out/test/runTest.js`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the sandbox-vscode-extension@0.0.1 test script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/runner/.npm/_logs/2020-10-02T03_03_09_885Z-debug.log
+make: *** [test] Error 1
+Makefile:14: recipe for target &amp;#39;test&amp;#39; failed
+Error: Process completed with exit code 2.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;どうやら Ubuntu のような GUI を持たない環境では VSCode 拡張のテストが正しく実行できないらしく、&lt;br&gt;
+書籍のコード(&lt;a href=&quot;https://github.com/vscode-textbook/vscode-extension-ci/blob/master/.github/workflows/vscode.yml&quot;&gt;vscode-extension-ci/.github/workflows/vscode.yml&lt;/a&gt;) を参考に、Ubuntu 環境でのみ XVfb を起動することで解決した。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Jetson Nano 入門 ~セットアップ編~]]></title><description><![CDATA[Jetson Nano 入門 Jetson Nano OS セットアップ セットアップ手順の概要はNVIDIA Jetson Nano Developer Kit 事始め の記事が詳しい。 Write Image to the microSD Card も参考にする。 sd…]]></description><link>https://ks6088ts.github.io/20200925_jetson-nano-handson/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200925_jetson-nano-handson/</guid><pubDate>Fri, 25 Sep 2020 07:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Jetson Nano 入門&lt;/h1&gt;
 &lt;h2&gt;Jetson Nano OS セットアップ&lt;/h2&gt;
 &lt;p&gt;セットアップ手順の概要は&lt;a href=&quot;https://note.com/npaka/n/n1abcb5f3f7fe#WzbEC&quot;&gt;NVIDIA Jetson Nano Developer Kit 事始め&lt;/a&gt; の記事が詳しい。&lt;br&gt;
 &lt;a href=&quot;https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit#write&quot;&gt;Write Image to the microSD Card&lt;/a&gt; も参考にする。&lt;br&gt;
