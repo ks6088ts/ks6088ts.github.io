@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 03 Oct 2020 08:27:47 GMT</lastBuildDate><item><title><![CDATA[VSCode 入門 ~入門から拡張開発(TypeScript で書いて GitHub Actions で CI を回す)~]]></title><description><![CDATA[本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(プログラマーのためのVisual Studio Codeの教科書)もでていたりで、GitHub Actions で CI…]]></description><link>https://ks6088ts.github.io/20201002_vscode-extension/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201002_vscode-extension/</guid><pubDate>Sat, 03 Oct 2020 18:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。&lt;br&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 06 Oct 2020 23:23:13 GMT</lastBuildDate><item><title><![CDATA[VSCode 入門 ~入門から拡張開発(TypeScript で書いて GitHub Actions で CI を回す)~]]></title><description><![CDATA[本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(プログラマーのためのVisual Studio Codeの教科書)もでていたりで、GitHub Actions で CI…]]></description><link>https://ks6088ts.github.io/20201002_vscode-extension/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201002_vscode-extension/</guid><pubDate>Sat, 03 Oct 2020 18:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。&lt;br&gt;
 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(&lt;a href=&quot;https://amzn.to/3nglNTO&quot;&gt;プログラマーのためのVisual Studio Codeの教科書&lt;/a&gt;)もでていたりで、GitHub Actions で CI 回しながら TypeScript で開発する環境が簡単にセットアップできた。&lt;br&gt;
 今回実装したコードはこちら。&lt;/p&gt;
 &lt;ul&gt;
@@ -375,5 +375,735 @@ GoogleAnalytics や PWA対応や多言語対応用のプラグインなど、&lt
 &lt;h2&gt;参考サイト&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;GitHub Actions の適用事例として &lt;a href=&quot;https://github.com/tokyo-metropolitan-gov/covid19/tree/development/.github/workflows&quot;&gt;tokyo-metropolitan-gov/covid19&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/peaceiris/items/d401f2e5724fdcb0759d&quot;&gt;GitHub Actions による GitHub Pages への自動デプロイ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[機械学習の学習 @ kaggle]]></title><description><![CDATA[機械学習の学習に着手した。 立ち読みレベルで巷にあふれる Python + 機械学習なテーマの本を立ち読みしたものの内容が浅く、コードも実用性に乏しいのが多かった。 結局、下手に市販の参考書を買うことはせず、いきなり Kaggle の Notebook…]]></description><link>https://ks6088ts.github.io/20200417-ml-with-python/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200417-ml-with-python/</guid><pubDate>Fri, 17 Apr 2020 12:00:00 GMT</pubDate><content:encoded>&lt;p&gt;機械学習の学習に着手した。&lt;br&gt;
+立ち読みレベルで巷にあふれる Python + 機械学習なテーマの本を立ち読みしたものの内容が浅く、コードも実用性に乏しいのが多かった。&lt;br&gt;
+結局、下手に市販の参考書を買うことはせず、いきなり Kaggle の Notebook を漁るスタイルに落ち着く。&lt;br&gt;
+雑に、 Kaggle の Notebook で votes 順 &amp;#x26; Language == Python でソートして上から読んだだけだが。&lt;br&gt;
+データサイエンティストの作業が追体験でき、超速で機械学習のノリ(背景の理論ではなく、表層のコーディング)がつかめるのでとても良かった。&lt;br&gt;
+コードも良さげなものについてはスニペットとして吸収しておく。  &lt;/p&gt;
+&lt;p&gt;いろいろと厳密ではないが、個人的には機械学習 == “多次元の特徴量を含んだ入力を、それが属するクラス(あるいは値)に射影する関数 f を求めること” と解釈。&lt;br&gt;
+データの分布、特性によって関数の選び方にノウハウが有るので、特徴量エンジニアリングだったりモデルの選定だったり、の知識が必要になってくる。  &lt;/p&gt;
+&lt;p&gt;流行りの深層学習は特徴量エンジニアリング不要！みたいなノリだが、重厚なニューラルネットで学習に時間がかかる。&lt;br&gt;
+hyper parameter の最適化をしようことなら計算いつ終わるのレベル。&lt;br&gt;
+今の所実務には使いづらそうだなーという印象だが、TensorFlow とその周辺のツール群(TensorFlow Serving, TensorBoard 等々)が充実しているので、そのうち言ってることが変わるかもしれない。  &lt;/p&gt;
+&lt;p&gt;深層学習の文脈で言う、ニューラルネットワークの学習は誤差逆伝播法が背景に有り、出力から入力へ微分値を計算して重みの変更する方向(コスト関数が減少する方向)を求める。&lt;br&gt;
+なぜこのような計算をするかの直感的な説明は、&lt;a href=&quot;https://amzn.to/34KhGXB&quot;&gt;ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装&lt;/a&gt;が詳しい。合成関数の微分を絡めつつ説明するとなんとなく腑に落ちる。あくまでなんとなく。  &lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4873117585&amp;linkId=c8bf4872907dff32504a9a2cf51f72b0&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;実務への適用を考えたとき、実は Deep Learning よりも Kaggle でよく使われている手法(XGBoost, Lightgbm など)は抑えておくべき。&lt;br&gt;
+決定木、ブースティング、アンサンブル手法なんかは、地味に実用性に富んでいて、結果も解釈しやすいことから今後お世話になりそう。&lt;/p&gt;</content:encoded></item><item><title><![CDATA[機械学習コードベースとインフラの構築]]></title><description><![CDATA[機械学習案件をスムーズに進めるために、コードベースとインフラの構築を行った。 ソースコードはこちら。 https://github.com/ks6088ts/ml-python Docker コンテナ上に Jupyter Notebook サーバを構築 クライアント PC…]]></description><link>https://ks6088ts.github.io/20200415-ml-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200415-ml-get-started/</guid><pubDate>Wed, 15 Apr 2020 12:00:00 GMT</pubDate><content:encoded>&lt;p&gt;機械学習案件をスムーズに進めるために、コードベースとインフラの構築を行った。&lt;br&gt;
+ソースコードはこちら。&lt;br&gt;
+&lt;a href=&quot;https://github.com/ks6088ts/ml-python&quot;&gt;https://github.com/ks6088ts/ml-python&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;Docker コンテナ上に Jupyter Notebook サーバを構築&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;クライアント PC にライブラリ群をインストールする必要がない&lt;/li&gt;
+&lt;li&gt;環境構築が容易&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;というメリットから、Docker コンテナ上に Jupyter Notebook サーバを構築することにした。&lt;br&gt;
+これにより、ブラウザから Python スクリプトをインタラクティブに実行できるようになった。  &lt;/p&gt;
+&lt;h1&gt;コードベース&lt;/h1&gt;
+&lt;p&gt;Jupyter Notebook は作業ログとしては有用だが、自動化には向いていない。&lt;br&gt;
+諸々自動化したいのでスクリプトに落とし込む。&lt;br&gt;
+データI/O・前処理・モデル生成・学習処理・評価等、各フェーズをモジュール分割しておき、&lt;br&gt;
+メインスクリプトからはその関数群を呼び出す構成にしたい。&lt;br&gt;
+この際、各モジュールは差し替え可能にしておくことで、&lt;br&gt;
+例えば csv から DB サーバに変わったとなればデータ I/O モジュールを書き換え、&lt;br&gt;
+学習モデルを変更する場合はモデル生成のみを差し替え、&lt;br&gt;
+といった感じに柔軟に作業ができるようになるはず。&lt;br&gt;
+設計は随時改善されそうなので、案件ごとにディレクトリを掘って別管理するものとし、無理な抽象化は避ける。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Docker コンテナ上に C++ 開発環境構築]]></title><description><![CDATA[C++ 開発環境を Mac 上に構築する必要が出てきたのでその作業ログをまとめる。   Docker コンテナ上に C++ 開発環境をセットアップする プライベートでメインの PC は Mac だが、開発環境をポータブルにしておきたいので、 ubuntu 18.0…]]></description><link>https://ks6088ts.github.io/20200413-cmake/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200413-cmake/</guid><pubDate>Mon, 13 Apr 2020 12:00:00 GMT</pubDate><content:encoded>&lt;p&gt;C++ 開発環境を Mac 上に構築する必要が出てきたのでその作業ログをまとめる。  &lt;/p&gt;
+&lt;h1&gt;Docker コンテナ上に C++ 開発環境をセットアップする&lt;/h1&gt;
+&lt;p&gt;プライベートでメインの PC は Mac だが、開発環境をポータブルにしておきたいので、&lt;br&gt;
+ubuntu 18.04 の Docker コンテナ上で作業できるように環境を整える。&lt;br&gt;
+といっても、下記の通り Dockerfile に下記コマンドを追加してインストールするだけ。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Install the Clang compiler&lt;/span&gt;
+RUN &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; -y &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    clang &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    clang-format &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    cmake&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;docker-compose で起動させてターミナル上で作業したいので、&lt;br&gt;
+docker-compose.yml のサービスに &lt;code class=&quot;language-text&quot;&gt;tty: true&lt;/code&gt; を追記。&lt;br&gt;
+あとは &lt;code class=&quot;language-text&quot;&gt;docker-compose run --rm &amp;lt;service&amp;gt;&lt;/code&gt; でターミナルに入れる。  &lt;/p&gt;
+&lt;p&gt;参考: &lt;a href=&quot;https://devblogs.microsoft.com/cppblog/c-development-with-docker-containers-in-visual-studio-code/&quot;&gt;C++ development with Docker containers in Visual Studio Code&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;cmake の入門&lt;/h1&gt;
+&lt;p&gt;次は cmake のビルド方法を理解する。&lt;br&gt;
+スクラッチで環境を作ったことがなかったのでまずは基礎から。&lt;br&gt;
+基本的には以下の 2 つの記事を Docker コンテナ上でなぞっただけでそれなりに分かった気になる。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/shohirose/items/45fb49c6b429e8b204ac&quot;&gt;CMakeの使い方（その１）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/shohirose/items/637f4b712893764a7ec1&quot;&gt;CMakeの使い方（その２）&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これでヘッダ、ライブラリ、アプリを分けたコードを cmake でビルドできるようになる。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;OpenCV のビルド&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;少し欲がでてきたので、OSS ライブラリのビルドにもチャレンジしてみた。&lt;br&gt;
+以下の流れで OpenCV をソースからビルド。&lt;br&gt;
+ビルドに必要なモジュール群はインストールされているものとする。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ソースコードを clone&lt;/span&gt;
+ghq get https://github.com/opencv/opencv.git
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; opencv
+
+&lt;span class=&quot;token comment&quot;&gt;# out-of-source ビルド&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; build
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; build
+cmake -D &lt;span class=&quot;token assign-left variable&quot;&gt;CMAKE_INSTALL_PREFIX&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token environment constant&quot;&gt;$HOME&lt;/span&gt;/local/opencv32 -D &lt;span class=&quot;token assign-left variable&quot;&gt;BUILD_EXAMPLES&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;ON -D &lt;span class=&quot;token assign-left variable&quot;&gt;WITH_IPP&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;OFF -D &lt;span class=&quot;token assign-left variable&quot;&gt;BUILD_PYTHON_SUPPORT&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;ON ./opencv-3.2.0 &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# ビルド&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; -j4&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;マシンリソースが貧弱なせいか、めっちゃ時間かかったので途中でやめて brew で OpenCV を入れた。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;brew install opencv
+brew list --versions | grep opencv
+&amp;gt; opencv 4.2.0_3&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;OpenCV アプリをビルド&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;気を取り直して今度は OpenCV を利用するアプリを cmake でビルドしてみる。
+ビルド方法は簡単で、CMakeLists.txt で OpenCV パッケージを走査してリンクするコードを追加すればよい。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;find_package(OpenCV REQUIRED)  
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable(opencv opencv.cpp)
+target_link_libraries(opencv ${OpenCV_LIBS})&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;アプリにリンクするだけであれば上記で問題なかった。&lt;br&gt;
+実際開発するとなるど、VS Code で実装することになりそうだが、&lt;br&gt;
+インテリセンスが効かなくて一瞬困ったものの、&lt;br&gt;
+エディタに表示された黄色い電球マークを押して、
+Include Path を設定するように選択すると、c&lt;em&gt;cpp&lt;/em&gt;properties.json が開いて勝手に設定してくれた。&lt;br&gt;
+エディタのこういう小回りの効く機能、地味にありがたい。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Device Orientation API でセンサー入力を取得する]]></title><description><![CDATA[An Introduction to the Device Orientation API を参考に、 スマホのセンサデータを収集するシステムを構築してみる。 記事によると Device Orientation API を使えば Web…]]></description><link>https://ks6088ts.github.io/20200409-typescript-deviceorientation/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200409-typescript-deviceorientation/</guid><pubDate>Fri, 10 Apr 2020 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://code.tutsplus.com/tutorials/an-introduction-to-the-device-orientation-api--cms-21067&quot;&gt;An Introduction to the Device Orientation API&lt;/a&gt; を参考に、&lt;br&gt;
+スマホのセンサデータを収集するシステムを構築してみる。&lt;br&gt;
+記事によると Device Orientation API を使えば Web アプリからデバイスのセンサー入力を取得することができる様子。  &lt;/p&gt;
+&lt;h1&gt;フロントエンド&lt;/h1&gt;
+&lt;p&gt;Web ブラウザからセンサデータを収集するための Web アプリを TypeScript で実装する。&lt;br&gt;
+デバッグの際、デバイスのセンサー入力を PC のブラウザからエミュレーションするため、&lt;br&gt;
+Chrome Dev Tools の Sensors 機能を使った。&lt;br&gt;
+Sensors の Orientation タブを Custom Orientation に変更して、&lt;br&gt;
+表示される端末をマウスドラッグで変更すると device orientation event が発行されて、デバッグできた。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://developers.google.com/web/tools/chrome-devtools/device-mode/orientation&quot;&gt;Simulate Device Orientation With Chrome DevTools&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;取得したデータは json に変換して axios 等の HTTP POST リクエストを飛ばしてサーバに収集する。  &lt;/p&gt;
+&lt;h1&gt;サーバ&lt;/h1&gt;
+&lt;p&gt;POST リクエストを受けて保存するだけの簡素なサーバを構築する。&lt;br&gt;
+ここではサーバを Go 言語(gin) で立てた。&lt;br&gt;
+受けた json データの保存方法はどうすべきか。。&lt;br&gt;
+InfluxDB に入れて Grafana で可視化できるとよいのだが、これは未実装。  &lt;/p&gt;
+&lt;h1&gt;Device Orientation API は非推奨 API&lt;/h1&gt;
+&lt;p&gt;Android スマホの Chrome では動作確認できたが、&lt;br&gt;
+iPad, iPhone では動作確認できなかった。&lt;br&gt;
+どうやらセンサデータはブラウザからデフォルトでは取れなくする変更が最近あった様子。  &lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.apple.com/documentation/safari_release_notes/safari_12_1_release_notes&quot;&gt;Added Motion &amp;#x26; Orientation settings on iOS to enable the DeviceMotionEvent and DeviceOrientationEvent events.&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Unity でネイティブアプリ書いたほうがいいのかな。。&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ゼロからの Unity]]></title><description><![CDATA[Unity に今更ながら入門した。 Web 上に良質な記事を見つけたので 2 時間ほどで基礎はキャッチアップできた。 C…]]></description><link>https://ks6088ts.github.io/20200410-unity-sensor/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200410-unity-sensor/</guid><pubDate>Fri, 10 Apr 2020 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Unity に今更ながら入門した。&lt;br&gt;
+Web 上に良質な記事を見つけたので 2 時間ほどで基礎はキャッチアップできた。&lt;br&gt;
+C# スクリプトの実装に関してはドキュメントを見れば判るし、あとはそれをどのオブジェクトにどうアタッチするかを軽く考えればやりたいことはできるようになりそう。  &lt;/p&gt;
+&lt;h1&gt;Unity 学習フロー&lt;/h1&gt;
+&lt;p&gt;Unity に一切触ったことがない状態からのスタート。&lt;br&gt;
+自分がやった作業としては、&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Mac 上に &lt;a href=&quot;https://store.unity.com/ja/products/unity-personal&quot;&gt;Unity Personal&lt;/a&gt; (無料版) をインストール&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/nmxi/items/7950fb12ef925efa276d&quot;&gt;今日からはじめるUnity&lt;/a&gt; をなぞる&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;ぐらいで、ブロック崩しまでは Unity で動かせるようになった。&lt;br&gt;
+Unity って GUI 操作結構多くなるので GIF アニメで解説あってとても助かる。&lt;br&gt;
+そしてその操作方法を知っているだけで大分作業効率に差が出る。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[［書評］ドメイン駆動設計入門 ボトムアップでわかる! ドメイン駆動設計の基本]]></title><description><![CDATA[Amazon レビューの高い「ドメイン駆動設計入門 ボトムアップでわかる! ドメイン駆動設計の基本」を読んだ。   書評 個々の用語を一つ一つ丁寧に簡単な C…]]></description><link>https://ks6088ts.github.io/20200406-ddd-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200406-ddd-get-started/</guid><pubDate>Mon, 06 Apr 2020 16:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Amazon レビューの高い「ドメイン駆動設計入門 ボトムアップでわかる! ドメイン駆動設計の基本」を読んだ。  &lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=479815072X&amp;linkId=7f1ce67532e7c34eea8a4c062547b91e&quot;&gt;&lt;/iframe&gt;
+&lt;h1&gt;書評&lt;/h1&gt;
+&lt;p&gt;個々の用語を一つ一つ丁寧に簡単な C# コードを交えて説明を進めるスタイル。&lt;br&gt;
+タイトルにある通りボトムアップでドメイン駆動設計を構成する個々の概念を理解して、&lt;br&gt;
+最終的にはドメイン駆動設計の実践のための武器が揃う、という感じ。&lt;br&gt;
+コードに落としこむとどうなのか、なぜそう実装するのか、パターンに違反して実装すると何が苦しいのかが噛み砕いて説明されていた。&lt;br&gt;
+抽象的な言葉を具体的なコードで例示されるため、抽象的な概念を理解するためのハードルが下げられ、&lt;br&gt;
+具体と抽象を行ったり来たりして理解度を上げていける良書。&lt;br&gt;
+読了時点では、ドメイン駆動設計のベースとなる用語の概念がコードレベルで想像できるようになる。  &lt;/p&gt;
+&lt;p&gt;何れにせよインプットだけしてもスキルにはならんので、今後のシステム開発においてドメイン駆動設計を意識した設計を適用していこうと思う。  &lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;以下、学んだことのノート。&lt;/p&gt;
+&lt;h1&gt;ドメイン駆動設計とは&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;ソフトウェア開発におけるドメイン&lt;/strong&gt; とは、「プログラムを適用する対象となる領域」のこと。&lt;br&gt;
+&lt;strong&gt;ドメインモデル&lt;/strong&gt; はドメインの事象・概念を抽象化してえられたモデル。
+&lt;strong&gt;ドメインオブジェクト&lt;/strong&gt; とは、ドメインモデルをソフトウェアで動作するモジュールとして表現したもの。&lt;/p&gt;
+&lt;p&gt;ドメイン駆動設計の目的は、「知識をコードへ落とし込む」こと。言い換えると、ソフトウェアの利用者を取り巻く世界について知り、実装に結びつけること。&lt;br&gt;
+イメージとしては、ドメインの概念・ドメインモデル・ドメインオブジェクトがお互いに影響し合い、イテレーティブに開発していくようなイメージ。&lt;/p&gt;
+&lt;h1&gt;ドメイン駆動設計のパターン&lt;/h1&gt;
+&lt;h2&gt;ドメイン知識を表現するためのパターン&lt;/h2&gt;
+&lt;h3&gt;値オブジェクト&lt;/h3&gt;
+&lt;p&gt;システム固有の値を表現するために定義されたオブジェクト。&lt;br&gt;
+不変・交換可能・等価性によって比較される。&lt;br&gt;
+値オブジェクトにする基準としては、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ルールが存在しているか&lt;/li&gt;
+&lt;li&gt;単体で取り扱いたいか&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;値オブジェクトを採用するモチベーションは、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;コードのドキュメント性を高める&lt;/li&gt;
+&lt;li&gt;値のバリデーション&lt;/li&gt;
+&lt;li&gt;誤った代入を防ぐ&lt;/li&gt;
+&lt;li&gt;ロジックの散在を防ぐ&lt;/li&gt;
+&lt;li&gt;ドメインにおける変更をコードに伝えやすくする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ドメインには様々なルールが有り、システムの仕様はドキュメントにまとめられるが、&lt;br&gt;
+コードの表現力を増して饒舌なコードにできるのであればそれに越したことはない。  &lt;/p&gt;
+&lt;h3&gt;エンティティ&lt;/h3&gt;
+&lt;p&gt;ドメインモデルを実装したドメインオブジェクト。&lt;br&gt;
+値オブジェクトとの違いは、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ライフサイクルがある&lt;/li&gt;
+&lt;li&gt;可変である&lt;/li&gt;
+&lt;li&gt;同じ属性であっても区別される&lt;/li&gt;
+&lt;li&gt;同一性により区別される&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;ドメインサービス&lt;/h3&gt;
+&lt;p&gt;値オブジェクトやエンティティに記述すると不自然になる振る舞いを解決するオブジェクト。&lt;br&gt;
+(ユーザ名の重複等)
+自身の振る舞いを変更するような状態を持たないオブジェクト。&lt;br&gt;
+すべての振る舞いはやろうと思えばドメインサービスに移設できるが、&lt;br&gt;
+濫用するとデータと振る舞いが断絶され、ロジックの点在を促進してしまうため、&lt;br&gt;
+可能な限りドメインサービスは利用してはいけない。&lt;/p&gt;
+&lt;h3&gt;集約&lt;/h3&gt;
+&lt;p&gt;データを変更するための単位として扱われるオブジェクトの集まり。&lt;/p&gt;
+&lt;h3&gt;仕様&lt;/h3&gt;
+&lt;p&gt;複雑な手順が必要となる評価を行うオブジェクト。&lt;br&gt;
+単純なものであればメソッドとして定義すればよいが、複雑な評価処理は&lt;/p&gt;
+&lt;h2&gt;アプリケーションを表現するためのパターン&lt;/h2&gt;
+&lt;h3&gt;リポジトリ&lt;/h3&gt;
+&lt;p&gt;ドメインオブジェクトの永続化や再構築を責務とするオブジェクト。&lt;br&gt;
+インタフェース(抽象型)で定義され、データにまつわる処理を分離する。&lt;br&gt;
+ロジックが特定のインフラストラクチャ技術に依存しないようにすることで、&lt;br&gt;
+データストアの差し替えが容易になり、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;開発初期にデータストアが決まっていなくてもインメモリのリポジトリを利用できる&lt;/li&gt;
+&lt;li&gt;モック利用のテストを導入しやすくなる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;アプリケーションサービス&lt;/h3&gt;
+&lt;p&gt;利用者のユースケースを実現するためにドメインオブジェクトを操作するオブジェクト。
+アプリケーション固有の振る舞いが定義されるサービスであり、&lt;br&gt;
+ドメインのルールは記述されないようにする。&lt;br&gt;
+一般にサービスは自身の振る舞いを変更するような状態を持たない。&lt;br&gt;
+状態がもたらす複雑さは混乱の元なので、アプリケーションサービスは直接的にサービスの振る舞いを変化させる状態を持たないように意識すること。&lt;/p&gt;
+&lt;h3&gt;ファクトリ&lt;/h3&gt;
+&lt;p&gt;複雑なオブジェクトの生成処理に関わる知識をまとめたオブジェクト。
+ロジックの意図を明確にしながら柔軟性を確保するために用いる。&lt;/p&gt;
+&lt;h1&gt;アーキテクチャ&lt;/h1&gt;
+&lt;p&gt;ドメイン駆動設計と同時に語られることの多いアーキテクチャは下記の通り。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;レイヤードアーキテクチャ&lt;/li&gt;
+&lt;li&gt;ヘキサゴナルアーキテクチャ&lt;/li&gt;
+&lt;li&gt;クリーンアーキテクチャ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;理解度がまだ浅いため自分の言葉に落とし込めていない。&lt;br&gt;
+実践を通して理解度を高めていく予定。&lt;/p&gt;
+&lt;h1&gt;次はエリック・エヴァンスのドメイン駆動設計に挑戦&lt;/h1&gt;
+&lt;p&gt;実は、数年前にドメイン駆動設計に興味を持って、原典とされる「エリック・エヴァンスのドメイン駆動設計」をパラパラ読んだ。&lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B00GRKD6XU&amp;linkId=f4cb4a3bf9d339fa1ee637531c60fba4&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;色々と聞き慣れない用語(ユビキタス言語、ドメインサービス、リポジトリ、エンティティ、etc) が出てきて、眠くなってしまい積ん読。&lt;br&gt;
+抽象的な概念がいきなりドバっと出てくる印象で、経験豊富なエンジニアであれば理解できるのであろうが、当時は全く何を言っているのか理解できなかった。&lt;br&gt;
+以降ドメイン駆動設計に触れることがなかったのだが、業務で少しづつそれっぽいワードが飛び交うのを聞いて、そろそろ勉強しないとなと思い立ったため、再度ドメイン駆動設計の理解にチャレンジした経緯がある。　　&lt;/p&gt;
+&lt;p&gt;少し知識を得た今、あらためて振り返るとドメイン駆動設計を学ぶべきタイミングは、「システムを長期的に運用したい」というモチベーションが強くなったときだと思った。&lt;br&gt;
+プログラミングを学びだした直後は、動作することが快感で、とにかく実装して動かすこと(それ自体は悪くないが)が最優先の課題になってしまっていて、長期的に安定して運用できる柔軟なシステムの価値が理解しづらいのだと思う。  &lt;/p&gt;
+&lt;p&gt;ドメイン駆動設計の入門レベルの知識がついた今、「エリック・エヴァンスのドメイン駆動設計」をパラパラ読むと、&lt;br&gt;
+ものすごい良書であることがわかってきた。&lt;br&gt;
+読了したらブログに残そうと思う。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[［gRPC 入門］Go 言語で gRPC サーバを実装して Docker コンテナにマルチステージビルドしてデプロイする]]></title><description><![CDATA[ks6088ts/sandbox-grpc-go に本記事に関連するコードを置いた。 gRPC 基礎 gRPC とは   Protocol Buffers を使ってデータをシリアライズし、
+HTTP/2の上に定義されたRPC…]]></description><link>https://ks6088ts.github.io/20200406-grpc-go/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200406-grpc-go/</guid><pubDate>Mon, 06 Apr 2020 13:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://github.com/ks6088ts/sandbox-grpc-go&quot;&gt;ks6088ts/sandbox-grpc-go&lt;/a&gt; に本記事に関連するコードを置いた。&lt;/p&gt;
+&lt;h1&gt;gRPC 基礎&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;gRPC とは&lt;/strong&gt;  &lt;/p&gt;
+&lt;p&gt;Protocol Buffers を使ってデータをシリアライズし、
+HTTP/2の上に定義されたRPCのための規格。&lt;br&gt;
+高速な通信を実現できる点が特長。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://grpc.io/docs/guides/&quot;&gt;What is gRPC?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;https://grpc.io/img/landing-2.svg&quot; alt=&quot;What is gRPC?&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Protocol Buffers とは&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;データの通信・永続化のためのシリアライズフォーマット。&lt;br&gt;
+プロセス内部の簡素なデータ構造をシリアライズするためにスキーマ定義用のドメイン固有言語があり、&lt;br&gt;
+「protoファイル」で構造化データを定義し、コンパイルすることで各言語のコードが生成される。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://developers.google.com/protocol-buffers&quot;&gt;Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Go 言語で実装してみる&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://grpc.io/docs/quickstart/&quot;&gt;Quick Start&lt;/a&gt; に各言語向けの入門ドキュメントがある。&lt;br&gt;
+ここでは &lt;a href=&quot;https://grpc.io/docs/quickstart/go/&quot;&gt;Go Quick Start&lt;/a&gt; を参考に、Go で簡単なサーバ・クライアントを実装してみる。  &lt;/p&gt;
+&lt;h2&gt;セットアップ&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# protoc のインストールを GNU Make のコマンドとして定義&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# ref. http://google.github.io/proto-lens/installing-protoc.html&lt;/span&gt;
+PROTOC_VERSION ?&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3.7&lt;/span&gt;.1
+PROTOC_ZIP ?&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; protoc-&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;PROTOC_VERSION&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;-linux-x86_64.zip
+.PHONY: install-protoc
+install-protoc:
+	@hash protoc &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; /dev/null &lt;span class=&quot;token operator&quot;&gt;&lt;span class=&quot;token file-descriptor important&quot;&gt;2&lt;/span&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token file-descriptor important&quot;&gt;&amp;amp;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$$&lt;/span&gt;? -ne &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+		&lt;span class=&quot;token function&quot;&gt;curl&lt;/span&gt; -OL https://github.com/protocolbuffers/protobuf/releases/download/v&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;PROTOC_VERSION&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;/&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;PROTOC_ZIP&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+		&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt; -o &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;PROTOC_ZIP&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt; -d /usr/local bin/protoc&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+		&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt; -o &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;PROTOC_ZIP&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt; -d /usr/local &lt;span class=&quot;token string&quot;&gt;&apos;include/*&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+		&lt;span class=&quot;token function&quot;&gt;rm&lt;/span&gt; -f &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;PROTOC_ZIP&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+	&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;続けて go 向けのモジュール群をインストールする。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# gRPC のインストール&lt;/span&gt;
+go get -u google.golang.org/grpc
+
+&lt;span class=&quot;token comment&quot;&gt;# protoc の go サポート&lt;/span&gt;
+go get -u github.com/golang/protobuf/protoc-gen-go&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これで Go 言語で gRPC サーバ・クライアントの開発環境ができた。&lt;/p&gt;
+&lt;h2&gt;実装&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/grpc/grpc-go/tree/master/examples&quot;&gt;grpc-go/examples&lt;/a&gt; をベースとして、サーバ・クライアントを実装する。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;proto ファイルから gRPC 向けのコードを生成する&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;proto ファイルで定義されたサービスを実装するための Go 言語のコードを生成する。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;protoc -I helloworld/ helloworld/helloworld.proto --go_out&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;plugins&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;grpc:helloworld&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;生成された *.pb.go を利用してサーバ・クライアントを実装する。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;grpcurl&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;REST API だと curl で CLI から任意のリクエスト発行が容易なのだが、gRPC ってそういうの無いのか？という疑問から OSS が無いか調査したところ、やはりそういうものは既にあった。&lt;br&gt;
+&lt;a href=&quot;https://github.com/fullstorydev/grpcurl&quot;&gt;grpcurl&lt;/a&gt; とかいうやつで、以下の README の説明(抜粋)からして curl っぽく使えそうな印象。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;なお、 grpcurl を利用するためには gRPC サーバ側のリフレクション機能を有効にする必要がある。&lt;br&gt;
+有効でない場合に grpcurl でリクエスト発行すると、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Error invoking method &amp;quot;helloworld.Greeter/SayHello&amp;quot;: failed to query for service descriptor &amp;quot;helloworld.Greeter&amp;quot;: server does not support the reflection API&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;と言われて確かに使えない。&lt;br&gt;
+サーバのリフレクション機能とは何かというと、&lt;a href=&quot;https://github.com/grpc/grpc-go/blob/master/Documentation/server-reflection-tutorial.md&quot;&gt;gRPC Server Reflection Tutorial&lt;/a&gt; にあるように、&lt;br&gt;
+公開アクセス可能なサーバ上のサービスに関する情報を提供する機能のことで、&lt;br&gt;
+これによりクライアントが gRPC リクエストをランタイムで構築できるようになる。  &lt;/p&gt;
+&lt;p&gt;grpcurl の使い方としては、&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;gRPC サーバのリフレクション機能を有効にする
+&lt;code class=&quot;language-text&quot;&gt;import &amp;quot;google.golang.org/grpc/reflection&amp;quot;&lt;/code&gt; して &lt;code class=&quot;language-text&quot;&gt;reflection.Register(server)&lt;/code&gt; する&lt;/li&gt;
+&lt;li&gt;grpcurl コマンドを発行&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;grpcurl -plaintext -d &lt;span class=&quot;token string&quot;&gt;&apos;{ &quot;name&quot;: &quot;helloworld&quot; }&apos;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+		localhost:50051 helloworld.Greeter/SayHello
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&quot;message&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Hello helloworld&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;という感じに利用できた。  &lt;/p&gt;
+&lt;h1&gt;Docker 環境で実行&lt;/h1&gt;
+&lt;p&gt;せっかく Go で書いてシングルバイナリ化できたので、Docker コンテナに乗せてみたくなった。&lt;br&gt;
+コンテナに載せる際の常識も合わせて抑える。&lt;/p&gt;
+&lt;h2&gt;プロダクション向けに Deploy&lt;/h2&gt;
+&lt;p&gt;プロダクション向けビルドでは生成するバイナリは最適化しておくべし。&lt;br&gt;
+&lt;a href=&quot;https://www.pixelstech.net/article/1576288399-GoLang-to-build-smaller-executable-file&quot;&gt;GoLang to build smaller executable file&lt;/a&gt; によると&lt;/p&gt;
+&lt;h3&gt;プロダクション環境向けビルド&lt;/h3&gt;
+&lt;p&gt;プロダクション環境で不要な情報をバイナリから削除するため、&lt;code class=&quot;language-text&quot;&gt;go build&lt;/code&gt; 時に &lt;code class=&quot;language-text&quot;&gt;-ldflags=&amp;quot;-s -w&amp;quot;&lt;/code&gt; をオプション指定する。&lt;br&gt;
+これにより、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;シンボルテーブル・デバッグ情報を削除(-s)&lt;/li&gt;
+&lt;li&gt;DWARF 情報を削除(-w)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;され、バイナリサイズが小さくなる。&lt;br&gt;
+不要なメモリを食わなくなるし、コンテナの起動も早くなるので常にやっておきたい。&lt;/p&gt;
+&lt;h3&gt;upx でバイナリ圧縮&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;upx &amp;lt;bin_name&amp;gt;&lt;/code&gt; でサイズ圧縮。&lt;/p&gt;
+&lt;h2&gt;マルチステージビルド&lt;/h2&gt;
+&lt;p&gt;go のアプリケーションをビルドするために必要な環境と、&lt;br&gt;
+生成されたバイナリを実行するために必要な環境は異なる。&lt;br&gt;
+前者はツールをいくつかインストールする必要があり、イメージサイズはいくらか大きくなり、&lt;br&gt;
+コンテナ内でできることが多くなりセキュリティリスクが上がる。&lt;br&gt;
+バイナリを実行するだけであれば最小限の機能をもったイメージ上に、生成されたバイナリを置くだけにしたい。  &lt;/p&gt;
+&lt;p&gt;そんな要望を叶えるため、Docker 17.05 またはそれ以上の Docker デーモンおよび Docker クライアントにおいて、マルチステージビルドがサポートされた。&lt;br&gt;
+以下ような形で、golang:1.14.1-alpine3.11 コンテナでビルドされたバイナリを、alpine:3.11.5 にデプロイした Docker イメージを生成することができる。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;dockerfile&quot;&gt;&lt;pre class=&quot;language-dockerfile&quot;&gt;&lt;code class=&quot;language-dockerfile&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;FROM&lt;/span&gt; golang&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;1.14.1&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;alpine3.11 AS build
+
+&lt;span class=&quot;token keyword&quot;&gt;WORKDIR&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;GOPATH&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;/src/github.com/ks6088ts/sandbox&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;grpc&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;go
+&lt;span class=&quot;token keyword&quot;&gt;ADD&lt;/span&gt; . .
+&lt;span class=&quot;token keyword&quot;&gt;RUN&lt;/span&gt; go build \
+    &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;ldflags=&lt;span class=&quot;token string&quot;&gt;&quot;-s -w&quot;&lt;/span&gt; \
+    &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;o /outputs/cli \
+    $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;GOPATH&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;/src/github.com/ks6088ts/sandbox&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;grpc&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;go
+&lt;span class=&quot;token comment&quot;&gt;# TODO: upx の圧縮&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# ---&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;FROM&lt;/span&gt; alpine&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;3.11.5
+&lt;span class=&quot;token keyword&quot;&gt;WORKDIR&lt;/span&gt; /app
+&lt;span class=&quot;token keyword&quot;&gt;COPY&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;from=build /outputs/cli .
+&lt;span class=&quot;token keyword&quot;&gt;CMD&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;./cli --help&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[React + TypeScript で実装したアプリを GitHub Actions で GitHub Pages にデプロイ]]></title><description><![CDATA[React:Getting Started を読み、ある程度関数コンポーネントを作って React に慣れてきた。 そろそろ TypeScript も導入したくなったので、ここでは React に TypeScript 導入した際の作業ログをまとめてみる。 ESLint…]]></description><link>https://ks6088ts.github.io/20200406-typescript-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200406-typescript-get-started/</guid><pubDate>Mon, 06 Apr 2020 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://reactjs.org/docs/getting-started.html&quot;&gt;React:Getting Started&lt;/a&gt; を読み、ある程度関数コンポーネントを作って React に慣れてきた。&lt;br&gt;
+そろそろ TypeScript も導入したくなったので、ここでは React に TypeScript 導入した際の作業ログをまとめてみる。&lt;br&gt;
+ESLint や GitHub Actions での CI など、生産性を向上させられそうなものも合わせて記述する。&lt;/p&gt;
+&lt;h1&gt;Create React App で雛形を生成&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://create-react-app.dev/docs/adding-typescript/&quot;&gt;Adding TypeScript&lt;/a&gt; を参考に Create React App を使って以下のコマンドで TypeScript 利用のプロジェクトを生成する。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;npx create-react-app sandbox-react-ts --template typescript&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;ESLint の導入&lt;/h1&gt;
+&lt;p&gt;eslint を導入する。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# eslint をインストール&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; eslint --dev
+
+&lt;span class=&quot;token comment&quot;&gt;# .eslintrc を生成&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; run eslint --init
+
+&lt;span class=&quot;token comment&quot;&gt;# 一旦 npm でインストールしたが、&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# yarn.lock に反映させる&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;GitHub Actions で CI を回す&lt;/h1&gt;
+&lt;p&gt;package.json に lint コマンドを定義し、GitHub Actions に設定ファイルを追加する。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commit: &lt;a href=&quot;https://github.com/ks6088ts/sandbox-react-ts/commit/cc759fc477f13006298bf69a530bbbf3961f938a&quot;&gt;https://github.com/ks6088ts/sandbox-react-ts/commit/cc759fc477f13006298bf69a530bbbf3961f938a&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;GitHub Pages に Deploy する&lt;/h1&gt;
+&lt;p&gt;GitHub Actions を使って develop ブランチに push されたら master ブランチにビルド成果物を push するようにする。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commit: &lt;a href=&quot;https://github.com/ks6088ts/sandbox-react-ts/commit/efa055ac63938c97a3cbd3fb6bf6cfda62462891&quot;&gt;https://github.com/ks6088ts/sandbox-react-ts/commit/efa055ac63938c97a3cbd3fb6bf6cfda62462891&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;React コンポーネントを TypeScript で実装する&lt;/h1&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;typescript&quot;&gt;&lt;pre class=&quot;language-typescript&quot;&gt;&lt;code class=&quot;language-typescript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; React &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;react&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Props&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    foo&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; Example&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; React&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;FunctionComponent&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;Props&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;props&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; foo &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; props&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;div&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;foo&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;div&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;default&lt;/span&gt; Example&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;React 自体そんなに触ったことが無いが、いきなり TypeScript で実装している。&lt;br&gt;
+型定義があるのでエディタのインテリセンスが効くし、開発体験は JavaScript のそれに比べると大分良い。  &lt;/p&gt;
+&lt;p&gt;上記コードは&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;React モジュールをインポートして、&lt;/li&gt;
+&lt;li&gt;props の型定義をして、&lt;/li&gt;
+&lt;li&gt;その型の変数を引数とした FunctionComponent を実装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;といった感じ。&lt;br&gt;
+フロントエンドは時代とともに変化も早いため、小手先のベストプラクティスがすぐに時代遅れになる印象がある。&lt;br&gt;
+根本を理解することは前提としつつ「走りながら学ぶ」スタイルで開発する考え。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commit: &lt;a href=&quot;https://github.com/ks6088ts/sandbox-react-ts/commit/fed1e27694f7d45067d5aee12d6ab4acb6120f8c&quot;&gt;https://github.com/ks6088ts/sandbox-react-ts/commit/fed1e27694f7d45067d5aee12d6ab4acb6120f8c&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;axios + TypeScript で HTTP GET&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;yarn add axios&lt;/code&gt; でインストールしたのち、下記コードでレスポンスの型指定をしつつ HTTP GET。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;typescript&quot;&gt;&lt;pre class=&quot;language-typescript&quot;&gt;&lt;code class=&quot;language-typescript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Response&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    pong&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;
+
+axios&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;Response&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;response&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// handle success&lt;/span&gt;
+    &lt;span class=&quot;token builtin&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;response&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;error&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// handle error&lt;/span&gt;
+    &lt;span class=&quot;token builtin&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;error&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// always executed&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;TypeScript を利用することでレスポンスの型が指定でき、コンパイル時点でエラーが判るため、開発効率が向上するはず。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commit: &lt;a href=&quot;https://github.com/ks6088ts/sandbox-react-ts/commit/2bc7b9346f407626b8024ec609c207ce3b792b96&quot;&gt;https://github.com/ks6088ts/sandbox-react-ts/commit/2bc7b9346f407626b8024ec609c207ce3b792b96&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref. &lt;a href=&quot;https://hi1280.hatenablog.com/entry/2018/12/05/201004&quot;&gt;TypeScriptでWebAPIを実行する&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;TypeScriptのためのESLintとPrettierの併用設定&lt;/h1&gt;
+&lt;p&gt;コードフォーマットは ESLint だけで良いと思っていたが、インデントや改行等の挙動に寄与しないコードの見た目がきれいにならないので prettier を導入することにした。&lt;br&gt;
+まともに入れると ESLint と Prettier のフォーマッタが競合することがあるため、ESLint の設定ファイルを工夫する必要がある。&lt;br&gt;
+このあたりは時代とともに移り変わりそうなので、&lt;a href=&quot;https://qiita.com/y-w/items/dcf5fb4af52e990109eb#typescript%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AEeslint%E3%81%A8prettier%E3%81%AE%E4%BD%B5%E7%94%A8%E8%A8%AD%E5%AE%9A&quot;&gt;[初心者向け]TypeScript用にESLintとPrettierを導入する&lt;/a&gt; を参考に適用した。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commit: &lt;a href=&quot;https://github.com/ks6088ts/sandbox-react-ts/commit/f5f18a962e3f98ec2105d87d5be0c40b34a513da&quot;&gt;https://github.com/ks6088ts/sandbox-react-ts/commit/f5f18a962e3f98ec2105d87d5be0c40b34a513da&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[［Go 言語入門］言語の特徴と学習リソース]]></title><description><![CDATA[Go 言語の特徴 静的型付け: コンパイル時エラー検出、静的解析 並行プログラミング: goルーチン, chan によるデータやり取り 周辺ツール: go build / go test / go doc / gofmt, goimports / go vet, golint…]]></description><link>https://ks6088ts.github.io/20200403-get-started-golang/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200403-get-started-golang/</guid><pubDate>Fri, 03 Apr 2020 11:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Go 言語の特徴&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;静的型付け: コンパイル時エラー検出、静的解析&lt;/li&gt;
+&lt;li&gt;並行プログラミング: goルーチン, chan によるデータやり取り&lt;/li&gt;
+&lt;li&gt;周辺ツール: go build / go test / go doc / gofmt, goimports / go vet, golint&lt;/li&gt;
+&lt;li&gt;シングルバイナリ・クロスコンパイル: 環境変数 GOOS, GOARCH。動作環境を用意する必要がない&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;利用事例&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;OSS: Docker, Kubernetes, gVisor&lt;/li&gt;
+&lt;li&gt;CLI: peco, ghq, Hugo&lt;/li&gt;
+&lt;li&gt;IoT: gobot, &lt;/li&gt;
+&lt;li&gt;サーバ: gRPC&lt;/li&gt;
+&lt;li&gt;ツール: &lt;a href=&quot;https://github.com/reviewdog/reviewdog&quot;&gt;reviewdog&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;学習リソース&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://tour.golang.org&quot;&gt;A Tour of Go&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;書籍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4621300253&amp;linkId=77b14453f1e9528700c56666c02b41e0&quot;&gt;&lt;/iframe&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4297107279&amp;linkId=fddbb8a70f3dd276b79345a0185f587e&quot;&gt;&lt;/iframe&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4908686033&amp;linkId=4ba37ea38ccbe7e22f02b92fc40cb82f&quot;&gt;&lt;/iframe&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4873118468&amp;linkId=08160f09f988703f602e20ec25ba33e6&quot;&gt;&lt;/iframe&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;記事&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://golang.org/doc/effective_go.html&quot;&gt;Effective Go&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;コミュニティ&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://invite.slack.golangbridge.org/&quot;&gt;Gophers Slack&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;参考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://tech.mercari.com/entry/2020/03/17/120137&quot;&gt;「プログラミング言語Go完全入門」の期間限定公開のお知らせ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[［Go 言語入門］ cobra で Slack API を叩く CLI ツールを実装してみた]]></title><description><![CDATA[これまで使い捨ての社内ツールは「慣れているから」という理由ですべて Python…]]></description><link>https://ks6088ts.github.io/20200403-slack-cli-go/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200403-slack-cli-go/</guid><pubDate>Fri, 03 Apr 2020 09:00:00 GMT</pubDate><content:encoded>&lt;p&gt;これまで使い捨ての社内ツールは「慣れているから」という理由ですべて Python で実装してきた。&lt;br&gt;
+しかしながら、実行環境のセットアップが必要になり、他の人に環境を共有するのが困難で、属人化しがちなデメリットが顕在化してきた。&lt;br&gt;
+今回これらの悩みを解決するため、 &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;マルチプラットフォーム対応が容易&lt;/li&gt;
+&lt;li&gt;シングルバイナリでデプロイが容易&lt;/li&gt;
+&lt;li&gt;OSS が充実していてツールの実装コストが低い&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;な特徴を持つ Go 言語を採用し、社内ツールを置き換えることを目指して勉強してみる。&lt;br&gt;
+ソースコード一式は &lt;a href=&quot;https://github.com/ks6088ts/slack-client-go&quot;&gt;ks6088ts/slack-client-go&lt;/a&gt; にある。 &lt;/p&gt;
+&lt;h1&gt;Go Modules 入門&lt;/h1&gt;
+&lt;p&gt;Go 言語の依存モジュール管理方法として dep を使っていたが、&lt;br&gt;
+&lt;a href=&quot;https://blog.golang.org/using-go-modules&quot;&gt;The Go Blog / Using Go Modules&lt;/a&gt; によると、&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Starting in Go 1.13, module mode will be the default for all development.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;とあり、Go 1.13 からは Go modules がデフォルトになるとのこと。&lt;br&gt;
+使い方は &lt;a href=&quot;https://blog.mmmcorp.co.jp/blog/2019/10/10/go-mod/&quot;&gt;2019-10-10 Go言語の依存モジュール管理ツール Modules の使い方&lt;/a&gt; を参考に、下記の作業作業ログにある通り使用開始できた。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Go のバージョンを確認&lt;/span&gt;
+$ go version
+go version go1.13.5 windows/amd64
+
+&lt;span class=&quot;token comment&quot;&gt;# go.mod ファイルを生成&lt;/span&gt;
+$ go mod init
+go: creating new go.mod: module github.com/ks6088ts/slack-client-go
+
+&lt;span class=&quot;token comment&quot;&gt;# 適当なアプリケーションを実装&lt;/span&gt;
+$ &lt;span class=&quot;token function&quot;&gt;vi&lt;/span&gt; main.go
+
+&lt;span class=&quot;token comment&quot;&gt;# コードを確認&lt;/span&gt;
+$ &lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; main.go
+package main
+
+&lt;span class=&quot;token function&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;token string&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+
+        &lt;span class=&quot;token string&quot;&gt;&quot;github.com/slack-go/slack&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+func &lt;span class=&quot;token function-name function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        api :&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; slack.New&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;YOUR_TOKEN_HERE&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        // If you &lt;span class=&quot;token builtin class-name&quot;&gt;set&lt;/span&gt; debugging, it will log all requests to the console
+        // Useful when encountering issues
+        // slack.New&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;YOUR_TOKEN_HERE&quot;&lt;/span&gt;, slack.OptionDebug&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;true&lt;span class=&quot;token punctuation&quot;&gt;))&lt;/span&gt;
+        groups, err :&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; api.GetGroups&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;false&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; err &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; nil &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                fmt.Printf&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;%s&lt;span class=&quot;token entity&quot; title=&quot;\n&quot;&gt;\n&lt;/span&gt;&quot;&lt;/span&gt;, err&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token builtin class-name&quot;&gt;return&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; _, group :&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; range &lt;span class=&quot;token function&quot;&gt;groups&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                fmt.Printf&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ID: %s, Name: %s&lt;span class=&quot;token entity&quot; title=&quot;\n&quot;&gt;\n&lt;/span&gt;&quot;&lt;/span&gt;, group.ID, group.Name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# go build で依存モジュールを自動インストール&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# go.mod に記載された依存モジュールの情報が更新される&lt;/span&gt;
+$ go build
+
+&lt;span class=&quot;token comment&quot;&gt;# go list -m all で、現在の依存モジュールを表示&lt;/span&gt;
+$ go list -m all
+go: finding github.com/go-test/deep v1.0.4
+go: finding github.com/nlopes/slack v0.6.0
+github.com/ks6088ts/slack-client-go
+github.com/davecgh/go-spew v1.1.1
+github.com/go-test/deep v1.0.4
+github.com/gorilla/websocket v1.2.0
+github.com/nlopes/slack v0.6.0
+github.com/pkg/errors v0.8.0
+github.com/pmezard/go-difflib v1.0.0
+github.com/slack-go/slack v0.6.3
+github.com/stretchr/testify v1.2.2
+
+&lt;span class=&quot;token comment&quot;&gt;# go mod tidy で、使われていない依存モジュールを削除&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# go.mod の内容が更新される&lt;/span&gt;
+$ go mod tidy&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;cobra による CLI ツール&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/spf13/cobra&quot;&gt;spf13/cobra&lt;/a&gt; は kubectl 等でも利用実績のある Go 言語製 CLI ライブラリ。&lt;br&gt;
+GitHub スター数も多く、CLI のための雛形を自動生成する &lt;a href=&quot;https://github.com/spf13/cobra/blob/master/cobra/README.md&quot;&gt;Cobra Generator&lt;/a&gt; 等もあるため利用することにした。&lt;br&gt;
+簡単に使い始められたので、作業ログを以下に残す。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# CLI ツールをインストール&lt;/span&gt;
+go get -u github.com/spf13/cobra/cobra
+
+&lt;span class=&quot;token comment&quot;&gt;# cobra generator でコード生成&lt;/span&gt;
+cobra init &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    --pkg-name github.com/ks6088ts/slack-client-go &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    --config .cobra.yml
+
+&lt;span class=&quot;token comment&quot;&gt;# cobra generator でコマンド追加&lt;/span&gt;
+cobra &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; hello &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    --config .cobra.yml &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    --parent rootCmd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;なお、cobra の自動生成コードだと root コマンドにすべてのコマンドが渡される設計で、サブコマンド向け単体テストが追加しづらい。&lt;br&gt;
+&lt;a href=&quot;https://github.com/spf13/cobra/issues/770#issue-371676093&quot;&gt;Document a best practice for testing a cobra app&lt;/a&gt; でもこの件は少し話題に上がっているが、kubectl 等の OSS を読むと良さそう。&lt;br&gt;
+参考になりそうなコードはこのあたり。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/kubernetes/kubernetes/blob/master/cmd/kubectl/kubectl.go&quot;&gt;kubernetes/kubectl&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Slack API&lt;/h1&gt;
+&lt;p&gt;詳細は &lt;a href=&quot;https://api.slack.com/methods&quot;&gt;Slack API Methods&lt;/a&gt; にあるが、API 呼び出しは簡単で、例えば &lt;a href=&quot;https://api.slack.com/methods/chat.postMessage&quot;&gt;chat.postMessage&lt;/a&gt; にあるように、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;curl&lt;/span&gt; -XPOST &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  -d &lt;span class=&quot;token string&quot;&gt;&quot;token=TOKEN&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  -d &lt;span class=&quot;token string&quot;&gt;&quot;channel=#test&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  -d &lt;span class=&quot;token string&quot;&gt;&quot;text=Hello &amp;lt;@ks6088ts&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  -d &lt;span class=&quot;token string&quot;&gt;&quot;username=bot&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&quot;https://slack.com/api/chat.postMessage&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;でメッセージ投稿ができる。&lt;br&gt;
+都度アドホックに実装するのも非効率なので、ここでは車輪の再発明を避けるため、&lt;a href=&quot;https://github.com/slack-go/slack&quot;&gt;slack-go/slack&lt;/a&gt; を使うことにした。&lt;br&gt;
+channel, message, token 等を CLI に引数指定できるようにすれば良い。&lt;br&gt;
+特に token はバージョン管理システムに残したくないので引数指定を必須化したい。&lt;br&gt;
+cobra のサブコマンドにおけるオプション指定を必須にするためには、&lt;a href=&quot;https://github.com/spf13/cobra/issues/723#issuecomment-418826503&quot;&gt;Required flags are not enforced in subcommands #723&lt;/a&gt; にある通り、&lt;code class=&quot;language-text&quot;&gt;MarkPersistentFlagRequired()&lt;/code&gt; を呼び出せば良い。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// bar フラグの指定を必須にする&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    fooCmd&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;MarkPersistentFlagRequired&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;bar&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+	fooCmd&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddCommand&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;frobozzCmd&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Makefile でルーチンワークを自動化&lt;/h1&gt;
+&lt;p&gt;Go 言語利用者は GNU Make を使うことが多いらしい。&lt;br&gt;
+個人的に読んだ良記事はこちら：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://frasco.io/golang-dont-afraid-of-makefiles-785f3ec7eb32&quot;&gt;Golang を使うなら Makefile を恐れるな&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基礎的なことがまとまっている。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/gin-gonic/gin/blob/master/Makefile&quot;&gt;gin-gonic/gin:Makefile&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;gin の Makefile。スター数の多いライブラリの実装は参考になる。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html&quot;&gt;Self-Documented Makefile&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;help オプションを自己文書化する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;GitHub Actions&lt;/h1&gt;
+&lt;p&gt;GitHub Actions を用いて簡単な CI も実行できるようにした。&lt;br&gt;
+&lt;a href=&quot;https://github.com/ks6088ts/slack-client-go/blob/master/.github/workflows/ci.yml&quot;&gt;.github/workflows/ci.yml&lt;/a&gt; にある通り、lint, build を実行するようにした。&lt;br&gt;
+導入時、GitHub Actions で &lt;code class=&quot;language-text&quot;&gt;golint&lt;/code&gt; をインストールしたのに golint が見つからない問題に嵌ったのだが、GitHub Actions で GOPATH を通して解決した。
+&lt;a href=&quot;https://github.com/actions/setup-go/issues/14&quot;&gt;Add $GOPATH/bin to $PATH #14&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ついでに以下のパッジも貼ってまともな OSS っぽくした。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;https://github.com/ks6088ts/slack-client-go/workflows/CI/badge.svg&quot;&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://goreportcard.com/report/github.com/ks6088ts/slack-client-go&quot;&gt;&lt;img src=&quot;https://goreportcard.com/badge/github.com/ks6088ts/slack-client-go&quot; alt=&quot;Go Report Card&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://godoc.org/github.com/ks6088ts/slack-client-go&quot;&gt;&lt;img src=&quot;http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square&quot; alt=&quot;GoDoc&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[GitHub Actions を使って GitHub Pages に GatsbyJS のサイトをデプロイ]]></title><description><![CDATA[TL;DR GatsbyJS でブログシステムを構築して、GitHub Actions で自動デプロイできるようにした話。 GatsbyJS って何? WordPress・Contentful 等の各種 CMS、ローカルの Markdown・YAML 等のファイル、API…]]></description><link>https://ks6088ts.github.io/20200307-gatsby-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20200307-gatsby-get-started/</guid><pubDate>Sun, 08 Mar 2020 07:50:00 GMT</pubDate><content:encoded>&lt;h1&gt;TL;DR&lt;/h1&gt;
+&lt;p&gt;GatsbyJS でブログシステムを構築して、GitHub Actions で自動デプロイできるようにした話。&lt;/p&gt;
+&lt;h2&gt;GatsbyJS って何?&lt;/h2&gt;
+&lt;p&gt;WordPress・Contentful 等の各種 CMS、ローカルの Markdown・YAML 等のファイル、API・Database 等をデータソースとして、&lt;br&gt;
+GraphQL を通じて統一的に扱う事ができる静的サイトジェネレータです。&lt;br&gt;
+複数のデータソースを扱えることから、既存のブログシステムから GatsbyJS による静的サイトへの乗り換えも容易です。  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1592e21fe0408b38b193bb608c0e8e52/61946/gatsby.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 89.86486486486487%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAABYlAAAWJQFJUiTwAAADZElEQVQ4y3VU228MYRTvkxJ2Z3Z2dm67MzuzMzur3UvbbVfRVF2qqIa6tIjwQEhLSVVbl2pUQkMlwoMHFZdEIpG4PDYhLkE8EI0nEkQi8Rd4Jj9nvmkttTb55Xx7zu/8vnO++b5TFhZkzESIj0BRYqjNL0C6sgoL6xtQlcsjk6kmW8vipfI8lJVyCiGJ2VjUhGMl4douQ8J0oKnG73hJQS9YisB8oQi4cByzggbKuTgEUYfAi/hfER7K/mzTgyD4AZHsnICMrfl5OLumHOdaZ6PR5TE3qLCNpgVmFlTmq8tQ5BhBhxhWIUWikEQVHK9ibT6K7iYJuxcLyNsK+RRois44PldDhOxfgjwnIpepQ2NDM7LpOlSkqhHTEtDpDOsXr0a6ejn0RAGmlWXJdbUNWFhoopwC0hW1iGrW7yr9lqlCI+YglczCSVQiHktCleOQJR2W4dL/BFmHODYJajDJ53Fty+cqssE0/I9CZ8WHBGqFRyDIIchxtA6BZxAQEsKIiDJEUaK1wLhBbprLM66HUCjsC4qCBkctIKkumAFqUa6BGqjEmWUBdOVFiPNysNUaP64Vea5aD0uu8r+yIlpomz+MLdnz6MicQ+cUtuTGsMYexqXhB3h6awJPbj/G4M5rWKr3YX3lCDqzY4zXkTmLbbkLWJXqZTeECS63e9GWGsbmzBlsShPIduRG0WqexPvJr5h8+g3fPn3HrcsPUS/uR4s7gLWpIeKPYmP6NAmPYaV7oCi4wj6EZrufRE8wkoeO7Cja7BG8e/UFP3/+gPe7cWECi6QeqmaQ+IdJ9ATbvJO6+0dwpTNAto+R/hQ833sX98Zf4v7VF9jXfhGN0YNoSQ6g2ekn/mG0po6z42KC02foBVuco4QjJDyIdRUj2OCO4kDrOCaff8brRx/w9tlHTNx5g7b0EFU3SKJHGL/ZHkB7xeniGcphE43WXjQl9mFJoptsN9ku2r0XnYWTONVzHf17buBY100M7bpCiX3E75riEWi9NNGDReb24sWWwvo/kGkQiLwOvjyCFjOAhiiHubPoiYaNEnyDLny0OBwE9tin4A0HwXtGEl3YCKyYgvEdKkbaNXDsNRQ5/iAp5v01D70BIQoKDDUJXXEQV10YZM3ofBhmHeLxGvIlmU9Xbej0HEvNxl81pzT2ncNmDQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;GatsbyJS&quot;
+        title=&quot;GatsbyJS&quot;
+        src=&quot;/static/1592e21fe0408b38b193bb608c0e8e52/fcda8/gatsby.png&quot;
+        srcset=&quot;/static/1592e21fe0408b38b193bb608c0e8e52/12f09/gatsby.png 148w,
+/static/1592e21fe0408b38b193bb608c0e8e52/e4a3f/gatsby.png 295w,
+/static/1592e21fe0408b38b193bb608c0e8e52/fcda8/gatsby.png 590w,
+/static/1592e21fe0408b38b193bb608c0e8e52/efc66/gatsby.png 885w,
+/static/1592e21fe0408b38b193bb608c0e8e52/c83ae/gatsby.png 1180w,
+/static/1592e21fe0408b38b193bb608c0e8e52/61946/gatsby.png 1546w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Airbnb や Nike 等、多くの有名企業で採用実績があります。&lt;br&gt;
+また、React ベースで実装されているので、React で UI パーツの追加などがしやすいです。&lt;/p&gt;
+&lt;h3&gt;Starters と Plugins&lt;/h3&gt;
+&lt;p&gt;GatsbyJSには「Starters」「Plugins」という2つのエコシステムがあります。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Starters&lt;/strong&gt; は簡単にいうとデザインテンプレートにあたります。&lt;br&gt;
+ブログや EC サイトなどさまざまなカテゴリがあり、&lt;br&gt;
+目的にあった Starter を見つけることができれば、スクラッチから書く必要がなく開発の初速が稼げるメリットがあります。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Plugins&lt;/strong&gt; は GatsbyJS で使用できる拡張機能です。&lt;br&gt;
+GoogleAnalytics や PWA対応や多言語対応用のプラグインなど、&lt;br&gt;
+多数のプラグインが充実しており、これらを使えばほぼコーディング不要で機能追加ができてしまいます。  &lt;/p&gt;
+&lt;h2&gt;Starter を使った GatsbyJS 製サイト構築&lt;/h2&gt;
+&lt;p&gt;まずは Gatsby CLI をインストールします。&lt;br&gt;
+&lt;a href=&quot;https://www.gatsbyjs.org/tutorial/part-zero/#using-the-gatsby-cli&quot;&gt;Using the Gatsby CLI&lt;/a&gt; にあるように、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;npm&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -g gatsby-cli&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;で gatsby コマンドが使えるようになります。  &lt;/p&gt;
+&lt;p&gt;次は Gatsby CLI で Starter を使ったサイトを生成します。&lt;br&gt;
+Starter は &lt;a href=&quot;https://www.gatsbyjs.org/starters/?&quot;&gt;Gatsby Starters&lt;/a&gt; にまとまっています。&lt;/p&gt;
+&lt;p&gt;ここでは例として、&lt;a href=&quot;https://github.com/gatsbyjs/gatsby-starter-blog&quot;&gt;gatsbyjs/gatsby-starter-blog&lt;/a&gt; を Starter として、下記コマンドで GatsbyJS サイトを作成します。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;gatsby new site https://github.com/v4iv/gatsby-starter-business&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;API は公式ドキュメント &lt;a href=&quot;https://www.gatsbyjs.org/docs/gatsby-cli/#api-commands&quot;&gt;gatsby-cli/#api-commands&lt;/a&gt; にまとまっています。  &lt;/p&gt;
+&lt;h2&gt;GitHub Actions って何?&lt;/h2&gt;
+&lt;p&gt;Travis CI や Circle CI などの CI/CDツールと同様、リポジトリに対するプッシュやプルリクエストといったイベントをトリガーとして、あらかじめ定義しておいた処理を実行する機能です。&lt;br&gt;
+リポジトリ内に設定ファイルを置くだけで、GitHub が提供するサーバー上に用意された仮想マシンで実行できます。  &lt;/p&gt;
+&lt;h2&gt;GitHub Actions を使って GitHub Pages を更新&lt;/h2&gt;
+&lt;p&gt;まずは GitHub Pages を利用するため、GitHub 上に username.github.io リポジトリを GitHub 上に作成します。&lt;br&gt;
+次に下記の操作を行います。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ↑で生成したディレクトリに移動&lt;/span&gt;
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; site
+
+&lt;span class=&quot;token comment&quot;&gt;# リモートリポジトリの追加&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; origin https://github.com/username/username.github.io.git
+
+&lt;span class=&quot;token comment&quot;&gt;# ソースコードを source ブランチで管理するためブランチ名をリネーム&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; branch -m master &lt;span class=&quot;token builtin class-name&quot;&gt;source&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;GitHub Actions の設定ファイルは、&lt;code class=&quot;language-text&quot;&gt;.github/workflows&lt;/code&gt;
+以下に置きます。&lt;br&gt;
+ここでは下記の YAML ファイルを追加します。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yaml&quot;&gt;&lt;pre class=&quot;language-yaml&quot;&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# .github/workflows/deploy.yml&lt;/span&gt;
+&lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; GitHub Pages
+
+&lt;span class=&quot;token key atrule&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; source
+&lt;span class=&quot;token key atrule&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ubuntu&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;18.04&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; actions/checkout@v2
+
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Setup Node
+        &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; actions/setup&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;node@v1
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;node-version&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;10.x&apos;&lt;/span&gt;
+
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Cache dependencies
+        &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; actions/cache@v1
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ~/.cache/yarn
+          &lt;span class=&quot;token key atrule&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; runner.os &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;yarn&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;$&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; hashFiles(&apos;&lt;span class=&quot;token important&quot;&gt;**/yarn.lock&apos;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;restore-keys&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token scalar string&quot;&gt;
+            ${{ runner.os }}-yarn-&lt;/span&gt;
+
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Install dependencies
+        &lt;span class=&quot;token key atrule&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; yarn install &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;frozen&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;lockfile
+
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Run build for GitHub Pages
+        &lt;span class=&quot;token key atrule&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; yarn build
+
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Deploy
+        &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; peaceiris/actions&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;gh&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;pages@v3
+        &lt;span class=&quot;token key atrule&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;github_token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; secrets.GITHUB_TOKEN &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;token key atrule&quot;&gt;publish_dir&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ./public
+          &lt;span class=&quot;token key atrule&quot;&gt;publish_branch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これで source ブランチに push したら、public 以下の成果物を master ブランチに push してくれて GitHub Pages が更新されます。  &lt;/p&gt;
+&lt;p&gt;日々のブログ更新のために必要な作業は、 content/blog/ に記事を push するだけになりました。&lt;/p&gt;
+&lt;h2&gt;参考サイト&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;GitHub Actions の適用事例として &lt;a href=&quot;https://github.com/tokyo-metropolitan-gov/covid19/tree/development/.github/workflows&quot;&gt;tokyo-metropolitan-gov/covid19&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;本家 &lt;a href=&quot;https://www.gatsbyjs.org/&quot;&gt;Gatsby&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://qiita.com/peaceiris/items/d401f2e5724fdcb0759d&quot;&gt;GitHub Actions による GitHub Pages への自動デプロイ&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content:encoded></item></channel></rss>
