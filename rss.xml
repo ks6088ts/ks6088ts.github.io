@@ -1,4 +1,87 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 07 Oct 2020 00:28:08 GMT</lastBuildDate><item><title><![CDATA[VSCode 入門 ~入門から拡張開発(TypeScript で書いて GitHub Actions で CI を回す)~]]></title><description><![CDATA[本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(プログラマーのためのVisual Studio Codeの教科書)もでていたりで、GitHub Actions で CI…]]></description><link>https://ks6088ts.github.io/20201002_vscode-extension/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201002_vscode-extension/</guid><pubDate>Sat, 03 Oct 2020 18:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。&lt;br&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 04 Nov 2020 06:27:55 GMT</lastBuildDate><item><title><![CDATA[Jetson Nano 入門 ~サンプル実行編~]]></title><description><![CDATA[Jetson Nano でサンプルアプリを実行してみる JetPack 同梱のデモやコミュニティが開発した OSS を Jetson Nano 上でひらすら実行してみました。 基本的にはサンプルやドキュメントに沿ってコマンド実行して install, build, run…]]></description><link>https://ks6088ts.github.io/20201104_jetson-nano-handson-2/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201104_jetson-nano-handson-2/</guid><pubDate>Wed, 04 Nov 2020 13:46:17 GMT</pubDate><content:encoded>&lt;h1&gt;Jetson Nano でサンプルアプリを実行してみる&lt;/h1&gt;
+&lt;p&gt;JetPack 同梱のデモやコミュニティが開発した OSS を Jetson Nano 上でひらすら実行してみました。&lt;br&gt;
+基本的にはサンプルやドキュメントに沿ってコマンド実行して install, build, run するだけですが、&lt;code class=&quot;language-text&quot;&gt;Makefile&lt;/code&gt; のコマンド一発で行けると今後振り返るときや自分の整理のためにも良さそうだったので、ざっくり &lt;a href=&quot;https://github.com/ks6088ts/sandbox-jetson-nano.git&quot;&gt;ks6088ts/sandbox-jetson-nano&lt;/a&gt; にまとめました。  &lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B085NQTKS9&amp;linkId=23528053d2f09b6a3ff1fd9fb0d9bd6a&quot;&gt;&lt;/iframe&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B07VLXHZLF&amp;linkId=297239f8a14457c106004d0733414cb5&quot;&gt;&lt;/iframe&gt;
+&lt;h2&gt;CUDA サンプル&lt;/h2&gt;
+&lt;p&gt;CUDA のサンプルは JetPack に同梱されていました。&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;/usr/local/cuda-10.2/samples/&lt;/code&gt; にソースがあるのでビルドして実行してみます。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; /usr/local/cuda-10.2/samples/5_Simulations/fluidsGL &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./fluidsGL&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;VisionWorks サンプル&lt;/h2&gt;
+&lt;p&gt;こちらも JetPack に同梱されています。&lt;br&gt;
+ビルドから実行までは以下。&lt;br&gt;
+feature tracker とか滑らかに動いているのをみると結構面白い。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# install&lt;/span&gt;
+/usr/share/visionworks/sources/install-samples.sh ~/
+
+&lt;span class=&quot;token comment&quot;&gt;# build&lt;/span&gt;
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; ~/VisionWorks-1.6-Samples/ &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; -j4 &lt;span class=&quot;token comment&quot;&gt;# add dbg=1 for debug build&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# run&lt;/span&gt;
+~/VisionWorks-1.6-Samples/bin/aarch64/linux/release/nvx_demo_feature_tracker&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;jetson-inference&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/dusty-nv/jetson-inference&quot;&gt;dusty-nv/jetson-inference&lt;/a&gt; で Jetson ボード上で推論処理のデモが体験できます。&lt;br&gt;
+clone、ビルド、インストールまでは以下の通り。&lt;br&gt;
+&lt;a href=&quot;https://github.com/dusty-nv/jetson-inference/blob/master/docs/building-repo-2.md#quick-reference&quot;&gt;Quick Reference&lt;/a&gt; にドキュメントがあります。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# ビルドからインストールまで&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; update
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; cmake libpython3-dev python3-numpy
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone --recursive https://github.com/dusty-nv/jetson-inference
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; ~/jetson-inference &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; -p build &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; build &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    cmake &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/ &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; -j&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;nproc&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;make&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; ldconfig&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;ImageNet や DetectNet のサンプル実行のためにはカメラが必要です。&lt;br&gt;
+私は残念ながら手元に丁度よい USB カメラが無かったため、&lt;br&gt;
+手元の Android スマホに RTSP をサービスするスマホアプリをインストールして代用しました。&lt;br&gt;
+単に自宅の WiFi に接続して &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.spynet.camon&amp;#x26;hl=ja&amp;#x26;gl=US&quot;&gt;CamON Live Streaming&lt;/a&gt; を Jetson Nano と同一 LAN に接続して起動させただけです(無線で使えるけどやはり遅延がすごい)。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# DetectNet を実行する&lt;/span&gt;
+./jetson-inference/build/aarch64/bin/detectnet &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    rtsp://username:password@ip:port &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    display://0 &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    --input-codec h264&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;引数指定次第で入力ソースは USB カメラでも mp4 ファイルでも RTSP サーバでも何でも選べるし、
+出力もディスプレイだったりファイルだったり柔軟。&lt;br&gt;
+使い勝手が非常によくてツール開発のお手本みたい。  &lt;/p&gt;
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;ja&quot; dir=&quot;ltr&quot;&gt;jetson-inference リポジトリを参考に、jetson nano で detectnet 動かす週末。usbカメラなかったからスマホアプリで rtsp サーバ立てて動かした。 &lt;a href=&quot;https://twitter.com/hashtag/jetson?src=hash&amp;amp;ref_src=twsrc%5Etfw&quot;&gt;#jetson&lt;/a&gt; &lt;a href=&quot;https://twitter.com/hashtag/%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92?src=hash&amp;amp;ref_src=twsrc%5Etfw&quot;&gt;#機械学習&lt;/a&gt; &lt;a href=&quot;https://t.co/CC55wJjnaL&quot;&gt;pic.twitter.com/CC55wJjnaL&lt;/a&gt;&lt;/p&gt;&amp;mdash; ks6088ts (@LearningAnimal1) &lt;a href=&quot;https://twitter.com/LearningAnimal1/status/1322453221655244800?ref_src=twsrc%5Etfw&quot;&gt;October 31, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&quot;https://platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;  
+&lt;p&gt;カメラ画像だけだと非常に地味だったので、&lt;br&gt;
+YouTube から mp4 ファイルを落としてきて DetectNet に喰わせるのも面白いです。&lt;br&gt;
+(学習ラベルにないものは変な判定されるのとかも含め…)&lt;/p&gt;
+&lt;h3&gt;ROS のトピックとしてサービスする&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/dusty-nv/ros_deep_learning.git&quot;&gt;dusty-nv/ros&lt;em&gt;deep&lt;/em&gt;learning&lt;/a&gt; を使うと ROS のトピック配信もできます。&lt;br&gt;
+Rviz でサブスクライブして可視化とかも簡単にできて、これまた良い。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# 必要なパッケージのインストール&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt-get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y ros-melodic-image-transport ros-melodic-vision-msgs
+
+&lt;span class=&quot;token comment&quot;&gt;# ワークスペースのセットアップ&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;mkdir&lt;/span&gt; -p ~/ros_workspace/src
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; ~/ros_workspace/src &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; clone https://github.com/dusty-nv/ros_deep_learning
+&lt;span class=&quot;token comment&quot;&gt;# ビルド&lt;/span&gt;
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; ~/ros_workspace/ &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+    catkin_make
+&lt;span class=&quot;token comment&quot;&gt;# source devel/setup.bash &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;VS Code で Remote SSH&lt;/h1&gt;
+&lt;p&gt;これまでは GUI が必要なサンプルばかりを触っていたので、&lt;br&gt;
+Jetson Nano に HDMI, USB キーボード、無線ドングルを挿して作業していました。(X Server の構築周りで嵌ったことがあるので…)  &lt;/p&gt;
+&lt;p&gt;その過程で CPU の処理負荷が高いときに頻繁に固まるのがイケてないなーと思い始め、開発時は処理負荷を極力下げるため GUI 起動はせず、ノート PC から SSH で作業することにしました。&lt;br&gt;
+VSCode の Remote SSH プラグインはとても優秀。&lt;/p&gt;
+&lt;h1&gt;jtop でモニタリング&lt;/h1&gt;
+&lt;p&gt;I/O が固まる原因については深く考察することがないまま、とりあえず処理負荷低減のために GUI やめて CLI 起動で SSH 接続、ってのもエンジニア的ではないので負荷をモニタリングすることにしました。&lt;br&gt;
+Jetson 界隈では GitHub の star 数みる限り &lt;code class=&quot;language-text&quot;&gt;jetson-stats&lt;/code&gt; なるものが良いようで、以下コマンドで導入しました。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apt&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y python3-pip
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; -H pip3 &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; jetson-stats&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;VSCode で Remote SSH した状態でターミナルから &lt;code class=&quot;language-text&quot;&gt;jtop&lt;/code&gt; すると以下のような感じにモニタリングできて素晴らしいです。  &lt;/p&gt;
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;&lt;p lang=&quot;ja&quot; dir=&quot;ltr&quot;&gt;Jetson Nano でのモニタリングツールとして jtop 導入したがとても優秀。コマンド一発でインストールできるし、欲しい情報大体取れる &lt;a href=&quot;https://t.co/Wowo8aCSfc&quot;&gt;https://t.co/Wowo8aCSfc&lt;/a&gt; &lt;a href=&quot;https://twitter.com/hashtag/NVIDIA?src=hash&amp;amp;ref_src=twsrc%5Etfw&quot;&gt;#NVIDIA&lt;/a&gt; &lt;a href=&quot;https://twitter.com/hashtag/JetsonNano?src=hash&amp;amp;ref_src=twsrc%5Etfw&quot;&gt;#JetsonNano&lt;/a&gt; &lt;a href=&quot;https://t.co/dG4InQ7Usq&quot;&gt;pic.twitter.com/dG4InQ7Usq&lt;/a&gt;&lt;/p&gt;&amp;mdash; ks6088ts (@LearningAnimal1) &lt;a href=&quot;https://twitter.com/LearningAnimal1/status/1323547860709773318?ref_src=twsrc%5Etfw&quot;&gt;November 3, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&quot;https://platform.twitter.com/widgets.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;  
+ 
+&lt;p&gt;ちなみに make で超並列化してビルドしたりすると一気に CPU 負荷が 100 % に達するようなのが見えて「Jetson Nano くん、限界なんだな」と察することができました。&lt;br&gt;
+やはりあくまでコスパの良い inference 専用機なのですね。。&lt;br&gt;
+DeepLearning 向けラズパイという立ち位置。&lt;/p&gt;</content:encoded></item><item><title><![CDATA[VSCode 入門 ~入門から拡張開発(TypeScript で書いて GitHub Actions で CI を回す)~]]></title><description><![CDATA[本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(プログラマーのためのVisual Studio Codeの教科書)もでていたりで、GitHub Actions で CI…]]></description><link>https://ks6088ts.github.io/20201002_vscode-extension/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201002_vscode-extension/</guid><pubDate>Sat, 03 Oct 2020 18:00:00 GMT</pubDate><content:encoded>&lt;p&gt;本記事では、VSCode を利用するメリットや、拡張機能の開発に関するメモをまとめる。&lt;br&gt;
 特に拡張機能開発はテンプレートが充実していたり、参考になる書籍(&lt;a href=&quot;https://amzn.to/3nglNTO&quot;&gt;プログラマーのためのVisual Studio Codeの教科書&lt;/a&gt;)もでていたりで、GitHub Actions で CI 回しながら TypeScript で開発する環境が簡単にセットアップできた。&lt;br&gt;
 今回実装したコードはこちら。&lt;/p&gt;
 &lt;ul&gt;
