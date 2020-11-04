@@ -21,3 +21,7 @@ export TEMPLATE
 add: ## add article
 	$(eval DIR ?= content/blog/$(shell date '+%Y%m%d')_$(URL))
 	mkdir -p $(DIR) && echo "$$TEMPLATE" > $(DIR)/index.md
+
+.PHONY: server
+server: ## run server
+	yarn start
