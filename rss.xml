@@ -1,4 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 07 Nov 2020 23:18:34 GMT</lastBuildDate><item><title><![CDATA[Docker 上で ROS2 の talker/listener デモを実行してみた]]></title><description><![CDATA[とりあえず動かしてみる 何も知らない中からの初手は ROS 2 > Overview > Installation…]]></description><link>https://ks6088ts.github.io/20201108_ros2-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201108_ros2-get-started/</guid><pubDate>Sun, 08 Nov 2020 07:13:22 GMT</pubDate><content:encoded>&lt;h1&gt;とりあえず動かしてみる&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 27 Dec 2020 23:17:21 GMT</lastBuildDate><item><title><![CDATA[AWS 入門(1) ~アカウント作成・初期設定~]]></title><description><![CDATA[gmail のサブアカウント作成 gmail のサブアカウントで AWS…]]></description><link>https://ks6088ts.github.io/20201227_aws-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201227_aws-get-started/</guid><pubDate>Sun, 27 Dec 2020 16:42:02 GMT</pubDate><content:encoded>&lt;h3&gt;gmail のサブアカウント作成&lt;/h3&gt;
+&lt;p&gt;gmail のサブアカウントで AWS アカウントを作成する。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;設定 &gt; &lt;strong&gt;アカウントとインポート&lt;/strong&gt; から&lt;strong&gt;ほかのメールアドレスを追加&lt;/strong&gt; でサブアカウントを作成&lt;/li&gt;
+&lt;li&gt;設定 &gt; &lt;strong&gt;ラベル &gt; 新しいラベルを作成&lt;/strong&gt; でラベルを作成&lt;/li&gt;
+&lt;li&gt;設定 &gt; &lt;strong&gt;フィルタとブロック中のアドレス&lt;/strong&gt; からラベルフィルタを適用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;AWS アカウント初期設定&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita.com/tmknom/items/303db2d1d928db720888&quot;&gt;AWSアカウントを取得したら速攻でやっておくべき初期設定まとめ&lt;/a&gt; を参考に以下の作業を行う。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;MFA を有効化する&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;スマホに Google Authenticator をインストール&lt;/li&gt;
+&lt;li&gt;アカウント追加を選択し、IAM で表示される QR コードをスキャン&lt;/li&gt;
+&lt;li&gt;連続した MFA code を 2 つ入力&lt;/li&gt;
+&lt;li&gt;参考: &lt;a href=&quot;https://www.youtube.com/watch?v=FUXy2t28oqc&quot;&gt;How to Setup MFA on AWS Account (Root User)&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;IAM ユーザの作成&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;AWS アカウントでマネジメントコンソールから IAM ユーザを作成&lt;/li&gt;
+&lt;li&gt;ユーザの MFA を有効化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;請求回りの設定&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;IAMユーザへの請求情報のアクセス許可&lt;/li&gt;
+&lt;li&gt;請求情報とコスト管理の設定&lt;/li&gt;
+&lt;li&gt;CloudWatchで請求情報のアラームを作成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;AWS CLI&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/install-cliv2.html&quot;&gt;AWS CLI バージョン 2 のインストール、更新、アンインストール&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Linux x86(64-bit)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;curl&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&quot;&lt;/span&gt; -o &lt;span class=&quot;token string&quot;&gt;&quot;awscliv2.zip&quot;&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;unzip&lt;/span&gt; awscliv2.zip
+&lt;span class=&quot;token function&quot;&gt;sudo&lt;/span&gt; ./aws/install
+
+&lt;span class=&quot;token comment&quot;&gt;# Docker&lt;/span&gt;
+docker run --rm -it amazon/aws-cli --version
+
+&lt;span class=&quot;token comment&quot;&gt;# 実行例: EC2 インスタンス数を取得&lt;/span&gt;
+aws ec2 describe-instances &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; jq &lt;span class=&quot;token string&quot;&gt;&apos;.Reservations[].Instances | length&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Docker 上で ROS2 の talker/listener デモを実行してみた]]></title><description><![CDATA[とりあえず動かしてみる 何も知らない中からの初手は ROS 2 > Overview > Installation…]]></description><link>https://ks6088ts.github.io/20201108_ros2-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201108_ros2-get-started/</guid><pubDate>Sun, 08 Nov 2020 07:13:22 GMT</pubDate><content:encoded>&lt;h1&gt;とりあえず動かしてみる&lt;/h1&gt;
 &lt;p&gt;何も知らない中からの初手は &lt;a href=&quot;https://index.ros.org/doc/ros2/Installation/&quot;&gt;ROS 2 &gt; Overview &gt; Installation&lt;/a&gt; を読んでセットアップするところから。&lt;br&gt;
 いろいろ環境については試行錯誤したのですが、ローカル環境に直でインストールすると手順がコード化されずに環境が再現できなくなったり、&lt;br&gt;
 バージョンの衝突だったりが起きてトラブルが多く茨の道です。&lt;br&gt;
