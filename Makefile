@@ -25,3 +25,14 @@ add: ## add article
 .PHONY: server
 server: ## run server
 	yarn start
+
+.PHONY: install
+install: ## install
+	yarn install --frozen-lockfile
+
+.PHONY: build
+build: ## build
+	yarn build
+
+.PHONY: ci
+ci: install build ## ci
