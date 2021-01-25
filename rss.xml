@@ -1,4 +1,124 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 27 Dec 2020 23:17:21 GMT</lastBuildDate><item><title><![CDATA[AWS 入門(1) ~アカウント作成・初期設定~]]></title><description><![CDATA[gmail のサブアカウント作成 gmail のサブアカウントで AWS…]]></description><link>https://ks6088ts.github.io/20201227_aws-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201227_aws-get-started/</guid><pubDate>Sun, 27 Dec 2020 16:42:02 GMT</pubDate><content:encoded>&lt;h3&gt;gmail のサブアカウント作成&lt;/h3&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[External Storage]]></title><description><![CDATA[A blog mainly focusing on what I learned.]]></description><link>https://ks6088ts.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 25 Jan 2021 05:30:38 GMT</lastBuildDate><item><title><![CDATA[AWS 入門(2) ~qwiklabs でハンズオン~]]></title><description><![CDATA[アカウント作成と初期設定をざっくり終えたので、全体を俯瞰するため Amazon で AWS の売れている本を探して乱読してみることにした。 まず最初の 1 冊目として VPC の設定だとか、EC2, S3 とか基礎的なサービスを理解するために、 「Amazon Web…]]></description><link>https://ks6088ts.github.io/20210125_aws-qwiklabs/</link><guid isPermaLink="false">https://ks6088ts.github.io/20210125_aws-qwiklabs/</guid><pubDate>Mon, 25 Jan 2021 08:24:34 GMT</pubDate><content:encoded>&lt;p&gt;アカウント作成と初期設定をざっくり終えたので、全体を俯瞰するため Amazon で AWS の売れている本を探して乱読してみることにした。&lt;br&gt;
+まず最初の 1 冊目として VPC の設定だとか、EC2, S3 とか基礎的なサービスを理解するために、&lt;br&gt;
+「Amazon Web Services 基礎からのネットワーク＆サーバー構築」を読んだ。&lt;br&gt;
+2021年1月現在、改訂3版も出ていて内容も新しい。  &lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B084QQ7TCF&amp;linkId=6c66687e3bf98ebdf7ccb767a29d6d18&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;読み終わった段階で、今流行りのサーバレスアーキテクチャとか、その他サービスの使い方も知りたくなってきたので、&lt;br&gt;
+「AWS 入門認定資格試験テキスト AWS認定ソリューションアーキテクト - アソシエイト 改訂第2版 (日本語) 」を読み始めた。&lt;br&gt;
+別に資格を取りたいわけではないのだが、全体のサービスを俯瞰して知っている状態は、&lt;br&gt;
+今後技術的になにか解決したい課題があったときにネタ帳として役立つはず。&lt;br&gt;
+この本も最近改訂第2版がでて内容は新しい。さらに初版の評判も良さそうなので早速買って読むことにした。  &lt;/p&gt;
+&lt;iframe style=&quot;width:120px;height:240px;&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot; src=&quot;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=ks6088ts-22&amp;language=ja_JP&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=4815607389&amp;linkId=b826505f6b66b399ddab30b92443a474&quot;&gt;&lt;/iframe&gt;
+&lt;p&gt;ざっくりパラパラ読んで演習問題解いた段階で、やっぱ座学だと頭に入らないなぁと思い、&lt;br&gt;
+学習法の項でおすすめされていた Qwiklabs のハンズオンをやってみることにした。&lt;br&gt;
+やったコンテンツと感想を以下に垂れ流す。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/14815?catalog_rank=%7B%22rank%22%3A1%2C%22num_filters%22%3A0%2C%22has_search%22%3Atrue%7D&amp;#x26;parent=catalog&amp;#x26;search_id=8684240&quot;&gt;Introduction to Amazon DynamoDB（日本語版）&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+DynamoDB を GUI 操作でテーブル作成、データ作成、クエリ実行する無料ハンズオン。&lt;br&gt;
+あくまでクライアント側の操作の紹介だけであって、深い突っ込んだところを触るわけではない。&lt;br&gt;
+読んで実行するだけなら体感 10 分もかからない。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/15683?catalog_rank=%7B%22rank%22%3A2%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to Amazon Simple Storage Service (S3)（日本語版）&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+バケット作成、オブジェクトアップロード、パブリック化、バケットポリシーの適用、バージョニングあたりが学べる。&lt;br&gt;
+個人的には 2 点学びがあった。  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;オブジェクトのパブリック化&lt;br&gt;
+公開設定にする手順をあえて多段階にしたり、&lt;br&gt;
+念押しチェックボックスを設けるなどの GUI 上のアラート。&lt;br&gt;
+昔はこういったUIがなかったが、うっかりミスを起こしてきた人たちのフィードバックを受けて取り入れたのだろう。
+オブジェクトのパブリック化周りの作業順序に齟齬があり少し手順書が古いようだったが、&lt;br&gt;
+行間を読んで一通り確認できた。  &lt;/li&gt;
+&lt;li&gt;バージョニング&lt;br&gt;
+バージョニング対象のオブジェクトを削除した場合は「削除マーカー」が付く。&lt;br&gt;
+復元したい場合は、バージョンのリスト表示を有効にして削除マーカーを削除することで削除前のバージョンに復元される、とか。&lt;br&gt;
+ポリシージェネレータの設定は GUI から json 生成してコピペする操作フローになっていたけど、&lt;br&gt;
+せっかく GUI なんだから(json コピペすら隠蔽して) ポチポチで済ませたら UX 良いのではないの？と思ったり。(多分他に術があるのだろう)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/14761?catalog_rank=%7B%22rank%22%3A3%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to Amazon EC2 (日本語版)&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+VPS のリッチ版という印象な EC2。少し触ってたことあるしクレジット 1 消費するので斜め読みするだけ。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/14177?catalog_rank=%7B%22rank%22%3A4%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to Amazon Redshift (日本語版)&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+なんかクラスタの起動に失敗したのでスキップ。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/15612?catalog_rank=%7B%22rank%22%3A7%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to Amazon CloudFront（日本語版）&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+S3 でパブリックにアクセスできるバケットを作成しておくと、&lt;br&gt;
+CloudFront からドメイン選択する際にサジェストされるの良い UX で感心した。&lt;br&gt;
+(知らずに S3 の URL 確認しに行ってた)&lt;br&gt;
+配信設定の 1 単位を CloudFront Distribution と呼ぶようだ。&lt;br&gt;
+グローバルなコンテンツ配信ネットワークであるため、リージョン選択はない。(Web Console は英語表示しかない?)&lt;br&gt;
+CloudFront の Distribution 削除は、-&gt;Disabled-&gt;Delete と手順を踏む必要があるけど、Disabled になるまで結構時間がかかる。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/15682?catalog_rank=%7B%22rank%22%3A8%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to AWS Lambda (日本語版)&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+S3 のオブジェクト作成イベントをトリガーとして Lambda 関数を呼び、オブジェクトを加工したものを別バケットに追加するサンプル。&lt;br&gt;
+当たり前ではあるが、入出力のバケットが同一である場合は再帰呼び出しになり費用増大、なんてリスクがあるので、Web 上の UI で注意喚起があった。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;関数が S3 バケットにオブジェクトを書き込む場合は、入出力に異なる S3 バケットを使用してください。同じバケットに書き込むと、再帰呼び出しを生み出すリスクが高くなり、その結果、Lambda の使用量が増加してコストが増大する可能性があります。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;というか、そもそもそういったユースケースは実行できないようにプラットフォーム側でポリシー制御すると親切なのではないだろうか。&lt;br&gt;
+実行できないと都合の悪いケースってあるのかなぁもやもや…?&lt;/p&gt;
+&lt;p&gt;Lambda 関数は Web console 上のエディタで編集する他、S3 にアップロードした zip ファイルを実行する方法もある。(ハンズオンでは後者)&lt;br&gt;
+AWS の他のサービスとの連携などで &lt;code class=&quot;language-text&quot;&gt;boto3&lt;/code&gt; だったりサードパーティ製ライブラリを利用するのがほとんどのケースだと思うので zip 参照がメインのユースケースなのかなと。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/10383?catalog_rank=%7B%22rank%22%3A6%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to Amazon API Gateway（日本語版）&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+テクニカルコンセプトの項はスッキリまとまっていて「マイクロサービスとは何か」をざっくり把握するのに良い。&lt;br&gt;
+ある程度大規模なソフトウェア開発を経験していればあるあるな話ではあるけれど。&lt;br&gt;
+Lambda 関数は単に配列で確保した FAQ の配列をランダムに選択して json で返すシンプルなもの。&lt;br&gt;
+まぁあくまで API Gateway の Introduction なので、トリガーとして API Gateway を設定するところが肝なのだから Lambda 側の説明によるノイズが少なくていいサンプルだと思った。&lt;br&gt;
+「API 呼び出せました」で終わるのではなく、モニタリングタブから CloudWatch のログ表示するまでをハンズオンで記載してくれているのは、「お家に帰るまでが遠足ですよ」みたいなノリを感じて好感が持てた。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/15717?catalog_rank=%7B%22rank%22%3A28%2C%22num_filters%22%3A1%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to AWS Identity and Access Management (IAM)&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;予めセキュリティポリシーがアタッチされたグループがあり、ユーザをそれぞれ指定されたグループに追加する。&lt;br&gt;
+各ユーザが適切に権限設定されていることを各ユーザとしてマネジメントコンソールにログインして確認。&lt;br&gt;
+地味だけど大事な操作。&lt;br&gt;
+ブラウザ操作するときログインセッションを削除するのが面倒なので Chrome のシークレットモードが役立った。  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://www.qwiklabs.com/focuses/15699?catalog_rank=%7B%22rank%22%3A9%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;#x26;parent=catalog&quot;&gt;Introduction to AWS Key Management Service (日本語版)&lt;/a&gt;&lt;/strong&gt;&lt;br&gt;
+KMS でのマスターキー生成とデータの暗号化、CloudTrail を利用したキーアクセスのモニタリング。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;以上、軽く流した感じではあるけれど大体 5 時間でざっくり入門はできた様子。  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d50a938480de9e7e9cce0e9060df3dfe/d93d9/qwiklabs.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 50%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAABYlAAAWJQFJUiTwAAAA1UlEQVQoz42RwXIEIQhE5/8/dqpGBBGRTeNMNoesqXRZHpRnN3gQ1fM8Sylzztc/1CzEXtyjjzi69aatUm23tImIqqIuPslnsChxG8OPGXNGgJImzBUk19x3zghIRKh3X7BP12UKRlpjYeyxERj0CCv/dp6Jar4AujKPMfbOXojk7Yy1nJNkZjP7Y2DICWf0mDAyow3EuGNz2nrslbGpoBLpACctj8AyntmN+t0zMj7OCfODlkLdzPPs87fj6rou5ju2u43x47uU81QF77+EieB2dTe+ANIUS7qBBh2RAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;qwiklabs.png&quot;
+        title=&quot;qwiklabs.png&quot;
+        src=&quot;/static/d50a938480de9e7e9cce0e9060df3dfe/fcda8/qwiklabs.png&quot;
+        srcset=&quot;/static/d50a938480de9e7e9cce0e9060df3dfe/12f09/qwiklabs.png 148w,
+/static/d50a938480de9e7e9cce0e9060df3dfe/e4a3f/qwiklabs.png 295w,
+/static/d50a938480de9e7e9cce0e9060df3dfe/fcda8/qwiklabs.png 590w,
+/static/d50a938480de9e7e9cce0e9060df3dfe/efc66/qwiklabs.png 885w,
+/static/d50a938480de9e7e9cce0e9060df3dfe/c83ae/qwiklabs.png 1180w,
+/static/d50a938480de9e7e9cce0e9060df3dfe/d93d9/qwiklabs.png 1243w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;GCP, Azure 等の他社のクラウドサービスを使い倒したわけではないのだが、&lt;br&gt;
+AWS 触ってていいなと入門しながら思ったところを言語化すると、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;いい感じのデフォルトで埋めてくれる&lt;/li&gt;
+&lt;li&gt;API Gateway + Lambda みたいなあるあるなサービス間の連携を簡単にできる GUI&lt;/li&gt;
+&lt;li&gt;やばい設定はアラートしてくれる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;あたりにある。
+他社サービスでも同様のことはできるが、ユーザのフィードバックを受けて改善するサイクルを鬼のように回しまくった老舗ならではの部分がAWS のサービスとしての競争力にあるのかなぁ。  &lt;/p&gt;
+&lt;p&gt;座学よりはハンズオンのほうが身になる事がわかったので、&lt;br&gt;
+次もいい感じのハンズオン教材に気合い入れて取り組む予定。&lt;br&gt;
+&lt;a href=&quot;https://aws.amazon.com/jp/blogs/news/aws-beginner-home-learning/&quot;&gt;自宅で学ぼう！AWS 初学者向けの勉強方法 6ステップ！&lt;/a&gt; によると、&lt;br&gt;
+ハンズオンおすすめ教材として QWIKLABS の他に、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://aws.amazon.com/jp/aws-jp-introduction/aws-jp-webinar-hands-on/&quot;&gt;AWS 初心者向けハンズオン&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://aws.amazon.com/jp/getting-started/hands-on/&quot;&gt;10分間チュートリアル&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;もあるようなのでチェックしてみます。&lt;/p&gt;</content:encoded></item><item><title><![CDATA[AWS 入門(1) ~アカウント作成・初期設定~]]></title><description><![CDATA[gmail のサブアカウント作成 gmail のサブアカウントで AWS…]]></description><link>https://ks6088ts.github.io/20201227_aws-get-started/</link><guid isPermaLink="false">https://ks6088ts.github.io/20201227_aws-get-started/</guid><pubDate>Sun, 27 Dec 2020 16:42:02 GMT</pubDate><content:encoded>&lt;h3&gt;gmail のサブアカウント作成&lt;/h3&gt;
 &lt;p&gt;gmail のサブアカウントで AWS アカウントを作成する。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;設定 &gt; &lt;strong&gt;アカウントとインポート&lt;/strong&gt; から&lt;strong&gt;ほかのメールアドレスを追加&lt;/strong&gt; でサブアカウントを作成&lt;/li&gt;
