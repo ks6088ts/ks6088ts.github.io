@@ -28,3 +28,8 @@ npx create-docusaurus@latest ks6088ts-labs.github.io classic --typescript
 
 - Reference: [Docusaurus / Deployment / Triggering deployment with GitHub Actions](https://docusaurus.io/docs/deployment#triggering-deployment-with-github-actions)
 - Commit: [add deploy action](https://github.com/ks6088ts/ks6088ts.github.io/commit/f27953ff6b308eb61986d7941f779f0a24fc57ef)
+
+### Update GitHub Settings
+
+- [remote: Permission to git denied to github-actions[bot]. #96](https://github.com/ad-m/github-push-action/issues/96#issuecomment-889984928)
+- [Configuring a publishing source for your GitHub Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
