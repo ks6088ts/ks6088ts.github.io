@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[535],{5641:s=>{s.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"GitHub Pages by Docusaurus","permalink":"/en/blog/gh-pages-by-docusaurus"}]}')}}]);
