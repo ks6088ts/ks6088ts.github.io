@@ -1,3 +1,6 @@
+[![test](https://github.com/ks6088ts/ks6088ts.github.io/workflows/test/badge.svg)](https://github.com/ks6088ts/ks6088ts.github.io/actions/workflows/test.yml)
+[![deploy](https://github.com/ks6088ts/ks6088ts.github.io/workflows/deploy/badge.svg)](https://github.com/ks6088ts/ks6088ts.github.io/actions/workflows/deploy.yml)
+
 # Website
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
