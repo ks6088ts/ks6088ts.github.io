@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[4179],{236:s=>{s.exports=JSON.parse('{"label":"azd","permalink":"/en/blog/tags/azd","allTagsPath":"/en/blog/tags","count":1}')}}]);
