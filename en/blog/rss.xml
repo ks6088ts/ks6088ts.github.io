@@ -4,10 +4,26 @@
         <title>ks6088ts Blog</title>
         <link>https://ks6088ts.github.io/en/blog</link>
         <description>ks6088ts Blog</description>
-        <lastBuildDate>Fri, 10 Mar 2023 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 13 Mar 2023 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Azure Container Apps ハンズオン]]></title>
+            <link>https://ks6088ts.github.io/en/blog/container-apps-handson</link>
+            <guid>https://ks6088ts.github.io/en/blog/container-apps-handson</guid>
+            <pubDate>Mon, 13 Mar 2023 00:00:00 GMT</pubDate>
+            <description><![CDATA[Azure Container Apps を使ってマルチコンテナアプリケーションのハンズオンをしました。]]></description>
+            <content:encoded><![CDATA[<p>Azure Container Apps を使ってマルチコンテナアプリケーションのハンズオンをしました。</p><h1>Azure Container Apps を使ってみる</h1><p>Azure Container Apps は Kubernetes の実装詳細を隠蔽し、簡単にマルチコンテナアプリケーションをデプロイできるサービスです。<br>
+<!-- -->素の Kubernetes を使うとケアしなければならなかったことが、Azure Container Apps によって隠蔽されていて、やりたいことを実現するために必要な知識が少なくなっています。<br>
+<!-- -->サービスの詳細は <a href="https://learn.microsoft.com/ja-jp/azure/container-apps/overview" target="_blank" rel="noopener noreferrer">Azure Container Apps の概要</a> にあります。  </p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="ハンズオン">ハンズオン<a href="#ハンズオン" class="hash-link" aria-label="Direct link to ハンズオン" title="Direct link to ハンズオン">​</a></h2><p>個人的には座学よりは手を動かしたほうが理解が早いので、<a href="https://amzn.to/3lgDTca" target="_blank" rel="noopener noreferrer">Azureコンテナアプリケーション開発</a> を買ってハンズオンをしてみました。</p><p>『Azureコンテナアプリケーション開発』（技術評論社，2023年）のサンプルコードは <a href="https://github.com/gihyo-book/azure-container-dev-book" target="_blank" rel="noopener noreferrer">github.com/gihyo-book/azure-container-dev-book</a> にあります。<br>
+<!-- -->dev container もあるので、VS Code で開くと環境が一気に整います。<br>
+<!-- -->ハンズオンで実行する Azure CLI コマンドは <a href="https://github.com/gihyo-book/azure-container-dev-book/blob/main/apps/part3/README.azcli" target="_blank" rel="noopener noreferrer">azure-container-dev-book/apps/part3/README.azcli</a> にあるので、dev container から逐次実行して動作確認しました。</p><p>コンテナアプリケーションのバージョン管理やアップデート戦略などの解説もあり、Azure Container Apps の概要を知るのには十分な内容だと思いました。
+Kubernetes の場合はサービスメッシュを導入してトラフィックコントロールするところが Azure Container Apps では簡単にできますし、
+カナリアリリースやリビジョン管理など、マルチコンテナアプリケーションの開発に必要な機能が揃っていることを理解できました。</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="参考リンク">参考リンク<a href="#参考リンク" class="hash-link" aria-label="Direct link to 参考リンク" title="Direct link to 参考リンク">​</a></h2><ul><li><a href="https://techblog.ap-com.co.jp/entry/2021/11/03/093821" target="_blank" rel="noopener noreferrer">Azure Container Appsを試してみた</a><ul><li>Azure Portal から試した例</li></ul></li><li><a href="https://techblog.ap-com.co.jp/entry/2023/02/10/155135" target="_blank" rel="noopener noreferrer">TerraformでAzure Container Appsがサポートされたので爆速でデプロイする</a><ul><li>Terraform でデプロイした例。AzureRM Provider の v.3.43.0 からサポートされてすぐに記事が出ていて非常に助かりました。</li></ul></li><li><a href="https://techblog.ap-com.co.jp/entry/2022/09/01/120000" target="_blank" rel="noopener noreferrer">Azure Container AppsでCI/CD(GitHub Actions編)</a><ul><li>GitHub Actionsでコンテナイメージをビルドして ACR へ格納し、そのイメージをContainer Appsへデプロイする例</li></ul></li><li><a href="https://github.com/Azure-Samples/todo-nodejs-mongo-aca" target="_blank" rel="noopener noreferrer">Azure-Samples/todo-nodejs-mongo-aca</a><ul><li>Azure Developer CLI でデプロイできる ACA を使ったサンプルアプリケーション</li></ul></li></ul>]]></content:encoded>
+            <category>azure</category>
+            <category>container</category>
+        </item>
         <item>
             <title><![CDATA[テンプレートから学ぶ Azure ~ Web API 編 ~]]></title>
             <link>https://ks6088ts.github.io/en/blog/learn-from-template-webapi</link>
