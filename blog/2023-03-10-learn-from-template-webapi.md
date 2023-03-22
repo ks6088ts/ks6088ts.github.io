@@ -44,7 +44,7 @@ azd up
 - API サーバーにアクセス(Swagger UI が開く): `https://app-api-{RESOURCE_TOKEN}.azurewebsites.net/`
 - Web サーバーにアクセス(Web アプリが開く): `https://app-web-{RESOURCE_TOKEN}.azurewebsites.net/`
 
-コマンドラインから動作メトリクスを確認することもできます。
+また、コマンドラインから動作メトリクスを確認できます。
 
 ```shell
 # Azure Dashboard を開く
@@ -83,9 +83,9 @@ module "applicationinsights" {
 ```
 
 ここで引数として指定されている `module.loganalytics.LOGANALYTICS_WORKSPACE_ID` に注目します。  
-これは applicationinsights は loganalytics に依存していることを意味します。
-すべてを頭に入れるのは大変なので、どのモジュールがどういう方向で依存を張っているのかの概要をざっくり把握しておくと、後々の細部の理解が楽になります。  
-(図に書いてモジュール間の依存を矢印で書くと良いかもしれません)
+これは applicationinsights が loganalytics に依存していることを意味します。
+すべてを頭に入れるのは大変なので、どのモジュールがどのような方向で依存を張っているのかの概要をざっくり把握しておくと、後々の細部の理解が楽になります。  
+(図に書いてモジュール間の依存を矢印で書くと良いです)
 
 Web アプリケーションと API サーバーの実装は、`modules/appservicenode/` 以下にあります。
 それぞれ環境変数として参照しているパラメータから依存関係が判ります。
@@ -107,7 +107,7 @@ Web アプリケーションと API サーバーの実装は、`modules/appservi
 - `AZURE_KEY_VAULT_ENDPOINT` から Key Vault に依存
 - `module.applicationinsights.APPLICATIONINSIGHTS_CONNECTION_STRING` から Application Insights に依存
 
-`azd up` で作成された各種リソースは `.azure/ENVIRONMENT_NAME/terraform.tfstate` に記録されていますので、実際に設定された個々のパラメータを確認することもできます。
+`azd up` で作成された各種リソースは `.azure/ENVIRONMENT_NAME/terraform.tfstate` に記録されていますので、実際に設定された個々のパラメータを確認できます。
 
 ### WIP: azure.yaml の services のビルドプロセスについて
 

@@ -12,20 +12,20 @@ Azure AD 認可情報を用いてフロントエンドアプリから Azure Func
 
 # Azure AD 認可情報を用いてフロントエンドアプリから Azure Functions を呼び出す
 
-Azure App Service 上にデプロイされた React 製のフロントエンドアプリケーションから、Azure Functions を呼び出すサンプルを提供します。
+Azure App Service 上にデプロイされた React 製のフロントエンドアプリから、Azure Functions を呼び出すサンプルを提供します。
 
 本アプリは以下の要求事項を満たします。
 
-- フロントエンドアプリケーションは Azure AD 認証を通すことを必須とする
+- フロントエンドアプリは Azure AD 認証を通すことを必須とする
 - Azure Functions は Azure AD 認証を必須とする
-- フロントエンドアプリケーションの Azure AD 認証を通したユーザは、**追加の認証を通すことなく**、フロントエンドアプリケーションの認証情報を用いて Azure Functions を呼び出すことができる
-- フロントエンドアプリケーション、Azure Functions 双方は Azure App Service の組み込み認証を利用し、認証処理の一切をアプリケーションコードに組み込む必要がない(⇔ MSAL ライブラリを利用しない)
+- フロントエンドアプリの Azure AD 認証を通したユーザは、**追加の認証を通すことなく**、フロントエンドアプリの認証情報を用いて Azure Functions を呼び出すことができる
+- フロントエンドアプリ、Azure Functions 双方は Azure App Service の組み込み認証を利用し、認証処理の一切をアプリケーションコードに組み込む必要がない
 
 ## ハンズオン
 
 ### React アプリの作成
 
-以下の記事を参考に、`create-react-app` を用いてフロントエンドアプリケーションを作成します。
+以下の記事を参考に、`create-react-app` を用いてフロントエンドアプリを作成します。
 
 - [TypeScript を対象とする npm を使用した React アプリを作成する](https://learn.microsoft.com/ja-jp/azure/developer/javascript/how-to/with-web-app/static-web-app-with-swa-cli/create-react-app#create-react-app-with-npm-targeting-typescript)
 
@@ -47,7 +47,7 @@ npm start
 
 ### React アプリのデプロイ
 
-以下の記事を参考に、App Service に React のフロントエンドアプリケーションをデプロイします。
+以下の記事を参考に、App Service に React のフロントエンドアプリをデプロイします。
 
 - [Azure で静的 HTML Web アプリを作成する](https://learn.microsoft.com/ja-jp/azure/app-service/quickstart-html#create-a-web-app)
 
@@ -78,11 +78,11 @@ az webapp up \
     --html
 ```
 
-### フロントエンドアプリケーションから Azure AD 認証を必要とする API を呼び出す
+### フロントエンドアプリから Azure AD 認証を必要とする API を呼び出す
 
-[アプリ コードでのトークンの取得](https://learn.microsoft.com/ja-jp/azure/app-service/configure-authentication-oauth-tokens#retrieve-tokens-in-app-code) に記載があるように、AAD 認証済クライアントは、`/.auth/me` にリクエストすることでアクセストークンを取得することができます。
+[アプリ コードでのトークンの取得](https://learn.microsoft.com/ja-jp/azure/app-service/configure-authentication-oauth-tokens#retrieve-tokens-in-app-code) に記載があるように、AAD 認証済クライアントは、`/.auth/me` にリクエストすることでアクセストークンを取得できます。
 
-API コールのためにフロントエンドアプリケーションコードで必要な実装は、以下の 2 点です。
+API コールのためにフロントエンドアプリコードで必要な実装は、以下の 2 点です。
 
 - `/.auth/me` にリクエストして `access_token` を取得
 - 取得した `access_token` をヘッダに追加して Azure Functions を呼び出す
@@ -138,11 +138,11 @@ export async function main() {
 
 ## AAD 認証の設定
 
-- App Service (=フロントエンドアプリケーション)
+- App Service (=フロントエンドアプリ)
     - `App Service > 認証` に Microsoft の ID プロバイダーを登録
         - 発行者の URL を空欄にする
     - `Azure AD > 管理 > API のアクセス許可` に API (=Azure Functions) のアクセス許可を追加
-    - `loginParameters` 設定を Azure Resource Explorer で書き換える。(Azure FunctionsのアプリケーションIDを追記)
+    - `loginParameters` 設定を Azure Resource Explorer で書き換える。(Azure Functions のアプリケーション ID を追記)
     - 参考: [Accessing Microsoft Graph with App Service Auth V2](https://azureossd.github.io/2021/06/07/authsettingsv2-graph/)
 - Azure Functions (=API)
     - `関数アプリ > 設定 > 認証` の ID プロバイダーに Microsoft を追加
@@ -166,9 +166,7 @@ export async function main() {
 - [How to call an AAD protected Azure Function from React](https://www.smcculloch.com/how-to-call-aad-protected-azure-function-from-react#:~:text=How%20to%20call%20an%20AAD%20protected%20Azure%20Function,...%205%20Step%205%3A%20Obtain%20Access%20Token%20)
 
 実装に際しては上記ドキュメントをご参照ください。
-MSAL ライブラリをアプリケーション側で import したり、アプリケーション側に認証設定を抱える(=アプリケーション ID やテナント設定を組み込む)ため、
+MSAL ライブラリをアプリケーション側に組み込むため以下の対応が必要になります。
 
-- リソース変更の度に ID 設定変更を入れてフロントエンドアプリケーションをリビルドする必要がある
-- 依存ライブラリの更新があったら都度更新する必要がある
-
-といった作業が必要です。
+- リソース変更の度に ID 設定変更を入れてフロントエンドアプリをリビルドする
+- 依存ライブラリの更新があったら都度更新する

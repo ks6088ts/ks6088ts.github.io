@@ -18,7 +18,7 @@ Syntax highlighting、インテリセンスなどを有効にするため、[Pow
 ## ドキュメント
 
 基本的には、[PowerShell Documentation](https://learn.microsoft.com/ja-jp/powershell/)の公式情報を参照します。
-具体的な文法や使い方に関してサンプルコードを見たい場合は、[~について知りたかったことのすべて](https://learn.microsoft.com/ja-jp/powershell/scripting/learn/deep-dives/everything-about-arrays)を参照すると良いと思います。
+具体的な文法や使い方に関してサンプルコードを見たい場合は、[~について知りたかったことのすべて](https://learn.microsoft.com/ja-jp/powershell/scripting/learn/deep-dives/everything-about-arrays)を参照すると良いです。
 PowerShell スクリプト開発のベストプラクティスを知りたい場合は、[PowerShell Best Practices and Style Guide](https://poshcode.gitbook.io/powershell-practice-and-style/) が参考になります。
 
 ### Code snippets
@@ -91,4 +91,4 @@ Install-Module -Name Pester -Scope CurrentUser
 ## Docker
 
 PowerShell スクリプトの再現性担保のために、Docker コンテナ上で開発したい場合、ベースとなるコンテナイメージは [mcr.microsoft.com/powershell](https://mcr.microsoft.com/en-us/product/powershell/tags) にあります。必要な tag を指定して利用してください。
-特に、PowerShell module が廃止になる場合に、その module の依存を剥がす開発をする場合などで重宝しました。
+特に、PowerShell module が廃止になる場合、その module の依存を剥がす開発をする場合などで重宝しました。

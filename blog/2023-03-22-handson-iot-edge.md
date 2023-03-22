@@ -65,7 +65,7 @@ CONNECTION_STRING=$(az iot hub device-identity connection-string show --device-i
 
 エッジ側のリソースとして、仮想マシン上にアプリケーションをデプロイします。  
 Azure IoT Edge によるアプリケーションのデプロイでは、エッジ側にコンテナランタイムやエージェントのインストールが必要になります。  
-[クイック スタート:初めての IoT Edge モジュールを Linux 仮想デバイスにデプロイする / IoT Edge デバイスを展開する](https://learn.microsoft.com/ja-jp/azure/iot-edge/quickstart-linux?view=iotedge-1.4#deploy-the-iot-edge-device)に記載されている ARM テンプレートを利用して、必要な依存関係が解決された仮想マシンを以下のコマンドでデプロイします。
+[クイック スタート:初めての IoT Edge モジュールを Linux 仮想デバイスにデプロイする](https://learn.microsoft.com/ja-jp/azure/iot-edge/quickstart-linux?view=iotedge-1.4#deploy-the-iot-edge-device)を参考に ARM テンプレートを利用して、仮想マシンを以下のコマンドでデプロイします。
 
 ```shell
 # Parameters
@@ -131,15 +131,15 @@ az acr login --name $CONTAINER_REGISTRY_NAME
 
 1. [Azure IoT Hub の VSCode 拡張](https://marketplace.visualstudio.com/items?itemName=vsciot-vscode.azure-iot-toolkit)をインストール
 1. コマンドパレットを開き、`Azure IoT Hub : Select IoT Hub` から対象となる IoT Hub を選択
-1. VSCode の Explorer にて `deployment.template.json` を右クリックし、`Build and Push IoT Edge Solution` を選択し、Docker Image の Build と ACR への Push が実行される
-1. 成功すると、ACR の Repository にコンテナイメージが追加される
+1. VSCode の Explorer にて `deployment.template.json` を右クリックし、`Build and Push IoT Edge Solution` を選択
+1. Docker Image の Build と ACR への Push が実行され、ACR の Repository にコンテナイメージが追加される
 
 ### IoT Module のデプロイ
 
 1. VSCode の Explorer の `AZURE IOT HUB` タブの対象デバイスを右クリックし `Create Deployment for Single Device` を選択
 1. `config/deployment.json` を選択して IoT Edge Module を転送
 
-Azure Portal の `Azure IoT Hub > IoT Edge` から適切に IoT Edge Module が設定されているか確認することができます。  
+Azure Portal の `Azure IoT Hub > IoT Edge` から適切に IoT Edge Module が設定されているか確認できます。  
 または、転送先の Edge から以下のコマンドで IoT Edge Module の起動状態を確認できます。
 
 ```shell
