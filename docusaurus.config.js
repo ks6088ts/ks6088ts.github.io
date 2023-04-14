@@ -76,18 +76,12 @@ const config = {
       // Replace with your project's social card
       image: 'https://github.com/ks6088ts.png',
       navbar: {
-        title: 'ks6088ts',
+        title: 'Home',
         logo: {
           alt: 'My Site Logo',
           src: 'https://github.com/ks6088ts.png',
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'home',
-            position: 'left',
-            label: 'Home',
-          },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/ks6088ts/ks6088ts.github.io',
@@ -106,6 +100,14 @@ const config = {
                 label: 'Blog',
                 to: '/blog',
               },
+              {
+                label: 'Projects',
+                to: '/docs/category/projects',
+              },
+              {
+                label: 'Privacy Policy',
+                to: '/docs/privacy-policy',
+              },
             ],
           },
           {
@@ -115,14 +117,9 @@ const config = {
                 label: 'Twitter',
                 href: 'https://twitter.com/ks6088ts',
               },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/ks6088ts',
               },
               {
                 label: 'GitHub',
