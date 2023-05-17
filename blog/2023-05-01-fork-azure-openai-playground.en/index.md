@@ -5,7 +5,7 @@ authors: ks6088ts
 tags: [azure, azure-ad, azure-openai-service, app-service]
 ---
 
-* This article is translated from [Azure OpenAI Service を利用した ChatGPT お試し環境の構築](../2023-05-01-fork-azure-openai-playground)
+* This article is translated from [Azure OpenAI Service を利用した ChatGPT お試し環境の構築](/blog/fork-azure-openai-playground)
 
 ---
 
