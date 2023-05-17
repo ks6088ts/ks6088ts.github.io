@@ -89,7 +89,7 @@ docker run --platform=linux/amd64 --rm \
     --env "AZURE_OPENAI_API_KEY=<YOUR API KEY>" \
     --env "AZURE_OPENAI_NAME=<YOUR AOAI NAME>" \
     --env "AZURE_OPENAI_DEPLOYMENT_NAME=<YOUR DEPLOYMENT NAME>" \
-		--env "AZURE_OPENAI_API_VERSION=$(AZURE_OPENAI_API_VERSION)" \
+    --env "AZURE_OPENAI_API_VERSION=$(AZURE_OPENAI_API_VERSION)" \
     ks6088ts/azure-openai-playground:0.0.5
 ```
 
