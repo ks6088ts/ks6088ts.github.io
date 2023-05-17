@@ -89,7 +89,8 @@ docker run --platform=linux/amd64 --rm \
     --env "AZURE_OPENAI_API_KEY=<YOUR API KEY>" \
     --env "AZURE_OPENAI_NAME=<YOUR AOAI NAME>" \
     --env "AZURE_OPENAI_DEPLOYMENT_NAME=<YOUR DEPLOYMENT NAME>" \
-    ks6088ts/azure-openai-playground:0.0.2
+		--env "AZURE_OPENAI_API_VERSION=$(AZURE_OPENAI_API_VERSION)" \
+    ks6088ts/azure-openai-playground:0.0.5
 ```
 
 ### 3. App Service にデプロイする
@@ -128,7 +129,8 @@ az webapp config appsettings set \
         WEBSITES_PORT=3000 \
         AZURE_OPENAI_API_KEY=$AZURE_OPENAI_API_KEY \
         AZURE_OPENAI_NAME=$AZURE_OPENAI_NAME \
-        AZURE_OPENAI_DEPLOYMENT_NAME=$AZURE_OPENAI_DEPLOYMENT_NAME
+        AZURE_OPENAI_DEPLOYMENT_NAME=$AZURE_OPENAI_DEPLOYMENT_NAME \
+        AZURE_OPENAI_API_VERSION=$AZURE_OPENAI_API_VERSION
 
 # 設定を反映させるために App Service を再起動する
 az webapp restart \
