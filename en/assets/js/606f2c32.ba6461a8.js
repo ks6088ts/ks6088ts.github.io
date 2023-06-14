@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[7770],{4593:s=>{s.exports=JSON.parse('{"label":"app-service","permalink":"/en/blog/tags/app-service","allTagsPath":"/en/blog/tags","count":2}')}}]);

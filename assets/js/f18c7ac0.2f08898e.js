@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[7015],{150:a=>{a.exports=JSON.parse('{"label":"api-management","permalink":"/blog/tags/api-management","allTagsPath":"/blog/tags","count":1}')}}]);
