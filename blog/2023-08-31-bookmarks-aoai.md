@@ -10,6 +10,8 @@ Azure OpenAI Service 活用のために個人的に参考になった情報源�
 
 <!--truncate-->
 
+<!-- textlint-disable -->
+
 ## スライド
 
 - [ChatGPT - Azure OpenAI 大全](https://speakerdeck.com/hirosatogamo/chatgpt-azure-openai-da-quan)
@@ -60,3 +62,5 @@ Azure OpenAI Service 活用のために個人的に参考になった情報源�
 - [Android / ChatGPT](https://play.google.com/store/apps/details?id=com.openai.chatgpt)
 - [Web / ChatGPT](https://chat.openai.com/)
 - [Bing Chat Enterprise](https://aka.ms/bingchatenterprise)
+
+<!-- textlint-enable -->
