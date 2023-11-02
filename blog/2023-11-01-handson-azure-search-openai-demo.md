@@ -75,6 +75,17 @@ ref. [Running locally](https://github.com/Azure-Samples/azure-search-openai-demo
 Azure Portal > Cognitive Search > Search management > Indexes 画面からインデックスの設定を確認します。  
 ref. [Azure Cognitive Search のインデックス](https://learn.microsoft.com/ja-jp/azure/search/search-what-is-an-index)
 
+**Cognitive Search のインデックス作成**
+
+インデックスを再作成・更新する場合は、`data/` に pdf ファイルを置いた後以下のコマンドを実行してください。
+
+```shell
+./scripts/prepdocs.sh
+```
+
+上記スクリプトは、ドキュメント自体に変更が無ければ index は再作成されないようになっています。  
+ref. [Store an MD5 hash of uploaded/indexed file and check before prepdocs #835](https://github.com/Azure-Samples/azure-search-openai-demo/pull/835)
+
 ## FAQ
 
 リポジトリの FAQ は [Azure-Samples/azure-search-openai-demo#faq](https://github.com/Azure-Samples/azure-search-openai-demo#faq) にあります。
