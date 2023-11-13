@@ -58,12 +58,16 @@ cd baseline-environment-on-azure-bicep/infra
 make deployment-create SCENARIO=example
 ```
 
-(FIXME: デフォルトだと関係のない不要なリソースもデプロイされてしまいますので、必要に応じて .bicepparam のフラグ設定を書き換えてください。今回は説明のため全部デプロイしてしまいます。)
+(FIXME: デフォルトだと関係のない不要なリソースもデプロイされてしまいます。必要に応じて .bicepparam のフラグ設定を書き換えてください。今回は説明のため全部デプロイしています。)
 
 ## 1. AOAI にプライベートエンドポイントから接続する方法
 
-Azure Portal からの操作方法は [Azure OpenAI にプライベートエンドポイント（Private Endpoint）を設定して東日本リージョンの仮想ネットワークのみから使う](https://blog.jbs.co.jp/entry/2023/04/07/173940) が詳しいです。
-今回は Bicep コードで構築済で、Private Endpoint 接続に関連するリソースは、[baseline-environment-on-azure-bicep/infra/modules/virtualNetwork.bicep](https://github.com/ks6088ts-labs/baseline-environment-on-azure-bicep/blob/main/infra/modules/virtualNetwork.bicep) の `openAiPrivateDnsZone `, `openAiPrivateDnsZoneVirtualNetworkLink`, `openAiPrivateEndpoint`, `openAiPrivateDnsZoneGroupName` が該当します。
+<!-- textlint-disable -->
+
+Azure Portal からの操作方法は [Azure OpenAI にプライベートエンドポイント（Private Endpoint）を設定して東日本リージョンの仮想ネットワークのみから使う](https://blog.jbs.co.jp/entry/2023/04/07/173940) が詳しいです。  
+今回は Azure Portal ではなく IaC スクリプトにてインフラは構築済です。Private Endpoint 接続に関連するリソースは、[baseline-environment-on-azure-bicep/infra/modules/virtualNetwork.bicep](https://github.com/ks6088ts-labs/baseline-environment-on-azure-bicep/blob/main/infra/modules/virtualNetwork.bicep) の `openAiPrivateDnsZone `, `openAiPrivateDnsZoneVirtualNetworkLink`, `openAiPrivateEndpoint`, `openAiPrivateDnsZoneGroupName` が該当します。
+
+<!-- textlint-enable -->
 
 こちらの環境で VM に SSH でログインして Azure OpenAI Service にプライベートエンドポイントから接続出来ていることを確認します。  
 以下のように `nslookup` の結果を見るとプライベートアドレスが返ってきます。  
@@ -84,9 +88,13 @@ Address: 10.3.1.5
 
 手順は以下の通りです。
 
+<!-- textlint-disable -->
+
 1. VM のシステム割り当てマネージド ID を有効にする (今回は Bicep 側で既に有効化しています。参考資料は [Azure portal を使用して Azure VM で Azure リソースのマネージド ID を構成する](https://learn.microsoft.com/ja-jp/entra/identity/managed-identities-azure-resources/qs-configure-portal-windows-vm))
 2. VM のシステム割り当てマネージド ID に対して AOAI リソースの呼び出し権限を割り当てる (Azure Portal から AOAI リソースを開き、IAM > Add role assignment > `Cognitive Services OpenAI User` を選び、割当先として VM のマネージド ID を指定します。参考: [マネージド ID を使用して Azure OpenAI Service を構成する方法](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/how-to/managed-identity))
 3. 以下コマンドで API Key 無しに呼び出しができることを確認する
+
+<!-- textlint-enable -->
 
 ```shell
 # 仮想環境の準備
@@ -116,11 +124,7 @@ response = openai.ChatCompletion.create(
     {"role":"user","content":"Hello"},
   ],
   temperature=0,
-  max_tokens=800,
-  top_p=0.95,
-  frequency_penalty=0,
-  presence_penalty=0,
-  stop=None)
+)
 
 # 確認
 response
