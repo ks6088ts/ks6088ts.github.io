@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[2313],{3174:s=>{s.exports=JSON.parse('{"label":"Microsoft Graph","permalink":"/en/blog/tags/microsoft-graph","allTagsPath":"/en/blog/tags","count":1}')}}]);
