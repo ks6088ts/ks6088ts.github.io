@@ -1,12 +1,20 @@
 ---
 slug: handson-rag-app
-title: Azure OpenAI Service のベーシックな機能と Bing Search API を利用した RAG アプリの作成
+title: Azure 上で作る RAG アプリの基礎
 authors: ks6088ts
 tags: [azure, app-service, azure-openai-service]
 ---
 
-本記事では Azure OpenAI Service のベーシックな機能を curl と Python のサンプルを交えて紹介します。  
-また、Bing Search API と連携した小規模な RAG アプリの作成を通じて、Azure OpenAI Service の利用方法を紹介します。
+<!-- textlint-disable -->
+
+本記事では Azure 上で RAG アプリを開発するにあたり、必要となる関連リソースとして Azure OpenAI Service, Azure AI Search, Bing Search のベーシックな機能を確認します。
+
+<!-- textlint-enable -->
+
+実際に、Bing Search API や Azure AI Search と連携した小規模な RAG アプリの作成も行います。
+
+なお、本記事で掲載している Python スクリプトは、以下のリポジトリに配置しています。
+[https://github.com/ks6088ts-labs/recipes](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/README.md)
 
 <!--truncate-->
 
@@ -14,7 +22,9 @@ tags: [azure, app-service, azure-openai-service]
 
 <!-- textlint-disable -->
 
-Azure OpenAI Service の外部仕様として、 OpenAPI で書かれた仕様書が GitHub の [specification/cognitiveservices/data-plane/AzureOpenAI/inference](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference) で公開されています。
+Azure OpenAI Service の外部仕様として、[Azure OpenAI Service の REST API リファレンス](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/reference) が公開されています。
+
+詳細なリクエスト・レスポンスの仕様は、OpenAPI のフォーマットで記載された仕様書が GitHub の [specification/cognitiveservices/data-plane/AzureOpenAI/inference](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference) で公開されています。
 
 API バージョンごとに仕様は別ファイルとして定義されております。例えば、`2023-12-01-preview` ですと [specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json](https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json)で確認できます。
 
@@ -27,7 +37,9 @@ OpenAPI 仕様書の JSON ファイルは GitHub 上で `Raw` ボタンをクリ
 
 <!-- textlint-disable -->
 
-外部仕様が確認できたら、なるべくライブラリ等の依存関係が無い状態で素の HTTP リクエストを発行して動作確認すると理解が深まります。ここでは curl コマンドを使って API を叩いてみます。
+外部仕様が確認できたら、なるべくライブラリ等の依存関係が無い状態で素の HTTP リクエストを発行して動作確認すると理解が深まります。
+ここでは curl コマンドを使って API を叩いてみます。
+
 curl だけだと複雑なリクエストを送るのに手間がかかるため、OpenAI 社が提供する Python ライブラリ [openai/openai-python](https://github.com/openai/openai-python) を使って、Python から Azure OpenAI Service を利用する方法も紹介します。
 
 [Python を使用して OpenAI エンドポイントと Azure OpenAI エンドポイントを切り替える方法](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/how-to/switching-endpoints)を参考に、以下のプログラムを実行することで、Azure OpenAI Service を利用できます。
@@ -129,6 +141,42 @@ YOUR_API_KEY="your-api-key"
   },
   "system_fingerprint": "fp_68a7d165bf"
 }
+```
+
+Azure OpenAI Service の Chat Completions API には逐次部分的にレスポンスを返す stream mode があります。チャット UI などリアルタイム性を要求するアプリにはこちらが有効です。stream をオンにしてリクエストを投げると以下のような挙動になります。
+
+```shell
+❯ curl -X 'POST' \
+    "https://$YOUR_AOAI_NAME.openai.azure.com/openai/deployments/$YOUR_DEPLOYMENT_ID/chat/completions?api-version=2023-12-01-preview" \
+    -H "api-key: $YOUR_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "messages": [
+        {"role": "user", "content": "What is the weather like in Boston and New York?"}
+      ],
+      "stream": true
+    }'
+data: {"id":"","object":"","created":0,"model":"","prompt_filter_results":[{"prompt_index":0,"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"choices":[]}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"role":"assistant"},"content_filter_results":{}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"content":"As"},"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"content":" of"},"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"content":" now"},"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"content":","},"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_68a7d165bf"}
+
+...
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"content":" winds"},"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":null,"index":0,"delta":{"content":"."},"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: {"id":"chatcmpl-8uw19bQk3hDKNIlwyK5md5wkLdBgA","object":"chat.completion.chunk","created":1708580079,"model":"gpt-35-turbo","choices":[{"finish_reason":"stop","index":0,"delta":{},"content_filter_results":{}}],"system_fingerprint":"fp_68a7d165bf"}
+
+data: [DONE]
 ```
 
 #### Python 版
@@ -599,7 +647,9 @@ print(chat_completion.choices[0].message.content)
 }
 ```
 
-## Bing Search API のハンズオン
+## Bing Search API を使った RAG の例
+
+### Bing Search API のハンズオン
 
 RAG アプリを作成するために、外部の情報源として Bing Search API を利用します。
 Bing Search API の外部仕様は [Bing Search API documentation](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/) で公開されています。
@@ -612,7 +662,7 @@ Bing Search API の外部仕様は [Bing Search API documentation](https://learn
 
 作成すると API キーが発行されるので、それを利用して Bing Search API を利用できます。
 
-### curl 版
+#### curl 版
 
 ```shell
 YOUR_BING_SEARCH_API_KEY="your-bing-search-api-key"
@@ -621,7 +671,7 @@ curl "https://api.bing.microsoft.com/v7.0/search?q='Microsoft'" \
     -H "Ocp-Apim-Subscription-Key: $YOUR_BING_SEARCH_API_KEY"
 ```
 
-### Python 版
+#### Python 版
 
 [Bing Web Search samples](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/samples#samples-using-native-http-get-requests) に各種言語のサンプルがあります。ここでは Python の例を示します。
 
@@ -663,13 +713,13 @@ print("\n".join(sources))
 「プリキュア」新作タイトルは「わんだふるぷりきゅあ！」初 ...
 ```
 
-## RAG アプリの作成
+### RAG アプリの作成
 
 Azure OpenAI Service と Bing Search API を利用して、RAG アプリを作成します。
 curl でも実装は可能ですが、コードが複雑になるためここでは Python で実装した例のみ紹介します。
 以下のプログラムは、Bing Search API を利用して検索結果を取得し、それを Azure OpenAI Service に渡して回答を取得するプログラムです。
 
-```python title="rag.py"
+```python title="rag_bing.py"
 import os
 from openai import AzureOpenAI
 import requests
@@ -724,7 +774,7 @@ if __name__ == "__main__":
 実行結果は以下の通りです。
 
 ```shell
-❯ python rag.py
+❯ python rag_bing.py
 ボットの回答: 最新のプリキュアシリーズのタイトルは『わんだふるぷりきゅあ！』です。
 ```
 
@@ -736,3 +786,87 @@ Bing Search の最新の検索結果を Azure OpenAI Service に渡して回答�
 Bing Search API の結果の中に、[デリシャスパーティプリキュア](https://ja.wikipedia.org/wiki/%E3%83%87%E3%83%AA%E3%82%B7%E3%83%A3%E3%82%B9%E3%83%91%E3%83%BC%E3%83%86%E3%82%A3%E2%99%A1%E3%83%97%E3%83%AA%E3%82%AD%E3%83%A5%E3%82%A2) も入っていましたが、21 作目と 19 作目という情報が入っていたため、Azure OpenAI Service にて正しい回答が生成できたと考えられます。
 
 <!-- textlint-enable -->
+
+## Azure AI Search を使った RAG の例
+
+Azure AI Search の利用方法について参考情報を以下に示します。
+
+- [Azure AI Search REST API リファレンス](https://learn.microsoft.com/ja-jp/rest/api/searchservice/?view=rest-searchservice-2023-11-01)
+- [REST API バージョン (Azure AI Search)](https://learn.microsoft.com/ja-jp/rest/api/searchservice/search-service-api-versions)
+- [Azure AI Search の各種操作](https://learn.microsoft.com/ja-jp/rest/api/searchservice/operation-groups?view=rest-searchservice-2023-11-01)
+- [OpenAPI specification: Azure/azure-rest-api-specs](https://github.com/Azure/azure-rest-api-specs/tree/master/specification/search/data-plane/Azure.Search)
+- [SDK サンプルコード / Samples for Azure Cognitive Search client library for Python](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/search/azure-search-documents/samples)
+
+### Azure AI Search のハンズオン
+
+[ポータルで Azure AI Search サービスを作成する](https://learn.microsoft.com/ja-jp/azure/search/search-create-service-portal) を参考に、Azure Portal で Azure AI Search サービスを作成します。  
+Azure AI Search でベクトル検索を利用するためには、別途 Azure OpenAI Service のリソースも必要です。[Azure OpenAI Service リソースを作成してデプロイする](https://learn.microsoft.com/ja-JP/azure/ai-services/openai/how-to/create-resource?pivots=web-portal)を参考にデプロイします。
+
+[python/azure_ai_search_client](https://github.com/ks6088ts-labs/recipes/tree/main/python/azure_ai_search_client) に全体の実装例を掲載しています。
+
+#### curl 版
+
+[API リファレンス / データ プレーン](https://learn.microsoft.com/ja-jp/rest/api/searchservice/operation-groups?view=rest-searchservice-2023-11-01) 以下に各種操作の API とその実行例があります。
+
+<!-- table -->
+
+| API                                                                                                                                                    | 説明                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------- |
+| [Indexes - Create](https://learn.microsoft.com/en-us/rest/api/searchservice/indexes/create?view=rest-searchservice-2023-11-01&tabs=HTTP)               | インデックスの作成                     |
+| [Add, Update or Delete Documents (Azure AI Search REST API)](https://learn.microsoft.com/en-us/rest/api/searchservice/addupdate-or-delete-documents)   | ドキュメントの登録                     |
+| [Documents - Search Post](https://learn.microsoft.com/en-us/rest/api/searchservice/documents/search-post?view=rest-searchservice-2023-11-01&tabs=HTTP) | インデックス上にあるドキュメントの検索 |
+
+#### Python 版
+
+[recipes/python/handson_rag_apps/scripts
+/azure_ai_search.py](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/scripts/azure_ai_search.py) にサンプルコードを掲載しています。
+
+### Azure Portal から検索する方法
+
+[クイック スタート: Search エクスプローラーを使用して Azure portal でクエリを実行する](https://learn.microsoft.com/ja-jp/azure/search/search-explorer) を参考に、Azure Portal から Azure AI Search を利用します。
+呼び出している API は [Documents - Search Post](https://learn.microsoft.com/ja-jp/rest/api/searchservice/documents/search-post?view=rest-searchservice-2023-11-01&tabs=HTTP) となります。
+
+例えば[検索結果無いのフィールドを制限](https://learn.microsoft.com/ja-jp/azure/search/search-explorer#limit-fields-in-search-results)したい場合、`select` を利用します。ベクトル検索利用時に embedding フィールドがあると見通しが悪い時などに利用することが多いです。
+
+```shell
+{
+   "search": "seattle condo",
+   "select": "content, id, category, sourcefile, sourcepage"
+}
+```
+
+### RAG のプログラムに Azure AI Search を組み込む
+
+Azure AI Search を利用して RAG アプリを作成します。
+RAG のデータソースを取得する箇所が Azure AI Search で置き換わっただけで、その他の処理は変更がありません。
+
+```shell
+@app.command()
+def rag(query_text="河原町さんの好きなスポーツは何ですか？"):
+    index_name = get_index_name()
+    documents = asyncio.run(
+        search_impl(
+            query_text=query_text,
+            index_name=index_name,
+        )
+    )
+    sources = []
+    for document in documents:
+        sources.append(document["content"])
+    sources_str = "\n".join(sources)
+    client = get_azure_openai_client()
+    messages = [
+        {"role": "system", "content": "あなたは優秀なヘルプデスクボットです。"},
+        {"role": "user", "content": query_text},
+    ]
+    messages.append({"role": "system", "content": f"Sources: {sources_str}"})
+
+    chat_completion = client.chat.completions.create(
+        model=os.getenv("azure_deployment_gpt"),
+        messages=messages,
+    )
+    print(chat_completion.choices[0].message.content)
+```
+
+[Azure AI Search / RAG](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/README.md#rag-1) に実行例がありますが、注目すべき点は Azure AI Search で取得した知識を元に自然な回答が生成されていることです。
+Azure AI Search に登録されていない知識に関しては正しく回答できないため、データソースの充実が重要です。
