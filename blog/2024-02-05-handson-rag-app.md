@@ -1,37 +1,88 @@
 ---
 slug: handson-rag-app
-title: Azure 上で作る RAG アプリの基礎
+title: Azure 上で作る RAG アプリ開発入門
 authors: ks6088ts
 tags: [azure, app-service, azure-openai-service]
 ---
 
 <!-- textlint-disable -->
 
-本記事では Azure 上で RAG アプリを開発するにあたり、必要となる関連リソースとして Azure OpenAI Service, Azure AI Search, Bing Search のベーシックな機能を確認します。
+本記事では Azure 上で RAG アプリを開発するにあたり、必要となる関連リソースとして Azure OpenAI Service, Azure AI Search, Bing Search のベーシックな機能を確認します。実際に、Bing Search API や Azure AI Search と連携した小規模な RAG アプリの作成も行います。
 
 <!-- textlint-enable -->
 
-実際に、Bing Search API や Azure AI Search と連携した小規模な RAG アプリの作成も行います。
-
-なお、本記事で掲載している Python スクリプトは、以下のリポジトリに配置しています。
-[https://github.com/ks6088ts-labs/recipes](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/README.md)
+本記事で掲載している Python スクリプトは、以下のリポジトリに配置しています。
+[https://github.com/ks6088ts-labs/recipes/python/handson_rag_apps](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/README.md)
 
 <!--truncate-->
 
-## Azure OpenAI Service の仕様を確認する
+## Azure 関連サービスのキャッチアップ方法
 
 <!-- textlint-disable -->
 
-Azure OpenAI Service の外部仕様として、[Azure OpenAI Service の REST API リファレンス](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/reference) が公開されています。
-
-詳細なリクエスト・レスポンスの仕様は、OpenAPI のフォーマットで記載された仕様書が GitHub の [specification/cognitiveservices/data-plane/AzureOpenAI/inference](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference) で公開されています。
-
-API バージョンごとに仕様は別ファイルとして定義されております。例えば、`2023-12-01-preview` ですと [specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json](https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json)で確認できます。
-
-[Swagger UI](https://petstore.swagger.io/) のデモサイトに Azure OpenAI Service の仕様を読み込ませることで、API の仕様をグラフィカルに確認できます。
-OpenAPI 仕様書の JSON ファイルは GitHub 上で `Raw` ボタンをクリックすることで取得できます。例えば、`https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json` を Swagger UI の `Explore` ボタンに入力することで、API の仕様を確認できます。
+サービスを使いこなしてアプリを開発・リリースするためには、いくつかのステップを踏むことが必要です。
+私は以下のステップでサービスのキャッチアップをすることが多いです。
 
 <!-- textlint-enable -->
+
+### 1. 仕様を理解する
+
+Microsoft Azure の AI 関連サービスについては、Microsoft Learn に多くのドキュメントが公開されています。基本的に最初に仕様を理解するためには、公式ドキュメントを読むことが重要です。
+
+- MS Learn の概要ページ
+- REST API リファレンス
+- (詳細の理解が必要な場合) OpenAPI 仕様書
+
+が適切な一次情報です。
+
+日本語のドキュメントが古い場合は英語に切り替えるなどして、最新の情報を確認できる場合があります。
+Azure の REST API 仕様は [Azure/azure-rest-api-specs](https://github.com/Azure/azure-rest-api-specs) で公開されています。
+過去の API 仕様からの変遷や、ドキュメントが不足している場合は、OpenAPI 仕様書を確認することで補完できます。API リファレンスでは詳細が書ききれていないこともあるため、必要に応じてこちらのリポジトリを参照すると良いです。
+
+<!-- textlint-disable -->
+
+リポジトリの見方ですが、例えば Azure OpenAI Service では、API バージョンごとに仕様は別ファイルとして定義されております。
+`2023-12-01-preview` ですと [specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json](https://github.com/Azure/azure-rest-api-specs/blob/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json)で確認できます。
+
+[Swagger UI](https://petstore.swagger.io/) のデモサイトに Azure OpenAI Service の仕様を読み込ませることで、簡単に API の仕様をグラフィカルに確認できます。
+OpenAPI 仕様書の JSON ファイルは GitHub 上で `Raw` ボタンをクリックすることで取得できます。例えば、`https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2023-12-01-preview/inference.json` を Swagger UI の `Explore` ボタンに入力することで、API の仕様を確認できます。
+
+#### Azure OpenAI Service の参考情報
+
+- [Azure OpenAI Service とは](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/overview)
+- [Azure OpenAI Service の REST API リファレンス](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/reference)
+- [specification/cognitiveservices/data-plane/AzureOpenAI](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI)
+
+#### Azure AI Search の参考情報
+
+- [Azure AI Search とは](https://learn.microsoft.com/ja-jp/azure/search/search-what-is-azure-search)
+- [Azure AI Search REST API リファレンス](https://learn.microsoft.com/ja-jp/rest/api/searchservice/)
+- [specification/search/data-plane/Azure.Search](https://github.com/Azure/azure-rest-api-specs/tree/main/specification/search/data-plane/Azure.Search)
+
+<!-- textlint-enable -->
+
+### 2. 動かしてみる
+
+MS Learn のドキュメントを見ると、"チュートリアル"や"クイックスタート"があります。これらを実際に動かしてみることで、サービスの動作を理解できます。ドキュメントを読むだけだと想像がつかない場合には、実際に動かしてみることが重要です。
+
+例えば Azure の AI 関連リソースについては以下の情報があります。
+
+#### Azure OpenAI Service の参考情報
+
+- [チュートリアル: Azure OpenAI Service の埋め込みとドキュメント検索を確認する](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/tutorials/embeddings?tabs=python%2Ccommand-line&pivots=programming-language-python)
+- [クイック スタート: Azure OpenAI Service を使用してテキストの生成を開始する](https://learn.microsoft.com/ja-jp/azure/ai-services/openai/quickstart?tabs=command-line%2Cpython&pivots=programming-language-studio)
+
+#### Azure AI Search の参考情報
+
+- [1 - Python による Web サイトへの検索の追加の概要](https://learn.microsoft.com/ja-jp/azure/search/tutorial-python-overview)
+- [クイックスタート: Azure OpenAI Studio で検索インデックスとチャットする](https://learn.microsoft.com/ja-jp/azure/search/search-get-started-retrieval-augmented-generation)
+
+### 3. アプリを作る
+
+SDK 付属のサンプルコードは、各種機能を説明的かつシンプルに実装している場合が多く、非常に参考になります。以下は Python SDK のサンプルの参照リンクです。
+
+- [openai/openai-python](https://github.com/openai/openai-python)
+- [Azure AI Search の Python サンプル](https://learn.microsoft.com/ja-jp/azure/search/samples-python)
 
 ## Azure OpenAI Service のハンズオン
 
@@ -816,21 +867,73 @@ Azure AI Search でベクトル検索を利用するためには、別途 Azure 
 | [Add, Update or Delete Documents (Azure AI Search REST API)](https://learn.microsoft.com/en-us/rest/api/searchservice/addupdate-or-delete-documents)   | ドキュメントの登録                     |
 | [Documents - Search Post](https://learn.microsoft.com/en-us/rest/api/searchservice/documents/search-post?view=rest-searchservice-2023-11-01&tabs=HTTP) | インデックス上にあるドキュメントの検索 |
 
+[ks6088ts-labs/cogsearchctl](https://github.com/ks6088ts-labs/cogsearchctl/tree/main/examples) に配置されたサンプル用 json ファイルを使って以下の通り実行します。  
+json フォーマットのリクエストを送信するため、`-d @examples/create_index.json` のように `-d` オプションを使ってリクエストボディを指定します。
+
+```shell
+YOUR_AZURE_AI_SEARCH_ENDPOINT="https://youar-azure-ai-search-name.search.windows.net"
+YOUR_AZURE_AI_SEARCH_API_KEY="your-azure-ai-search-api-key"
+YOUR_AZURE_AI_SEARCH_INDEX_NAME="your-azure-ai-search-index-name"
+
+# インデックスの作成
+curl -X PUT "$YOUR_AZURE_AI_SEARCH_ENDPOINT/indexes/$YOUR_AZURE_AI_SEARCH_INDEX_NAME?api-version=2023-11-01" \
+  -H "Content-Type: application/json" \
+  -H "api-key: $YOUR_AZURE_AI_SEARCH_API_KEY" -d @examples/create_index.json
+
+❯ cat examples/create_index.json
+{
+  "fields": [
+    {
+      "name": "content",
+      "type": "Edm.String",
+      "facetable": false,
+      "filterable": false,
+      "key": false,
+      "retrievable": true,
+      ...
+    }
+  ],
+  "suggesters": [
+    {
+      "name": "sg1",
+      "searchMode": "analyzingInfixMatching",
+      "sourceFields": ["merged_content"]
+    }
+  ],
+  "scoringProfiles": [],
+  "defaultScoringProfile": "",
+  "corsOptions": {
+    "allowedOrigins": ["*"],
+    "maxAgeInSeconds": null
+  },
+  "analyzers": [],
+  "charFilters": [],
+  "tokenFilters": [],
+  "tokenizers": [],
+  "similarity": {
+    "@odata.type": "#Microsoft.Azure.Search.BM25Similarity",
+    "k1": null,
+    "b": null
+  }
+}
+```
+
 #### Python 版
 
 [recipes/python/handson_rag_apps/scripts
-/azure_ai_search.py](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/scripts/azure_ai_search.py) にサンプルコードを掲載しています。
+/azure_ai_search.py](https://github.com/ks6088ts-labs/recipes/blob/main/python/handson_rag_apps/scripts/azure_ai_search.py) にサンプルコードを掲載しています。  
+インデックスの作成、ドキュメントの登録、検索の 3 つの操作を実施する CLI プログラムです。
 
 ### Azure Portal から検索する方法
 
 [クイック スタート: Search エクスプローラーを使用して Azure portal でクエリを実行する](https://learn.microsoft.com/ja-jp/azure/search/search-explorer) を参考に、Azure Portal から Azure AI Search を利用します。
 呼び出している API は [Documents - Search Post](https://learn.microsoft.com/ja-jp/rest/api/searchservice/documents/search-post?view=rest-searchservice-2023-11-01&tabs=HTTP) となります。
 
-例えば[検索結果無いのフィールドを制限](https://learn.microsoft.com/ja-jp/azure/search/search-explorer#limit-fields-in-search-results)したい場合、`select` を利用します。ベクトル検索利用時に embedding フィールドがあると見通しが悪い時などに利用することが多いです。
+例えば[検索結果内のフィールドを制限](https://learn.microsoft.com/ja-jp/azure/search/search-explorer#limit-fields-in-search-results)したい場合、`select` を利用します。ベクトル検索利用時に embedding フィールドがあると見通しが悪い時などに利用することが多いです。
 
 ```shell
 {
-   "search": "seattle condo",
+   "search": "*",
    "select": "content, id, category, sourcefile, sourcepage"
 }
 ```
