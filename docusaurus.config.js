@@ -133,6 +133,11 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        // https://docusaurus.io/docs/markdown-features/code-blocks#supported-languages
+        additionalLanguages: [
+          'hcl',
+          'bicep'
+        ],
       },
     }),
 };
