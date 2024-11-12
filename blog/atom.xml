@@ -9,8 +9,8 @@
     <icon>https://ks6088ts.github.io/https://github.com/ks6088ts.png</icon>
     <entry>
         <title type="html"><![CDATA[GitHub Actions から OpenID Connect で Azure に接続する設定の自動化方法]]></title>
-        <id>https://ks6088ts.github.io/blog/terraform-azure-dev-env</id>
-        <link href="https://ks6088ts.github.io/blog/terraform-azure-dev-env"/>
+        <id>https://ks6088ts.github.io/blog/configure-oidc-azure</id>
+        <link href="https://ks6088ts.github.io/blog/configure-oidc-azure"/>
         <updated>2024-12-13T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Microsoft Azure Tech Advent Calendar 2024 の 12/13 の投稿記事です。]]></summary>
         <content type="html"><![CDATA[<p><a href="https://qiita.com/advent-calendar/2024/microsoft-azure-tech" target="_blank" rel="noopener noreferrer">Microsoft Azure Tech Advent Calendar 2024</a> の 12/13 の投稿記事です。</p><p>本記事では、GitHub Actions から OpenID Connect で Azure に接続する設定の自動化方法についてご紹介します。</p><hr><h1>本記事を 3 行でまとめると</h1><ul><li>GitHub Actions から OpenID Connect で Azure に接続する設定作業が面倒なのでシェルスクリプトや Terraform で自動化しました。</li><li>どこからでもデプロイできるように、GitHub Codespaces や GitHub Actions から手動実行もできるようにしました。</li><li>スクリプトと Terraform のサンプルは <a href="https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform" target="_blank" rel="noopener noreferrer">https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform</a> にて MIT ライセンスで公開しています。</li></ul><hr><h1>OpenID Connect を使って Azure に接続することのメリット</h1><p>まず、<code>「GitHub Actions から OpenID Connect で Azure に接続する」</code>とはどういうことか説明します。</p><p>コードをホストする GitHub と、クラウドサービスを提供する Azure は、それぞれのサービスを連携させることができます。
