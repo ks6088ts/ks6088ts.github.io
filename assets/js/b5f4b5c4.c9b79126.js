@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[304],{5410:r=>{r.exports=JSON.parse('{"title":"Projects","description":"My projects.","slug":"/category/projects","permalink":"/docs/category/projects","navigation":{"next":{"title":"Terraform provider for SORACOM","permalink":"/docs/projects/terraform-provider-soracom"}}}')}}]);

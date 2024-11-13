@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[658],{3145:t=>{t.exports=JSON.parse('{"label":"textlint","permalink":"/blog/tags/textlint","allTagsPath":"/blog/tags","count":1}')}}]);

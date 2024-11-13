@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[3721],{4999:s=>{s.exports=JSON.parse('{"label":"bicep","permalink":"/en/blog/tags/bicep","allTagsPath":"/en/blog/tags","count":2}')}}]);

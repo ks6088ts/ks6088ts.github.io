@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[8815],{7839:s=>{s.exports=JSON.parse('{"label":"apim","permalink":"/blog/tags/apim","allTagsPath":"/blog/tags","count":1}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[9108],{5307:s=>{s.exports=JSON.parse('{"label":"openai","permalink":"/en/blog/tags/openai","allTagsPath":"/en/blog/tags","count":2}')}}]);

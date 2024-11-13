@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[1904],{2245:a=>{a.exports=JSON.parse('{"label":"aoai","permalink":"/en/blog/tags/aoai","allTagsPath":"/en/blog/tags","count":1}')}}]);
