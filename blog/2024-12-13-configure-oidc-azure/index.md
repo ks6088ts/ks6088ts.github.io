@@ -15,16 +15,15 @@ tags: [azure, terraform, github]
 
 # 本記事を 3 行でまとめると
 
-- GitHub Actions から OpenID Connect で Azure に接続する設定作業が面倒なのでシェルスクリプトや Terraform で自動化しました。
-- どこからでもデプロイできるように、GitHub Codespaces や GitHub Actions から手動実行もできるようにしました。
-- スクリプトと Terraform のサンプルは [https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform) にて MIT ライセンスで公開しています。
+- GitHub Actions から OpenID Connect で Azure に接続する設定作業をシェルスクリプトや Terraform で自動化しました。
+- GitHub Codespaces や GitHub Actions からリソースをデプロイできるようにしました。
+- スクリプトと Terraform のサンプルは [こちら](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform) にて MIT ライセンスで公開しています。
 
 ## 全体構成
 
 ### OpenID Connect 接続設定の自動化
 
-GitHub Actions から OpenID Connect で Azure に接続する設定を Terraform で自動化した処理の流れは以下の通りです。
-ローカル開発環境から、GitHub と Azure プラットフォーム上に接続に必要なリソースを作成しています。
+GitHub Actions から OpenID Connect で Azure に接続する設定を自動化した処理の流れは以下の通りです。ローカル開発環境から、GitHub と Azure プラットフォーム上に接続に必要なリソースを作成しています。アプリケーションのコードがシェルスクリプトか Terraform かの違いはありますが、基本的な流れはどちらも同じです。
 
 ![configure_oidc_azure.png](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/v0.0.1/docs/images/configure_oidc_azure.png?raw=true)
 
@@ -32,9 +31,9 @@ GitHub Actions から OpenID Connect で Azure に接続する設定を Terrafor
 
 払い出された接続設定を利用して、GitHub Actions から OpenID Connect で Azure に接続し、Azure のリソースを払い出す全体の流れは以下の通りです。
 
-![deploy_tfstate_backend.png](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/v0.0.1/docs/images/deploy_tfstate_backend.png?raw=true)
-
 GitHub Actions のワークフローから、参照する環境情報を切り替えることで、異なる環境に対してデプロイを行うこともできます。
+
+![deploy_tfstate_backend.png](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/v0.0.1/docs/images/deploy_tfstate_backend.png?raw=true)
 
 # OpenID Connect を使って Azure に接続することのメリット
 
@@ -48,7 +47,7 @@ Azure に接続するための認証方法として、種々の方法が提供�
 クライアントシークレットのような静的な認証情報はえてして有効期限が長く、漏洩した場合のリスクが高いです。また、キーの管理が煩雑になることもあります。  
 そこで、OpenID Connect を使って認証する方法が推奨されています。OpenID Connect を使って認証する場合、静的な認証情報を使わずに一時的なトークンを使って認証を行います。このトークンは有効期限が短く、アクセス元や対象のリソース権限範囲を細かく制限できるため、漏洩してもリスクが低いため、OpenID Connect を使って認証する方法が推奨されています。
 
-このあたりの詳細は [GitHub CI/CD 実践ガイド――持続可能なソフトウェア開発を支える GitHub Actions の設計と運用 エンジニア選書](https://amzn.to/3Co02xA) に書かれています。
+OpenID Connect を利用するメリットに関しては、[GitHub CI/CD 実践ガイド――持続可能なソフトウェア開発を支える GitHub Actions の設計と運用 エンジニア選書](https://amzn.to/3Co02xA) の `第11章　OpenID Connectによるセキュアなクラウド連携` の
 
 ## 手動で GitHub Actions から OpenID Connect で Azure に接続する設定を行う
 
@@ -114,18 +113,21 @@ GitHub Copilot のおかげでシェルスクリプトを書くのもだいぶ�
 
 ここではどの IaC ツールを使うかを検討してみます。
 
-#### Bicep で書いてみる
+#### Bicep の場合
 
 Bicep は Azure のリソース管理はもちろん、拡張機能を利用すると Microsoft Graph リソースの管理もできるようです。[クイック スタート: Microsoft Graph リソースを使用して最初の Bicep ファイルを作成してデプロイする](https://learn.microsoft.com/ja-jp/graph/templates/quickstart-create-bicep-interactive-mode?tabs=CLI) が参考になります。
 ただ、ドキュメントを見た感じ、リソースの作成までは流れても、削除までは統一的な操作で実施できないのが痒いポイントではないかと思います。(別途 REST API で削除しているのが気になる)
+2024 年 12 月現在は諸々限定的なようです。
 
-拡張機能としての口はあるので将来的に他のプラットフォームもサポートのような未来はあるかもしれませんが、2024 年 12 月現在は諸々限定的なようです。
+#### Terraform (HCL) の場合
 
-#### Terraform (HCL) で書いてみる
+[Terraform と Bicep の比較](https://learn.microsoft.com/ja-jp/azure/developer/terraform/comparing-terraform-and-bicep?tabs=comparing-bicep-terraform-integration-features#infrastructure-targets) でもマルチプラットフォーム対応を想定するなら Terraform が推奨されています。
 
-[Terraform と Bicep の比較](https://learn.microsoft.com/azure/developer/terraform/comparing-terraform-and-bicep?tabs=comparing-bicep-terraform-integration-features#state-and-backend) でもマルチプラットフォーム対応を想定するなら Terraform が推奨されています。
+今回は GitHub, Azure それぞれのプラットフォームに対してリソースを作成する必要があるので、Terraform で書いてみると良さそうです。
 
-統一的にコード管理をしたいので、今回はクロスプラットフォーム対応ができる Terraform で書いてみると良さそうです。各プラットフォーム向けに以下のプロバイダが提供されています。
+## Terraform で書いてみる
+
+各プラットフォーム向けに以下のプロバイダが提供されています。
 
 <!-- table -->
 
@@ -142,11 +144,13 @@ Bicep は Azure のリソース管理はもちろん、拡張機能を利用す�
 - [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform)
 - [HashiCorp HCL](https://marketplace.visualstudio.com/items?itemName=HashiCorp.HCL)
 
-自分の書くコードが信頼できないのでガードレールを敷くためにこれらもお勧めです。
+### 静的解析を導入する
 
-**[TFLint](https://github.com/terraform-linters/tflint)**
+Terraform のコードに静的解析ツールを導入しておくと、コードの品質を保つのに役立ちます。今回は以下のツールを導入してみました。
 
-静的解析ツール。未使用変数とかがあればこんな感じに怒ってくれる。
+#### **[TFLint](https://github.com/terraform-linters/tflint)**
+
+静的解析ツール。未使用変数とかがあると教えてくれます。例えば以下のように、未使用のデータソースがあることを指摘してくれます。
 
 ```
 2 issue(s) found:
@@ -169,13 +173,19 @@ make: *** [Makefile:52: tflint] Error 2
 Error: Process completed with exit code 2.
 ```
 
-**[Tfsec](https://github.com/aquasecurity/tfsec)**
+#### **[Tfsec](https://github.com/aquasecurity/tfsec)**
 
-セキュリティの静的解析ツール。セキュリティに関するベストプラクティスに沿っていないコードを見つけてくれる。例えば以下のように、セキュリティに関する問題を指摘してくれます。
+セキュリティの静的解析ツール。セキュリティに関するベストプラクティスに沿っていないコードを指摘してくれます。例えば以下のように、平文でパスワードを扱っていることを指摘してくれます。
 
 ```
 Results #1-4 HIGH Secret has plain text value (4 similar results)
 ```
+
+#### **[Trivy](https://github.com/aquasecurity/trivy)**
+
+Trivy はコンテナイメージの脆弱性スキャンツールですが、Terraform のコードにも適用できます。
+[tfsec is joining the Trivy family #1994](https://github.com/aquasecurity/tfsec/discussions/1994\) の記事によると、tfsec 利用者に Trivy への移行を推奨しているようです。
+既存のコードで tfsec を利用している場合は、[Migrating from tfsec to Trivy](https://github.com/aquasecurity/tfsec/blob/master/tfsec-to-trivy-migration-guide.md) を参考に移行を検討してみてください。
 
 ## どこからでも使えるようにしたい
 
