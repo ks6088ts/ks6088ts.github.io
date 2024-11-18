@@ -2,7 +2,7 @@
 slug: default-community-health-files
 title: GitHub リポジトリのデフォルト設定ファイルを追加する
 authors: ks6088ts
-tags: [GitHub, DevOps]
+tags: [github, devops]
 ---
 
 GitHub では、Organization または個人用アカウント配下に `.github` という名前のリポジトリを作成し、その中にデフォルトの設定ファイルを配置することで、Code of Conduct や Contributing Guide、Issue テンプレート、Pull Request テンプレート、Security Policy などの設定を共通化することができます。
@@ -57,7 +57,14 @@ Community Standards の対応状況は、リポジトリの `Insights` から確
 
 実際に Community Health Files を追加する手順を説明します。
 ゼロから始めると結構辛いので、まずは幾つかの OSS プロジェクトを参考にしながら、自分のプロジェクトとの整合性を判断しつつ取り込んでいくと良いと思います。
-私は、以下のプロジェクトを参考に設定ファイルを追加しました。
+
+個人的に参考にしている `.github` リポジトリは以下の通りです。
+
+- [github/.github](https://github.com/github/.github)
+- [microsoft/.github](https://github.com/microsoft/.github)
+- [google/.github](https://github.com/google/.github)
+
+また、参考になる設定ファイルの例として以下のリポジトリがあります。
 
 - [freeCodeCamp/freeCodeCamp](https://github.com/freeCodeCamp/freeCodeCamp)
 - [microsoft/vscode](https://github.com/microsoft/vscode)
@@ -70,6 +77,8 @@ Community Standards の対応状況は、リポジトリの `Insights` から確
 [https://github.com/ks6088ts-labs/.github](https://github.com/ks6088ts-labs/.github)
 
 以下では、個々のデフォルトの設定ファイルを追加する手順を説明します。
+
+---
 
 ### [プロジェクトへの行動規範の追加](https://docs.github.com/ja/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project)
 

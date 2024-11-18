@@ -2,7 +2,7 @@
 slug: graph-api-summary
 title: Microsoft Graph API 関連情報のまとめ
 authors: ks6088ts
-tags: [Microsoft Graph]
+tags: [microsoft-graph]
 ---
 
 Microsoft Graph API を触る必要が出てきたので、関連情報をまとめておきます。
