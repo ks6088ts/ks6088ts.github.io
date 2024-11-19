@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[3627],{264:s=>{s.exports=JSON.parse('{"label":"devops","permalink":"/en/blog/tags/devops","allTagsPath":"/en/blog/tags","count":1}')}}]);

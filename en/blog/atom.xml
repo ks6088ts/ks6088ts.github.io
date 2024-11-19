@@ -72,8 +72,8 @@ Terraform で GitHub リポジトリに環境を作成し、環境にシーク�
             <name>ks6088ts</name>
             <uri>https://github.com/ks6088ts</uri>
         </author>
-        <category label="GitHub" term="GitHub"/>
-        <category label="DevOps" term="DevOps"/>
+        <category label="github" term="github"/>
+        <category label="devops" term="devops"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Azure 上で作る RAG アプリ開発入門]]></title>
@@ -122,7 +122,7 @@ Graph Explorer は、ブラウザから Graph API を実行して簡単に試す
             <name>ks6088ts</name>
             <uri>https://github.com/ks6088ts</uri>
         </author>
-        <category label="Microsoft Graph" term="Microsoft Graph"/>
+        <category label="microsoft-graph" term="microsoft-graph"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[AOAI にプライベートエンドポイントから接続し、VM のマネージド ID を利用して API Key 無しで AOAI を呼び出す]]></title>
