@@ -1,6 +1,6 @@
 ---
 slug: configure-oidc-azure
-title: GitHub Actions から OpenID Connect で Azure に接続する設定作業を Terraform で自動化する方法
+title: GitHub Actions から OpenID Connect で Azure に接続する設定作業を Terraform で自動化する
 authors: ks6088ts
 tags: [azure, terraform, github]
 ---
@@ -15,9 +15,9 @@ tags: [azure, terraform, github]
 
 ## TL;DR
 
-- GitHub Actions から OpenID Connect で Azure に接続する処理を Terraform で実装しました。
-- スクリプトと Terraform のサンプルは [こちら](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform) にて MIT ライセンスで公開しています。
-- GitHub Codespaces と GitHub Actions の Event Trigger からも実行できるようにしました。
+- Terraform を利用して、GitHub Actions から OpenID Connect で Azure に接続するための設定作業を自動化しました
+- スクリプトと Terraform のサンプルは [こちら](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform) にて MIT ライセンスで公開しました
+- GitHub Codespaces と GitHub Actions のイベントトリガーからリソースのデプロイが実行できることを確認しました
 
 ---
 
@@ -25,35 +25,38 @@ tags: [azure, terraform, github]
 
 ### OpenID Connect 接続設定の自動化
 
-GitHub Actions から OpenID Connect で Azure に接続する設定を自動化する流れを以下に示します。  
-下図はローカル開発環境から、GitHub と Azure プラットフォーム上に必要な設定を Terraform で自動化する全体の流れです。  
-Terraform を使用して、Azure 側にサービスプリンシパルを作成し、GitHub 側に Environment Secret を設定しています。
+GitHub Actions から OpenID Connect で Azure に接続するのに必要な設定作業を自動化する流れを示します。  
+下図では、ローカル開発環境から Terraform を実行して、GitHub と Azure プラットフォーム上に必要な設定流し込むため、以下 2 つのシナリオを実行しています。
+シナリオを分けて実行するのは、依存する Terraform provider が異なっていることや、ターゲットとなるプラットフォームが異なることから再利用性を高めるためです。
+
+1. [configure_github_secrets](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/main/infra/scenarios/configure_github_secrets/README.md): GitHub 側に Environment Secret を作成する処理が含まれます。
+1. [create_service_principal](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/main/infra/scenarios/create_service_principal/README.md): Terraform を使用して、Azure 側にサービスプリンシパルを作成する処理
 
 ![configure_oidc_azure.png](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/v0.0.1/docs/images/configure_oidc_azure.png?raw=true)
 
 ### OpenID Connect 接続で GitHub Actions から Azure にリソースをデプロイ
 
-GitHub Actions から OpenID Connect を利用して Azure にリソースをデプロイする全体の流れを以下に示します。
-下図では、払い出された接続設定を利用して、GitHub Actions から Azure にリソースをデプロイしています。
-GitHub Actions の Environment を利用すると、異なる環境に対して同じ処理を実行できるため便利です。
+上記の設定を行うと、GitHub Actions から OpenID Connect を利用して Azure に接続することができるようになります。
+下図では、払い出された接続設定を利用して、GitHub Actions から Azure にリソースをデプロイするシナリオ (e.g. [tfstate_backend](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/main/infra/scenarios/tfstate_backend/README.md)) を実行した様子を示しています。
 
 ![deploy_tfstate_backend.png](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/v0.0.1/docs/images/deploy_tfstate_backend.png?raw=true)
 
-## GitHub Actions 　から OpenID Connect で Azure に接続する設定作業を手動で行う
+## GitHub Actions から OpenID Connect で Azure に接続する設定作業を手動で行う
 
 ### なぜ OpenID Connect を使って Azure に接続するのか
 
-まず、「GitHub Actions から OpenID Connect で Azure に接続する」とはどういうことか説明します。
+まず、`GitHub Actions から OpenID Connect で Azure に接続する` とはどういうことか説明します。
 
-GitHub と Azure を連携させるために、ここでは GitHub Actions を利用します。GitHub Actions は、GitHub が提供するソフトウェア開発のワークフローを自動化するサービスです。例えば、GitHub リポジトリにプッシュされたコードを自動的にビルド、テスト、デプロイするような CI/CD のユースケースなどがあります。
+GitHub と Azure を連携させるために、ここでは GitHub Actions を利用します。GitHub Actions は、GitHub が提供するソフトウェア開発のワークフローを自動化するサービスです。例えば、GitHub リポジトリにプッシュされたコードを自動的にビルド、テスト、デプロイするような CI/CD のユースケースなどに利用されます。
 
-Azure 上で動作するアプリケーションを GitHub Actions からテストしたりデプロイする場合、Azure に接続するための認証が必要です。Azure には様々な認証方法が提供されています。従来は、Azure のサービスプリンシパルを作成し、クライアントシークレットを使って認証する方法が一般的でした。しかし、セキュリティ上の理由から、現在では OpenID Connect を使った認証方法が推奨されています。
+Azure 上で動作するアプリケーションを GitHub Actions からテストしたりデプロイする場合、Azure に接続するための認証が必要です。Azure には様々な認証方法が提供されています。従来は、Azure のサービスプリンシパルを作成し、クライアントシークレットを使って認証する方法が一般的でした。しかし、セキュリティ上の理由から、現在では OpenID Connect を使った認証方法が推奨されています。 (ref. [GitHub Actions を使用して Azure に接続する
+](https://learn.microsoft.com/ja-jp/azure/developer/github/connect-from-azure?tabs=azure-portal%2Clinux))
 
 クライアントシークレットのような静的な認証情報は有効期限が長く、漏洩した場合のリスクが高いです。また、キーの管理も煩雑になります。  
 一方で OpenID Connect を使うと、静的な認証情報を使用せず一時的なトークンで認証を行います。このトークンは有効期限が短く、アクセス元や対象リソースの権限範囲を細かく制限できるため、漏洩してもリスクが低くなります。
 そのため、OpenID Connect を使った認証方法が推奨されています。
 
-OpenID Connect を利用するメリットに関しては、[GitHub CI/CD 実践ガイド――持続可能なソフトウェア開発を支える GitHub Actions の設計と運用 エンジニア選書](https://amzn.to/3Co02xA)の`第11章 OpenID Connectによるセキュアなクラウド連携`が参考になります。
+OpenID Connect を利用するメリットに関しては、[GitHub CI/CD 実践ガイド――持続可能なソフトウェア開発を支える GitHub Actions の設計と運用 エンジニア選書](https://amzn.to/3Co02xA)の`第11章 OpenID Connectによるセキュアなクラウド連携`に詳しく書かれています。
 
 ### 手動での接続設定は手間がかかるしミスが起きやすい
 
@@ -70,8 +73,8 @@ GitHub Actions から OpenID Connect で Azure に接続する設定作業は、
 - リポジトリに環境(=Environment)を作成する
 - リポジトリで作成した環境上にシークレットを登録する
 
-作業手順に関する一次情報は、[GitHub Actions を使用して Azure に接続する](https://learn.microsoft.com/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux)にあります。  
-恥ずかしながら私はそれでもよくわからなかったので、調べてみたところ[Check! GitHub Actions で OpenID Connect(OIDC) で Azure に安全に接続する](https://zenn.dev/dzeyelid/articles/5f20acbe549666)という記事を見つけました。GUI 操作のスクリーンショット付きで具体的な手順が解説されており、とても参考になりました。
+作業手順に関する一次情報は、[GitHub Actions を使用して Azure に接続する](https://learn.microsoft.com/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux) にあります。  
+残念なことに私はそれでもよくわからなかったので、調べてみたところ [Check! GitHub Actions で OpenID Connect(OIDC) で Azure に安全に接続する](https://zenn.dev/dzeyelid/articles/5f20acbe549666) という記事を見つけました。GUI 操作のスクリーンショット付きで具体的な手順が解説されており、とても参考になりました。
 
 ![GitHub Actions で OpenID Connect で Azure に接続する設定](https://res.cloudinary.com/zenn/image/fetch/s--jeiZgBuE--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_1200/https://storage.googleapis.com/zenn-user-upload/deployed-images/4db01a487f4e1f7e8807f25c.png%3Fsha%3Db18c893e94c6fdeeeb28d1d181bb1d74d1ebbd8e)
 
@@ -89,8 +92,8 @@ Azure Portal などの Web UI は、ベンダー側の親切心で見た目や�
 
 操作手順を自動化するアプローチとして、正攻法としては UI 操作に対応する API をドキュメントや Copilot を使って調べ、CLI のコマンドやスクリプトに書き起こすことが考えられます。
 
-場合に依ってはドキュメントがない場合もあります。以下のようなブラウザのツールを使ってリクエスト内容をキャプチャし、そこから観測できた挙動を元にスクリプトを書くこともできます。
-(※ これはプラットフォーマが明示的に API を定義したものではないため推奨されません。)
+場合に依ってはドキュメントがない場合もあります。以下のようなブラウザのツールを使ってリクエスト内容をキャプチャし、そこから観測できた挙動を元にスクリプトを書くことも技術的には可能です。
+(※ ただし、これはプラットフォーマが明示的に API を定義したものではないため、あまり行儀の良い方法ではなく推奨されません。)
 
 | ブラウザ       | リンク                                                                                                                 |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -112,11 +115,14 @@ Azure Portal などの Web UI は、ベンダー側の親切心で見た目や�
 シェルスクリプトに比べると書くのに手間がかかりますが、再現性や保守性が高いので他者に渡す場合は IaC ツールを利用することが多いです。
 IaC ツールとしては大きく Bicep, Terraform などが考えられます。
 今回のユースケースにおいては、Azure と GitHub のリソースを管理する必要があるため Terraform が適していると思います。
-[Terraform と Bicep の比較](https://learn.microsoft.com/ja-jp/azure/developer/terraform/comparing-terraform-and-bicep?tabs=comparing-bicep-terraform-integration-features#infrastructure-targets) が参考になります。
+IaC ツール選定に迷った場合は、[Terraform と Bicep の比較](https://learn.microsoft.com/ja-jp/azure/developer/terraform/comparing-terraform-and-bicep?tabs=comparing-bicep-terraform-integration-features#infrastructure-targets) が参考になります。
 
-## Terraform で書いてみる
+## Terraform で実装する
 
-各プラットフォーム向けに以下のプロバイダが提供されています。
+基本的に CRUD 操作を行う Web API を提供しているプラットフォームには Terraform Provider を実装することができます。
+幸い、今回ターゲットとしている各プラットフォーム向けに以下のプロバイダが提供されていますので、それを利用して設定を自動化してみます。
+
+(仮にプロバイダが無い場合は、[2. SORACOM 向けカスタムプロバイダの実装](https://ks6088ts.github.io/blog/terraform-provider-soracom#2-soracom-%E5%90%91%E3%81%91%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%83%97%E3%83%AD%E3%83%90%E3%82%A4%E3%83%80%E3%81%AE%E5%AE%9F%E8%A3%85)のような形でフルスクラッチでプロバイダを実装することもできます)
 
 | プラットフォーム             | プロバイダ                                                                                 |
 | ---------------------------- | ------------------------------------------------------------------------------------------ |
@@ -125,6 +131,8 @@ IaC ツールとしては大きく Bicep, Terraform などが考えられます�
 | Azure                        | [hashicorp/azurerm](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs) |
 
 ### 開発環境を整える
+
+エディタの拡張機能による決定論的なインテリセンス、GitHub Copilot による生成 AI ベースのインテリセンス、静的解析ツールによる品質保証など、事前に開発環境を整えることで生産性が向上します。
 
 Visual Studio Code 上で開発する場合、VS Code 拡張として以下のものをインストールすると Terraform の開発が捗ります。いずれも HashiCorp が提供しているものです。
 
@@ -198,7 +206,7 @@ GitHub Actions の環境(Environment) を使うと、同様の処理を異なる
 git clone git@github.com:ks6088ts-labs/baseline-environment-on-azure-terraform.git
 ```
 
-### 1. サービスプリンシパルを作成し、OpenID Connect を設定して Azure に認証します。
+### 1. [create_service_principal](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/main/infra/scenarios/create_service_principal/README.md): サービスプリンシパルを作成し、OpenID Connect を設定して Azure に認証します。
 
 以下の処理を Terraform で実行します。
 
@@ -247,7 +255,7 @@ application_object_id=$(terraform output -raw application_object_id)
 az ad app permission admin-consent --id $application_object_id
 ```
 
-### 2. GitHub シークレットを設定
+### 2. [configure_github_secrets](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/blob/main/infra/scenarios/configure_github_secrets/README.md): GitHub シークレットを設定
 
 GitHub CLI の認証情報を利用して、以下の処理を Terraform で実行します。
 
@@ -373,4 +381,5 @@ env:
 
 本記事では、GitHub Actions から OpenID Connect を利用して Azure に接続する設定を Terraform で自動化する方法をご紹介しました。  
 この自動化により、開発者は環境構築の手間を省き、本来の開発業務に集中できるようになります。また、手動設定に比べてミスが減り、OpenID Connect を使った認証によりセキュリティリスクも軽減されます。  
-さらに、GitHub Actions を利用して Azure にリソースをデプロイする構成は、事業部門が Entra ディレクトリを提供サービス用に外出ししているケースや、開発者がオペレーターを兼ねる場合などに特に有用です。
+GitHub Actions を利用して Azure にリソースをデプロイする構成は、ローカル環境からデプロイする場合と異なり、デプロイに必要な権限を GitHub Actions 側に委譲できることから、セキュリティの観点からも有用です。
+事業部門が Entra ディレクトリを提供サービス用に外出ししているケースや、開発者がオペレーターを兼ねる場合など、様々なシーンで活用できると思います。
