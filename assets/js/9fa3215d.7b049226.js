@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[3654],{8649:s=>{s.exports=JSON.parse('{"label":"iot-edge","permalink":"/blog/tags/iot-edge","allTagsPath":"/blog/tags","count":1}')}}]);

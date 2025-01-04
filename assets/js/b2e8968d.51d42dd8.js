@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkks_6088_ts_github_io=self.webpackChunkks_6088_ts_github_io||[]).push([[3257],{1699:s=>{s.exports=JSON.parse('{"label":"iac","permalink":"/blog/tags/iac","allTagsPath":"/blog/tags","count":2}')}}]);
