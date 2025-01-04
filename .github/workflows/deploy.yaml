@@ -19,9 +19,9 @@ jobs:
           cache: yarn
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: make install-deps-dev
       - name: Build website
-        run: yarn build
+        run: make build
       - name: Add ads.txt
         run: echo "google.com, pub-8893504680895468, DIRECT, f08c47fec0942fa0" > ./build/ads.txt
 
