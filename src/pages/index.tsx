@@ -28,6 +28,7 @@ export default function Home(): JSX.Element {
     >
       <HomepageHeader />
       <main>
+        <h1 className="text--center padding-horiz--md">Services</h1>
         <HomepageFeatures />
       </main>
     </Layout>

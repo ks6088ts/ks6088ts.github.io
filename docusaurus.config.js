@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'ks6088ts',
-  tagline: 'A portal site for my own blog and documentation',
+  tagline: 'Enabling you to build awesome things with code',
   favicon: 'https://github.com/ks6088ts.png',
 
   // Set the production url of your site here
