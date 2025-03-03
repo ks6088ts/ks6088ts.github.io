@@ -1,10 +1,12 @@
+<!-- textlint-disable -->
+
 # 筆者の技術的方向性と文体特徴
 
 ## 技術的方向性とドメイン知識
 
 ### 主な専門分野
 
-- **Azure クラウドサービス**: Azure OpenAI Service, Azure Functions, App Service, API Management, Azure AD (Entra ID)
+- **Azure クラウドサービス**: Azure OpenAI Service, Azure Functions, App Service, API Management, Microsoft Entra ID
 - **インフラストラクチャ**: Terraform, IaC, クラウドリソース管理
 - **AI / 機械学習**: OpenAI、RAG アプリケーション、LLM 活用
 - **開発手法**: DevOps, CI/CD, GitHub Actions
@@ -37,8 +39,8 @@
 
 - **適度な専門用語**: 専門用語を使いつつも、初心者にも理解できるよう配慮
 - **「〜です/ます調」**: 丁寧だが堅すぎない文体
-- **一人称**: 「私は」「私が」を適度に使い、個人的経験を共有
-- **疑問形**: 「〜ではないでしょうか？」のような読者への問いかけを時々使用
+- **一人称**:「私は」「私が」を適度に使い、個人的経験を共有
+- **疑問形**:「〜ではないでしょうか？」のような読者への問いかけを時々使用
 - **比喩**: 複雑な概念を身近な例えで説明することがある
 
 ### 特徴的な言い回し
