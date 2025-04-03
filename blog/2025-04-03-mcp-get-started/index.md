@@ -1,13 +1,13 @@
 ---
 slug: mcp-get-started
-title: Visual Studio Code Insider と GitHub Copilot agent mode (preview) を使って MCP サーバーを活用する
+title: Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を使って MCP サーバーを活用する
 authors: ks6088ts
 tags: [vscode, github]
 ---
 
 <!-- textlint-disable -->
 
-本記事では Visual Studio Code Insider と GitHub Copilot agent mode (preview) を使用して MCP サーバーを活用する方法について説明します。
+本記事では Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を使用して MCP サーバーを活用する方法について説明します。
 
 <!--truncate-->
 
@@ -22,7 +22,7 @@ MCP (Model Context Protocol) は、AI モデルとアプリケーション間の
 (※出典: [Enterprise AI in 2025?](https://speakerdeck.com/pamelafox/enterprise-ai-in-2025?slide=5))
 
 MCP の概要を理解するために、まずは一次情報にあたります。Anthropic が出している[MCP の公式ドキュメント](https://modelcontextprotocol.io/introduction)を参照することをお勧めします。
-(※ほとんど英語の記事ですが、ChatGPT などの AI を使って `猫でもわかるように 3 行で日本語でまとめて` と聞いてみると、意外と良い感じに要約してくれます。)
+(※関連文献は英語の記事が多いですが、ChatGPT などの AI を使って `猫でもわかるように 3 行で日本語でまとめて` と聞いてみると、意外と良い感じに要約してくれます。)
 
 MCP は、AI モデルとアプリケーション間のインタラクションを標準化するためのプロトコルであり、Anthropic が開発したものです。MCP を使用することで、AI モデルとアプリケーション間の通信が効率化され、開発者はより簡単に AI モデルを利用できるようになります。
 
@@ -35,7 +35,7 @@ MCP は、AI モデルとアプリケーション間のインタラクション�
 
 ## MCP を使ってみる
 
-読むだけだとどのぐらい便利なものかの解像度がそこまで上がらないので、次は Visual Studio Code Insider と GitHub Copilot agent mode (preview) を使用して MCP サーバ、クライアントを実際に使ってみます。(※ 2025/04 現在、Visual Studio Code Insider でしか使えないので Insider 版を使っています。)
+読むだけだとどのぐらい便利なものかの解像度がそこまで上がらないので、次は Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を使用して MCP サーバ、クライアントを実際に使ってみます。(※ 2025/04 現在、Visual Studio Code Insiders でしか使えないので Insiders 版を使っています。)
 
 GitHub Copilot agent mode 以外にも、MCP クライアントアプリケーションとして振る舞えるアプリとして [Claude Desktop](https://claude.ai/download) や [Cline](https://cline.bot/) などもあります。
 
@@ -46,15 +46,16 @@ Microsoft がオープンソースで出している [Playwright MCP server](htt
 
 手順は以下の通りです。
 
-**1. [Visual Studio Code Insider](https://code.visualstudio.com/insiders/) をインストール**
+**1. [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/) をインストール**
 
 公式サイトからインストーラをダウンロードしてインストールするもよし、パッケージマネージャーを使うもよし、好きな方法でインストールしてください。
 
 **2. 設定ファイルを作成する**
 
-適当なディレクトリで Visual Studio Code Insider を開いて、以下の内容で `.vscode/settings.json` を作成します。
+適当なディレクトリで Visual Studio Code Insiders を開いて、以下の内容で `.vscode/settings.json` を作成します。
 
 注意:
+
 - npx を使うので、Node.js がインストールされている必要があります
 - headless だと挙動が見えないので `--vision` オプションを付けています
 
@@ -64,11 +65,7 @@ Microsoft がオープンソースで出している [Playwright MCP server](htt
     "servers": {
       "playwright": {
         "command": "npx",
-        "args": [
-          "-y",
-          "@playwright/mcp@latest",
-          "--vision"
-        ]
+        "args": ["-y", "@playwright/mcp@latest", "--vision"]
       }
     }
   }
@@ -79,9 +76,9 @@ Microsoft がオープンソースで出している [Playwright MCP server](htt
 
 ![agent-mode](./agent-mode.png)
 
-**4. チャット経由で　Web 検索してみる**
+**4. チャット経由で　 Web 検索してみる**
 
-Webブラウザの操作が必要な指示を与えると、GitHub Copilot Chat から MCP Server への API 呼び出しの確認が走り、許可するとブラウザが起動します。
+Web ブラウザの操作が必要な指示を与えると、GitHub Copilot Chat から MCP Server への API 呼び出しの確認が走り、許可するとブラウザが起動します。
 
 ![playwright-mcp](./playwright-mcp.gif)
 
@@ -193,11 +190,10 @@ mcp.run(transport="stdio")
 3. 生成されたコードを理解し、必要に応じて修正
 4. 動作検証と微調整
 
+類似機能の実装例やプロジェクト固有の規約をコンテキストとして与えると、AI がそれらを参考にしてより適切なコードを生成できます。
+そのため、過去のコード資産の価値が格段に高まります。
+日頃からコードを整理し、再利用可能な形で管理しておくとよいです。
 完成したコードは GitHub で公開しています → [youtube_transcript_server.py](https://github.com/ks6088ts-labs/mcp-python/blob/main/scripts/youtube_transcript_server.py)
-
-Claude 3.7 Sonnet などの高性能な LLM を活用する際は、アーキテクチャレベルの抽象的な設計から始めると効率的です。具体的な API 呼び出しや例外処理などは AI が適切に補完してくれますが、全体設計の方向性は人間が示す必要があります。
-
-また、AI を活用する開発では、過去のコード資産の価値が格段に高まります。類似機能の実装例やプロジェクト固有の規約がコンテキストとして与えられると、AI がそれらを参考にしてより適切なコードを生成できるためです。日頃からコードを整理し、再利用可能な形で管理しておくと効率が大きく向上します。
 
 実際に動かしてみた動画はこちら。
 
@@ -205,6 +201,6 @@ Claude 3.7 Sonnet などの高性能な LLM を活用する際は、アーキテ
 
 ## まとめ
 
-本記事では Visual Studio Code Insider と GitHub Copilot agent mode (preview) を活用した MCP サーバーの実装と利用方法について解説しました。
+本記事では Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を活用した MCP サーバーの実装と利用方法について解説しました。
 
 ドキュメントを読むだけではイメージが湧きにくい部分もあるかと思いますが、実際に手を動かしてみることで MCP の利点や使い方がより明確になると思います。
