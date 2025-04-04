@@ -1,13 +1,13 @@
 ---
 slug: mcp-get-started
-title: Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を使って MCP サーバーを活用する
+title: Visual Studio Code と GitHub Copilot agent mode (preview) を使って MCP サーバーを活用する
 authors: ks6088ts
 tags: [vscode, github]
 ---
 
 <!-- textlint-disable -->
 
-本記事では Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を使用して MCP サーバーを活用する方法について説明します。
+本記事では Visual Studio Code と GitHub Copilot agent mode (preview) を使用して MCP サーバーを活用する方法について説明します。
 
 <!--truncate-->
 
@@ -35,7 +35,7 @@ MCP は、AI モデルとアプリケーション間のインタラクション�
 
 ## MCP を使ってみる
 
-読むだけだとどのぐらい便利なものかの解像度がそこまで上がらないので、次は Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を使用して MCP サーバ、クライアントを実際に使ってみます。(※ 2025/04 現在、Visual Studio Code Insiders でしか使えないので Insiders 版を使っています。)
+読むだけだとどのぐらい便利なものかの解像度がそこまで上がらないので、次は Visual Studio Code と GitHub Copilot agent mode (preview) を使用して MCP サーバ、クライアントを実際に使ってみます。
 
 GitHub Copilot agent mode 以外にも、MCP クライアントアプリケーションとして振る舞えるアプリとして [Claude Desktop](https://claude.ai/download) や [Cline](https://cline.bot/) などもあります。
 
@@ -46,13 +46,13 @@ Microsoft がオープンソースで出している [Playwright MCP server](htt
 
 手順は以下の通りです。
 
-**1. [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/) をインストール**
+**1. [Visual Studio Code](https://code.visualstudio.com/) をインストール**
 
 公式サイトからインストーラをダウンロードしてインストールするもよし、パッケージマネージャーを使うもよし、好きな方法でインストールしてください。
 
 **2. 設定ファイルを作成する**
 
-適当なディレクトリで Visual Studio Code Insiders を開いて、以下の内容で `.vscode/settings.json` を作成します。
+適当なディレクトリで Visual Studio Code を開いて、以下の内容で `.vscode/settings.json` を作成します。
 
 注意:
 
@@ -201,6 +201,6 @@ mcp.run(transport="stdio")
 
 ## まとめ
 
-本記事では Visual Studio Code Insiders と GitHub Copilot agent mode (preview) を活用した MCP サーバーの実装と利用方法について解説しました。
+本記事では Visual Studio Code と GitHub Copilot agent mode (preview) を活用した MCP サーバーの実装と利用方法について解説しました。
 
 ドキュメントを読むだけではイメージが湧きにくい部分もあるかと思いますが、実際に手を動かしてみることで MCP の利点や使い方がより明確になると思います。
