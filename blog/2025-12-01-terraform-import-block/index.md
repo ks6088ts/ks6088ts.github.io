@@ -25,23 +25,25 @@ tags: [terraform, vscode, github]
 
 ## TL;DR
 
-デプロイ済の既存クラウドリソースから Terraform コードを効率的に作成する方法について解説します。
-Azure 上に既にデプロイ済の Azure Container Apps で構築された Web アプリを例に、import block のいくつかのペインポイントを生成 AI を組み合わせて活用したところ、効率的に Terraform コード化を実現できました。
+- Terraform v1.5.0+ の `import block` と `-generate-config-out` オプションで既存リソースのコード生成が可能
+- Azure CLI などで取得したリソース情報を生成 AI に与えることで、import block の ID 記述を自動化
+- 自動生成された冗長なコードを生成 AI でリファクタリングし、可読性を向上
+- [Azure Portal 経由でデプロイした既存リソースを、Terraform 管理下に移行する例](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app) を公開
 
 ## Terraform での既存リソースの管理
 
 Terraform の機能を活用して、既存のインフラリソースを管理下に置くことは、多くの組織にとって重要な課題です。
-従来、`terraform import` コマンドを使用して既存リソースを Terraform の状態ファイルに追加する方法が一般的でしたが、この方法にはいくつかの制約があります。
+従来、[terraform import コマンド](https://developer.hashicorp.com/terraform/cli/commands/import) を使用して既存リソースを Terraform の状態ファイルに追加する方法が一般的でしたが、この方法にはいくつかの制約があります。
 例えば、`terraform import` コマンドはリソースを状態ファイルに追加するだけで、対応する Terraform コードを自動生成しないため、手動でコードを作成する必要があります。
 
-そこで、Terraform v1.5.0 で導入された import block を活用することで、既存リソースの管理をより効率的に行うことが可能になりました。
+そこで、Terraform v1.5.0 で導入された import block を活用することで、既存リソースの管理を HCL コードとして自動生成して効率的に行うことが可能になりました。
 v1.5.0 で導入された import block は、既存のインフラリソースを Terraform 管理下に置くための新しい方法です。
 import block を使用することで、既存リソースのインポート情報を Terraform コード内に直接記述できるため、コードと状態ファイルの整合性を保ちながら管理を始めることができます。
 
-import block の活用手順は [Import resources overview](https://developer.hashicorp.com/terraform/language/import) に一次情報が纏まっています。
-[Terraform v1.5.0 からの新機能：Import Block 機能の紹介と既存ツールとの比較](https://techblog.ap-com.co.jp/entry/2023/06/12/184506) では具体的な例をあげて import block の使い方が紹介されています。
+`import block` の活用手順は [Import resources overview](https://developer.hashicorp.com/terraform/language/import) に一次情報が纏まっています。また、[Terraform v1.5.0 からの新機能：Import Block 機能の紹介と既存ツールとの比較](https://techblog.ap-com.co.jp/entry/2023/06/12/184506) では具体的な例をあげて import block の使い方が紹介されています。
 
-import block では、事前に以下のような import block を Terraform コードに追加します。
+`import block` では、事前に以下のような `import block` を Terraform コードに追加します。
+
 以下は Azure のリソースグループをインポートする例です。
 
 ```hcl
@@ -64,122 +66,101 @@ terraform init
 terraform plan -generate-config-out=imported.tf
 ```
 
-このコマンドにより、指定した既存リソースが Terraform の状態ファイルにインポートされ、対応する Terraform コードが `imported.tf` ファイルに生成されます。
+`-generate-config-out` オプションを指定することで、import block で指定した既存リソースに対応する Terraform コードが `imported.tf` ファイルに生成されます。なお、実際のインポート（状態ファイルへの追加）は `terraform apply` を実行した際に行われます。
 
 ## import block を活用するうえでの課題
 
-ミニマムな例だとあまり見えてきませんが、実践投入しようとすると以下のような課題が出てきました。
+シンプルな例では分かりにくいですが、実際のプロジェクトで活用しようとすると以下のような課題に直面します。
 
-- import block の id をいちいち調べてコード化するのが大変
-- 自動生成されるコードはあらゆるパラメータを明示的にハードコードするため、可読性が低く、メンテナンスが難しい
+1. **ID の調査コスト**: リソースごとに import block の `id` を調べてコード化する作業が煩雑
+2. **生成コードの可読性**: 自動生成されるコードはすべてのパラメータをハードコードするため、冗長で保守性が低い
 
-以下では、これらの課題に対する解決策を紹介します。
+以下では、生成 AI を活用してこれらの課題を解決する方法を紹介します。
 
-<!-- ### import block の id を生成 AI で簡単に書き換える方法
+### 1. import block の ID を生成 AI で自動記述する
 
-ここでは、既に特定の Azure リソースグループ内に Azure Container Apps で構築された Web アプリが存在していることを前提とします。
-その既存リソースを Terraform import block と生成 AI を活用して効率的に Terraform コード化する手順を紹介します。
+`import block` を使用する際、既存リソースの ID を調べてコード化する必要があります。
+例えば Azure Container Apps で構築された Web アプリでは、以下のリソースが必要です。
 
-まずは、以下のような import block のテンプレートを main.tf ファイルに用意します。
+- Resource Group
+- Container Apps Environment
+- Container App
+- Log Analytics Workspace
 
-```hcl
-provider "azurerm" {
-    features {}
-}
+これらの ID を手動で調べて import block に記述するのは手間がかかります。
 
-import {
-    id = "/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/your-resource-group-name/providers/Microsoft.App/managedEnvironments/your-environment-name"
-    to = azurerm_container_app_environment.env
-}
-
-... (他のリソースも同様に import block を追加) ...
-```
-
-id の部分は後ほど生成 AI を活用して埋める予定なので、ここではプレースホルダーとして適当な値を入れておきます。 -->
-
-### 1. import block の id を効率的に書き換える方法
-
-import block を使用する際、既存リソースの ID を一つ一つ調べてコード化する必要があります。
-例えば Azure 上に Container Apps で構築された Web アプリだけでも、
-
-- resource group
-- container app environment
-- container app
-- log analytics workspace
-
-の 4 つのリソースが必要であり、これらの ID を手動で調べて import block に記述するのは非常に手間がかかります。
-
-面倒なときこそ生成 AI の出番です。必要なコンテキストを与えつつ、import block の ID を GitHub Copilot の Agent mode で書き換えることを考えます。
-
-ID の情報を引っ張り出すところは Azure CLI などを活用して取得します。
-例えば、特定のリソースグループ内の全リソース情報を取得するには、以下のコマンドを実行します。
+この手間を生成 AI に肩代わりさせるため、ここでは、GitHub Copilot を活用します。まず、Azure CLI を使用してリソース情報を取得します。
 
 ```bash
 RESOURCE_GROUP_NAME="your-resource-group-name"
 
 az resource list \
- --resource-group $RESOURCE_GROUP_NAME \
- --output json > exported_resources.json
+  --resource-group $RESOURCE_GROUP_NAME \
+  --output json > exported_resources.json
 ```
 
-exported_resources.json には、import block に必要なリソース ID 情報が含まれています。
-このファイルをコンテキストに与えながら Agent mode で以下のプロンプトを実行します。
+`exported_resources.json` には、各リソースの `id` フィールドが含まれており、これが import block に必要な情報です。
+このファイルをコンテキストとして GitHub Copilot の Agent mode に与え、以下のプロンプトを実行します。
 
 ```prompt
-#file:exported_resources.json のリソース群の情報に合わせて、 #file:main.tf の import block の ID やパラメータ部分を書き換えてください。
+#file:exported_resources.json のリソース群の情報に合わせて、#file:main.tf の import block の ID やパラメータ部分を書き換えてください。
 ```
 
-これにより、main.tf ファイル内の import block の ID が自動的に既存リソースの情報に書き換えられます。
+これにより、JSON から抽出したリソース ID が main.tf の import block に自動的に反映されます。
+比較的小さいスコープに絞った操作であれば、他の生成 AI ツールでも同様の効果が得られることが多いです。
 
-### 2. 自動生成されるコードを生成 AI でリファクタリングする方法
+### 2. 自動生成コードを生成 AI でリファクタリングする
 
-上記手順で main.tf を適切に書き換えたあと、以下のコマンドを実行してインポートとコード生成を行います。
+上記の手順で main.tf を書き換えた後、以下のコマンドでコードを生成します。
 
 ```bash
-terraform init
-
 terraform plan -generate-config-out=imported.tf
 ```
 
-imported.tf には、既存リソースに対応する Terraform コードが自動生成されますが、自動生成されるコードはあらゆるパラメータを明示的にハードコードしていたり、provider にも依りますが obsolete なパラメータが含まれていたりと、可読性が低く、メンテナンスが難しい場合があります。
+生成された `imported.tf` には既存リソースに対応する Terraform コードが含まれますが、以下の問題があります。
 
-ここでも生成 AI の出番です。imported.tf をコンテキストに与えながら、以下のようなプロンプトで生成 AI にリファクタリングを依頼します。
+- すべてのパラメータが明示的にハードコードされている
+- Provider によっては非推奨（deprecated）なパラメータが含まれる
+- 可読性が低く、保守が困難
+
+明示的にハードコードされていることはわかりやすい反面、実際の運用では不要なパラメータが多く含まれていることが一般的です。また、provider の仕様変更により非推奨となったパラメータが含まれている場合もあります。特に意識しないで済むパラメータは尤もらしいデフォルト値が設定されていることが多いため、コードから削除しても問題ありません。
+
+今度はリファクタのために生成 AI を活用します。`imported.tf` をコンテキストとして与え、以下のプロンプトでリファクタリングを依頼します。
 
 ```prompt
-#file:imported.tf を以下の観点に従ってリファクタしてください。
+#file:imported.tf を以下の観点でリファクタリングしてください。
 
-- 明示的に指定する必要のない Optional な変数指定は削除
-- 必須パラメータでハードコードされた変数は #file:variables.tf に定義して変数化し、尤もらしいデフォルト値を設定
-- #file:outputs.tf に出力変数として外部からアクセスできると利便性のあるもののみを限定して定義
+- 明示的に指定する必要のない Optional なパラメータは削除
+- ハードコードされた必須パラメータは #file:variables.tf に変数として定義し、適切なデフォルト値を設定
+- #file:outputs.tf には外部から参照する必要があるものに限定して出力変数を定義
 ```
 
-必要であれば Terraform MCP Server などで知識を補完する仕組みを用意しても良いですが、呼ばれたり呼ばれなかったり、挙動が悩ましいこともあったので、LLM 単体の知識では対応できない最新の情報に追従する必要があるとか、本当に必要な場合に限定して活用するのが現時点では良いと思います。
+補足として、[Terraform MCP Server](https://github.com/hashicorp/terraform-mcp-server) などで LLM の知識を補完することも可能ですが、挙動が安定しない場合があります。最新の Provider 仕様への追従が必要な場合など、本当に必要なケースに限定して活用するのが現時点では現実的です。
 
-変数定義や出力変数の設計は人それぞれ好みが分かれる部分でもあるので、チーム内での合意形成が重要です。
-ひとまず再利用できそうなクオリティで variable.tf や outputs.tf が生成できたら OK として、あとは手動で微調整するのが現実的かと思います。
+変数定義や出力変数の設計はチームによって方針が異なるため、事前に合意形成しておくことが重要です。
+生成 AI による出力は「たたき台」として捉え、最終的には手動で微調整するのが現実的なアプローチです。
 
-プロンプトは自分がイケてないと思う部分を明示的に言語化して伝えるのがポイントです。多分ここが経験値に依存する部分で、良いプロンプトを作るには泥にまみれる経験が必要に思いました。(私もまだ泥経験が足りていない気がします…)
+効果的なプロンプトを作成するポイントは、改善したい点を明確に言語化することです。「何が自分の文脈でイケてないと感じるのか」を明示的に言語化して伝えることで、生成 AI の出力品質が向上します。
 
-大規模であれば module 化も検討すると良いと思いますが、一度でたくさんのことを依頼すると大体の場合うまくいかないので、スコープをコントロールして成果物の質のゆらぎを制御することが重要に思います。一旦近視眼的に小さなタスクに分解して対応して、良質な小さい成果物を積み上げていく方が最終的な品質は高くなることが多いです。
-こうして生成 AI を活用することで、import block のいくつかのペインポイントを解消し、効率的に Terraform コード化を実現できました。
+大規模なインフラでは module 化も検討すべきですが、一度に多くのことを依頼すると出力品質が不安定になります。タスクを小さく分割し、品質の高い成果物を積み上げていく方が、最終的な品質は高くなります。import 直後のコードには多くを求めず、まずは基本的なリファクタリングから始める方が動き出しやすいです。
 
 ## まとめ
 
-本記事では、Terraform import block と生成 AI を組み合わせて活用することで、既存クラウドリソースから効率的に Terraform コードを作成する方法について解説しました。
-import block の ID 書き換えや自動生成コードのリファクタリングに生成 AI を活用することで、手動での作業負荷を大幅に軽減できることが分かりました。
+本記事では、Terraform import block と生成 AI を組み合わせて、既存クラウドリソースから効率的に Terraform コードを作成する方法を解説しました。Azure Portal からコンテナアプリをデプロイして、上記プロセスを経て Terraform 管理下に移行する具体的な作業詳細は [こちら](https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app) で公開しています。
 
-作業を自動化するにあたり、一段抽象化して考えると以下のポイントが挙げられます。
+今回のリファクタを通じて、個人的に感じた生成 AI を効果的に活用するためのポイントを整理します。
 
-- 必要なコンテキスト情報が何かを明確にする
-  - 普段自分が開発するときに参照する情報や意識していることを洗い出してシステム化する
-- 必要なコンテキストを決定論的なツールを駆使して収集する
-  - 決定論的なツールの方が再現性が高くコストも低いため最大限活用する
-  - 例: Azure CLI や AWS CLI などで既存リソース情報を JSON 形式でエクスポート
-- 小さなタスクに分解して生成 AI に依頼する
-  - 例: import block の ID 書き換え、コードのリファクタリングでタスクを分割
+1. **必要なコンテキストを明確化する**
 
-リファクタ x 生成 AI のパターンは Terraform に限らず様々な場面で応用できると思います。
-生成 AI との付き合い方としては、「ドカッと AI に聞けばいい」スタンスだと制御が効かなかったり再現性に乏しいパルプンテを唱えていることと同義ですので、多少手間のかかることを厭わず、コントロール可能な小さいタスクに分解して依頼することが重要です。
+   - 自分が手動で作業する際に参照する情報を洗い出す
 
-そのうえで、必要十分なコンテキストを決定論的なツールを駆使して収集することが重要です。
-Azure CLI や AWS CLI などで既存リソース情報を JSON 形式でエクスポートすることができれば、生成 AI に与えるコンテキストとして非常に有用です。
+2. **決定論的なツールでコンテキストを収集する**
+
+   - 再現性が高くコストも低い決定論的なツールを最大限活用する
+   - 例: `az resource list` で既存リソース情報を JSON でエクスポート
+
+3. **タスクを小さく分割して依頼する**
+   - import block の ID 記述とコードのリファクタリングを分けて実行
+
+こうした考え方は Terraform に限らず、既存コードのリファクタリングや移行作業など様々な場面でも適用できると思います。
+生成 AI を効果的に活用するには、「丸投げ」ではなくコントロール可能な小さいタスクに分解することが重要です。また、CLI ツールなどで収集した決定論的なデータをコンテキストとして与えることで、出力の品質と再現性が向上し、自分のコンテキストに即した成果物を得やすくなります。
