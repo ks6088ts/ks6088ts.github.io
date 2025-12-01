@@ -136,9 +136,15 @@ const config = {
         darkTheme: darkCodeTheme,
         // https://docusaurus.io/docs/markdown-features/code-blocks#supported-languages
         additionalLanguages: [
+          'bash',
           'hcl',
           'bicep'
         ],
+      },
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
       },
     }),
 };
