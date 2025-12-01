@@ -4,10 +4,120 @@
         <title>ks6088ts Blog</title>
         <link>https://ks6088ts.github.io/blog</link>
         <description>ks6088ts Blog</description>
-        <lastBuildDate>Thu, 03 Apr 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 01 Dec 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ja</language>
+        <item>
+            <title><![CDATA[既存クラウドリソースを Terraform import block と生成 AI を活用して効率的に Terraform コード化する方法]]></title>
+            <link>https://ks6088ts.github.io/blog/terraform-import-block</link>
+            <guid>https://ks6088ts.github.io/blog/terraform-import-block</guid>
+            <pubDate>Mon, 01 Dec 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[本記事ではデプロイ済の既存クラウドリソースから Terraform コードを効率的に作成する方法について解説します。]]></description>
+            <content:encoded><![CDATA[<p>本記事ではデプロイ済の既存クラウドリソースから Terraform コードを効率的に作成する方法について解説します。
+以下のようなシナリオを想定しています。</p>
+<ul>
+<li>クラウドリソースを手動で作成してしまったが、後から Terraform 管理下に置きたい</li>
+<li>既存リソースを Terraform 管理下に置きたいが、リソース数が多く手動でコード化するのが大変</li>
+</ul>
+<p>こうしたシナリオに対して、Terraform v1.5.0 で導入された import block 機能は非常に有用です。
+しかし、import block 自体にはいくつかのペインポイントが存在します。
+例えば、import block の id を一つ一つ調べてコード化するのが大変であったり、自動生成されるコードが冗長で可読性が低いといった課題があります。</p>
+<p>そこで今回は、Azure 上に既にデプロイ済の Azure Container Apps で構築された Web アプリを例に、import block のいくつかのペインポイントを生成 AI を組み合わせて活用したところ、効率的に Terraform コード化を実現できることが分かったため、その手順とポイントを共有します。</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="tldr">TL;DR<a href="https://ks6088ts.github.io/blog/terraform-import-block#tldr" class="hash-link" aria-label="TL;DR への直接リンク" title="TL;DR への直接リンク">​</a></h2>
+<ul>
+<li>Terraform v1.5.0+ の <code>import block</code> と <code>-generate-config-out</code> オプションで既存リソースのコード生成が可能</li>
+<li>Azure CLI などで取得したリソース情報を生成 AI に与えることで、import block の ID 記述を自動化</li>
+<li>自動生成された冗長なコードを生成 AI でリファクタリングし、可読性を向上</li>
+<li><a href="https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app" target="_blank" rel="noopener noreferrer">Azure Portal 経由でデプロイした既存リソースを、Terraform 管理下に移行する例</a> を公開</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="terraform-での既存リソースの管理">Terraform での既存リソースの管理<a href="https://ks6088ts.github.io/blog/terraform-import-block#terraform-%E3%81%A7%E3%81%AE%E6%97%A2%E5%AD%98%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E7%AE%A1%E7%90%86" class="hash-link" aria-label="Terraform での既存リソースの管理 への直接リンク" title="Terraform での既存リソースの管理 への直接リンク">​</a></h2>
+<p>Terraform の機能を活用して、既存のインフラリソースを管理下に置くことは、多くの組織にとって重要な課題です。
+従来、<a href="https://developer.hashicorp.com/terraform/cli/commands/import" target="_blank" rel="noopener noreferrer">terraform import コマンド</a> を使用して既存リソースを Terraform の状態ファイルに追加する方法が一般的でしたが、この方法にはいくつかの制約があります。
+例えば、<code>terraform import</code> コマンドはリソースを状態ファイルに追加するだけで、対応する Terraform コードを自動生成しないため、手動でコードを作成する必要があります。</p>
+<p>そこで、Terraform v1.5.0 で導入された import block を活用することで、既存リソースの管理を HCL コードとして自動生成して効率的に行うことが可能になりました。
+v1.5.0 で導入された import block は、既存のインフラリソースを Terraform 管理下に置くための新しい方法です。
+import block を使用することで、既存リソースのインポート情報を Terraform コード内に直接記述できるため、コードと状態ファイルの整合性を保ちながら管理を始めることができます。</p>
+<p><code>import block</code> の活用手順は <a href="https://developer.hashicorp.com/terraform/language/import" target="_blank" rel="noopener noreferrer">Import resources overview</a> に一次情報が纏まっています。また、<a href="https://techblog.ap-com.co.jp/entry/2023/06/12/184506" target="_blank" rel="noopener noreferrer">Terraform v1.5.0 からの新機能：Import Block 機能の紹介と既存ツールとの比較</a> では具体的な例をあげて import block の使い方が紹介されています。</p>
+<p><code>import block</code> では、事前に以下のような <code>import block</code> を Terraform コードに追加します。</p>
+<p>以下は Azure のリソースグループをインポートする例です。</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">provider</span><span class="token keyword type variable" style="color:#36acaa"> "azurerm" </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">features</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">id</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">=</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">"/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/YOUR_RESOURCE_GROUP_NAME"</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token property" style="color:#36acaa">to</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">=</span><span class="token plain"> azurerm_resource_group.rg</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>id にはインポートする既存リソースの識別子を指定し、to にはインポート先のリソースタイプと名前を指定します。
+その後、以下のコマンドを実行してインポートとコード生成を行います。</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan -generate-config-out=imported.tf</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><code>-generate-config-out</code> オプションを指定することで、import block で指定した既存リソースに対応する Terraform コードが <code>imported.tf</code> ファイルに生成されます。なお、実際のインポート（状態ファイルへの追加）は <code>terraform apply</code> を実行した際に行われます。</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="import-block-を活用するうえでの課題">import block を活用するうえでの課題<a href="https://ks6088ts.github.io/blog/terraform-import-block#import-block-%E3%82%92%E6%B4%BB%E7%94%A8%E3%81%99%E3%82%8B%E3%81%86%E3%81%88%E3%81%A7%E3%81%AE%E8%AA%B2%E9%A1%8C" class="hash-link" aria-label="import block を活用するうえでの課題 への直接リンク" title="import block を活用するうえでの課題 への直接リンク">​</a></h2>
+<p>シンプルな例では分かりにくいですが、実際のプロジェクトで活用しようとすると以下のような課題に直面します。</p>
+<ol>
+<li><strong>ID の調査コスト</strong>: リソースごとに import block の <code>id</code> を調べてコード化する作業が煩雑</li>
+<li><strong>生成コードの可読性</strong>: 自動生成されるコードはすべてのパラメータをハードコードするため、冗長で保守性が低い</li>
+</ol>
+<p>以下では、生成 AI を活用してこれらの課題を解決する方法を紹介します。</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-import-block-の-id-を生成-ai-で自動記述する">1. import block の ID を生成 AI で自動記述する<a href="https://ks6088ts.github.io/blog/terraform-import-block#1-import-block-%E3%81%AE-id-%E3%82%92%E7%94%9F%E6%88%90-ai-%E3%81%A7%E8%87%AA%E5%8B%95%E8%A8%98%E8%BF%B0%E3%81%99%E3%82%8B" class="hash-link" aria-label="1. import block の ID を生成 AI で自動記述する への直接リンク" title="1. import block の ID を生成 AI で自動記述する への直接リンク">​</a></h3>
+<p><code>import block</code> を使用する際、既存リソースの ID を調べてコード化する必要があります。
+例えば Azure Container Apps で構築された Web アプリでは、以下のリソースが必要です。</p>
+<ul>
+<li>Resource Group</li>
+<li>Container Apps Environment</li>
+<li>Container App</li>
+<li>Log Analytics Workspace</li>
+</ul>
+<p>これらの ID を手動で調べて import block に記述するのは手間がかかります。</p>
+<p>この手間を生成 AI に肩代わりさせるため、ここでは、GitHub Copilot を活用します。まず、Azure CLI を使用してリソース情報を取得します。</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">RESOURCE_GROUP_NAME="your-resource-group-name"</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">az resource list \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --resource-group $RESOURCE_GROUP_NAME \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --output json &gt; exported_resources.json</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><code>exported_resources.json</code> には、各リソースの <code>id</code> フィールドが含まれており、これが import block に必要な情報です。
+このファイルをコンテキストとして GitHub Copilot の Agent mode に与え、以下のプロンプトを実行します。</p>
+<div class="language-prompt codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-prompt codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">#file:exported_resources.json のリソース群の情報に合わせて、#file:main.tf の import block の ID やパラメータ部分を書き換えてください。</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>これにより、JSON から抽出したリソース ID が main.tf の import block に自動的に反映されます。
+比較的小さいスコープに絞った操作であれば、他の生成 AI ツールでも同様の効果が得られることが多いです。</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-自動生成コードを生成-ai-でリファクタリングする">2. 自動生成コードを生成 AI でリファクタリングする<a href="https://ks6088ts.github.io/blog/terraform-import-block#2-%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E7%94%9F%E6%88%90-ai-%E3%81%A7%E3%83%AA%E3%83%95%E3%82%A1%E3%82%AF%E3%82%BF%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B" class="hash-link" aria-label="2. 自動生成コードを生成 AI でリファクタリングする への直接リンク" title="2. 自動生成コードを生成 AI でリファクタリングする への直接リンク">​</a></h3>
+<p>上記の手順で main.tf を書き換えた後、以下のコマンドでコードを生成します。</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan -generate-config-out=imported.tf</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>生成された <code>imported.tf</code> には既存リソースに対応する Terraform コードが含まれますが、以下の問題があります。</p>
+<ul>
+<li>すべてのパラメータが明示的にハードコードされている</li>
+<li>Provider によっては非推奨（deprecated）なパラメータが含まれる</li>
+<li>可読性が低く、保守が困難</li>
+</ul>
+<p>明示的にハードコードされていることはわかりやすい反面、実際の運用では不要なパラメータが多く含まれていることが一般的です。また、provider の仕様変更により非推奨となったパラメータが含まれている場合もあります。特に意識しないで済むパラメータは尤もらしいデフォルト値が設定されていることが多いため、コードから削除しても問題ありません。</p>
+<p>今度はリファクタのために生成 AI を活用します。<code>imported.tf</code> をコンテキストとして与え、以下のプロンプトでリファクタリングを依頼します。</p>
+<div class="language-prompt codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-prompt codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">#file:imported.tf を以下の観点でリファクタリングしてください。</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- 明示的に指定する必要のない Optional なパラメータは削除</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- ハードコードされた必須パラメータは #file:variables.tf に変数として定義し、適切なデフォルト値を設定</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- #file:outputs.tf には外部から参照する必要があるものに限定して出力変数を定義</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="クリップボードにコードをコピー" title="コピー" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>補足として、<a href="https://github.com/hashicorp/terraform-mcp-server" target="_blank" rel="noopener noreferrer">Terraform MCP Server</a> などで LLM の知識を補完することも可能ですが、挙動が安定しない場合があります。最新の Provider 仕様への追従が必要な場合など、本当に必要なケースに限定して活用するのが現時点では現実的です。</p>
+<p>変数定義や出力変数の設計はチームによって方針が異なるため、事前に合意形成しておくことが重要です。
+生成 AI による出力は「たたき台」として捉え、最終的には手動で微調整するのが現実的なアプローチです。</p>
+<p>効果的なプロンプトを作成するポイントは、改善したい点を明確に言語化することです。「何が自分の文脈でイケてないと感じるのか」を明示的に言語化して伝えることで、生成 AI の出力品質が向上します。</p>
+<p>大規模なインフラでは module 化も検討すべきですが、一度に多くのことを依頼すると出力品質が不安定になります。タスクを小さく分割し、品質の高い成果物を積み上げていく方が、最終的な品質は高くなります。import 直後のコードには多くを求めず、まずは基本的なリファクタリングから始める方が動き出しやすいです。</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="まとめ">まとめ<a href="https://ks6088ts.github.io/blog/terraform-import-block#%E3%81%BE%E3%81%A8%E3%82%81" class="hash-link" aria-label="まとめ への直接リンク" title="まとめ への直接リンク">​</a></h2>
+<p>本記事では、Terraform import block と生成 AI を組み合わせて、既存クラウドリソースから効率的に Terraform コードを作成する方法を解説しました。Azure Portal からコンテナアプリをデプロイして、上記プロセスを経て Terraform 管理下に移行する具体的な作業詳細は <a href="https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app" target="_blank" rel="noopener noreferrer">こちら</a> で公開しています。</p>
+<p>今回のリファクタを通じて、個人的に感じた生成 AI を効果的に活用するためのポイントを整理します。</p>
+<ol>
+<li>
+<p><strong>必要なコンテキストを明確化する</strong></p>
+<ul>
+<li>自分が手動で作業する際に参照する情報を洗い出す</li>
+</ul>
+</li>
+<li>
+<p><strong>決定論的なツールでコンテキストを収集する</strong></p>
+<ul>
+<li>再現性が高くコストも低い決定論的なツールを最大限活用する</li>
+<li>例: <code>az resource list</code> で既存リソース情報を JSON でエクスポート</li>
+</ul>
+</li>
+<li>
+<p><strong>タスクを小さく分割して依頼する</strong></p>
+<ul>
+<li>import block の ID 記述とコードのリファクタリングを分けて実行</li>
+</ul>
+</li>
+</ol>
+<p>こうした考え方は Terraform に限らず、既存コードのリファクタリングや移行作業など様々な場面でも適用できると思います。
+生成 AI を効果的に活用するには、「丸投げ」ではなくコントロール可能な小さいタスクに分解することが重要です。また、CLI ツールなどで収集した決定論的なデータをコンテキストとして与えることで、出力の品質と再現性が向上し、自分のコンテキストに即した成果物を得やすくなります。</p>]]></content:encoded>
+            <category>terraform</category>
+            <category>vscode</category>
+            <category>github</category>
+        </item>
         <item>
             <title><![CDATA[Visual Studio Code と GitHub Copilot agent mode (preview) を使って MCP サーバーを活用する]]></title>
             <link>https://ks6088ts.github.io/blog/mcp-get-started</link>
@@ -1527,50 +1637,6 @@ MSAL ライブラリをアプリケーション側に組み込むため以下の
             <category>azure</category>
             <category>azure-ad</category>
             <category>msal</category>
-        </item>
-        <item>
-            <title><![CDATA[Azure Container Apps ハンズオン]]></title>
-            <link>https://ks6088ts.github.io/blog/container-apps-handson</link>
-            <guid>https://ks6088ts.github.io/blog/container-apps-handson</guid>
-            <pubDate>Mon, 13 Mar 2023 00:00:00 GMT</pubDate>
-            <description><![CDATA[Azure Container Apps を使ってマルチコンテナアプリケーションのハンズオンをしました。]]></description>
-            <content:encoded><![CDATA[<p>Azure Container Apps を使ってマルチコンテナアプリケーションのハンズオンをしました。</p>
-<p>Azure Container Apps は Kubernetes の実装詳細を隠蔽し、簡単にマルチコンテナアプリケーションをデプロイできるサービスです。<br>
-<!-- -->素の Kubernetes を使うとケアしなければならなかったことが、Azure Container Apps によって隠蔽されていて、やりたいことを実現するために必要な知識が少なくなっています。<br>
-<!-- -->サービスの詳細は <a href="https://learn.microsoft.com/ja-jp/azure/container-apps/overview" target="_blank" rel="noopener noreferrer">Azure Container Apps の概要</a> にあります。</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ハンズオン">ハンズオン<a href="https://ks6088ts.github.io/blog/container-apps-handson#%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3" class="hash-link" aria-label="ハンズオン への直接リンク" title="ハンズオン への直接リンク">​</a></h2>
-<p>個人的には座学よりは手を動かす方が早く理解できるので、<a href="https://amzn.to/3lgDTca" target="_blank" rel="noopener noreferrer">Azureコンテナアプリケーション開発</a> を買ってハンズオンをしてみました。</p>
-<p>『Azure コンテナアプリケーション開発』（技術評論社，2023 年）のサンプルコードは <a href="https://github.com/gihyo-book/azure-container-dev-book" target="_blank" rel="noopener noreferrer">github.com/gihyo-book/azure-container-dev-book</a> にあります。<br>
-<!-- -->dev container もあるので、VS Code で開くと環境が一気に整います。<br>
-<!-- -->ハンズオンで実行する Azure CLI コマンドは <a href="https://github.com/gihyo-book/azure-container-dev-book/blob/main/apps/part3/README.azcli" target="_blank" rel="noopener noreferrer">azure-container-dev-book/apps/part3/README.azcli</a> にあります。dev container から逐次実行して動作確認しました。</p>
-<p>コンテナアプリケーションのバージョン管理やアップデート戦略などの解説もあり、Azure Container Apps の概要を知るのには十分な内容だと思いました。
-Kubernetes の場合はサービスメッシュを導入してトラフィックコントロールが Azure Container Apps では簡単にできます。
-また、カナリアリリースやリビジョン管理など、マルチコンテナアプリケーションの開発に必要な機能が揃っていることを理解できました。</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="参考リンク">参考リンク<a href="https://ks6088ts.github.io/blog/container-apps-handson#%E5%8F%82%E8%80%83%E3%83%AA%E3%83%B3%E3%82%AF" class="hash-link" aria-label="参考リンク への直接リンク" title="参考リンク への直接リンク">​</a></h2>
-<ul>
-<li><a href="https://techblog.ap-com.co.jp/entry/2021/11/03/093821" target="_blank" rel="noopener noreferrer">Azure Container Appsを試してみた</a>
-<ul>
-<li>Azure Portal から試した例</li>
-</ul>
-</li>
-<li><a href="https://techblog.ap-com.co.jp/entry/2023/02/10/155135" target="_blank" rel="noopener noreferrer">TerraformでAzure Container Appsがサポートされたので爆速でデプロイする</a>
-<ul>
-<li>Terraform でデプロイした例。AzureRM Provider の v.3.43.0 からサポートされてすぐに記事が出ていて非常に助かりました。</li>
-</ul>
-</li>
-<li><a href="https://techblog.ap-com.co.jp/entry/2022/09/01/120000" target="_blank" rel="noopener noreferrer">Azure Container AppsでCI/CD(GitHub Actions編)</a>
-<ul>
-<li>GitHub Actions でコンテナイメージをビルドして ACR へ格納し、そのイメージを Container Apps へデプロイする例</li>
-</ul>
-</li>
-<li><a href="https://github.com/Azure-Samples/todo-nodejs-mongo-aca" target="_blank" rel="noopener noreferrer">Azure-Samples/todo-nodejs-mongo-aca</a>
-<ul>
-<li>Azure Developer CLI でデプロイできる ACA を使ったサンプルアプリケーション</li>
-</ul>
-</li>
-</ul>]]></content:encoded>
-            <category>azure</category>
-            <category>container</category>
         </item>
     </channel>
 </rss>
