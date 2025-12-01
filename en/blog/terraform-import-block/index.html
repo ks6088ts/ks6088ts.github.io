@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0ZTKFXVQ5K"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-0ZTKFXVQ5K",{anonymize_ip:!0})</script><link rel="stylesheet" href="/en/assets/css/styles.096f1c7b.css">
-<script src="/en/assets/js/runtime~main.eae407ea.js" defer="defer"></script>
+<script src="/en/assets/js/runtime~main.914637f1.js" defer="defer"></script>
 <script src="/en/assets/js/main.6706304c.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -88,6 +88,8 @@ GitHub Copilot での実行結果は以下のようになります。</p>
 明示的でわかりやすい反面、実際の運用では不要なパラメータが多く含まれていることが一般的です。また、provider の仕様変更により非推奨となったパラメータが含まれている場合もあります。特に意識しないで済むパラメータは尤もらしいデフォルト値が設定されていることが多いため、コードから削除しても問題ありません。</p>
 <p>今度はリファクタのために生成 AI を活用します。<code>imported.tf</code> をコンテキストとして与え、以下のプロンプトでリファクタリングを依頼します。</p>
 <div class="language-prompt codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-prompt codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">#file:imported.tf を以下の観点でリファクタリングしてください。</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- 明示的に指定する必要のない Optional なパラメータは削除</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- ハードコードされた必須パラメータは #file:variables.tf に変数として定義し、適切なデフォルト値を設定</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- #file:outputs.tf には外部から参照する必要があるものに限定して出力変数を定義</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><code>Claude Opus 4.5</code> で実行した変更差分は以下のようになります。</p>
+<p><img decoding="async" loading="lazy" alt="refactored-tf" src="/en/assets/images/refactored-tf-3ca6c7ed69fd139db8f42b4b6bd10d15.png" width="2926" height="1784" class="img_ev3q"></p>
 <p>補足として、<a href="https://github.com/hashicorp/terraform-mcp-server" target="_blank" rel="noopener noreferrer">Terraform MCP Server</a> などで LLM の知識を補完することも可能ですが、挙動が安定しない場合があります。最新の Provider 仕様への追従が必要な場合など、本当に必要なケースに限定して活用するのが現時点では現実的です。</p>
 <p>変数定義や出力変数の設計はチームによって方針が異なるため、事前に合意形成しておくことが重要です。
 生成 AI による出力は「たたき台」として捉え、最終的には手動で微調整するのが現実的なアプローチです。</p>
