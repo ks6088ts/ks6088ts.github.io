@@ -9,22 +9,26 @@
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
-            <title><![CDATA[既存クラウドリソースを Terraform import block と生成 AI を活用して効率的に Terraform コード化する方法]]></title>
+            <title><![CDATA[既存 Azure リソースを Terraform import block と GitHub Copilot を活用して効率的に Terraform コード化する方法]]></title>
             <link>https://ks6088ts.github.io/en/blog/terraform-import-block</link>
             <guid>https://ks6088ts.github.io/en/blog/terraform-import-block</guid>
             <pubDate>Thu, 11 Dec 2025 00:00:00 GMT</pubDate>
             <description><![CDATA[こちらは Microsoft Azure Tech Advent Calendar 2025 @ 12/11 の記事です。]]></description>
             <content:encoded><![CDATA[<p>こちらは <a href="https://qiita.com/advent-calendar/2025/microsoft-azure-tech" target="_blank" rel="noopener noreferrer">Microsoft Azure Tech Advent Calendar 2025</a> @ 12/11 の記事です。</p>
-<p>本記事ではデプロイ済の既存クラウドリソースから Terraform コードを効率的に作成する方法について解説します。
+<p>本記事ではデプロイ済の既存 Azure リソースから Terraform コードを効率的に作成する方法について解説します。
 以下のようなシナリオを想定しています。</p>
 <ul>
-<li>クラウドリソースを手動で作成してしまったが、後から Terraform 管理下に置きたい</li>
+<li>Azure リソースを手動で作成してしまったが、後から Terraform 管理下に置きたい</li>
 <li>既存リソースを Terraform 管理下に置きたいが、リソース数が多く手動でコード化するのが大変</li>
 </ul>
-<p>こうしたシナリオに対して、Terraform v1.5.0 で導入された import block 機能は非常に有用です。
-しかし、import block 自体にはいくつかのペインポイントが存在します。
-例えば、import block の id を一つ一つ調べてコード化するのが大変であったり、自動生成されるコードが冗長で可読性が低いといった課題があります。</p>
-<p>そこで今回は、Azure 上に既にデプロイ済の Azure Container Apps で構築された Web アプリを例に、import block のいくつかのペインポイントを生成 AI を組み合わせて活用したところ、効率的に Terraform コード化を実現できることが分かったため、その手順とポイントを共有します。</p>
+<p>こうしたシナリオに対して、<a href="https://github.com/hashicorp/terraform/releases/tag/v1.5.0" target="_blank" rel="noopener noreferrer">Terraform v1.5.0 で導入された import block 機能</a> は非常に有用です。
+しかし、import block を活用したコード生成のためには、</p>
+<ul>
+<li>既存リソースの id を一つ一つ調べてコード化するのが大変</li>
+<li>自動生成されるコードが冗長で再利用性や可読性が低い</li>
+</ul>
+<p>といった課題があります。
+そこで今回は、Azure 上に既にデプロイ済の Azure Container Apps で構築された Web アプリを例に、import block のこれらの課題を生成 AI を組み合わせて解決する方法を紹介します。</p>
 <hr>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="tldr">TL;DR<a href="https://ks6088ts.github.io/en/blog/terraform-import-block#tldr" class="hash-link" aria-label="Direct link to TL;DR" title="Direct link to TL;DR">​</a></h2>
 <ul>
@@ -100,7 +104,7 @@ GitHub Copilot の場合、チーム共通のルールなどを <a href="https:/
 <p>大規模なインフラでは module 化も検討すべきですが、一度に多くのことを依頼すると出力品質が不安定になります。
 タスクを小さく分割し、品質の高い成果物を積み上げていく方が、最終的な品質は高くなります。import 直後のコードには多くを求めず、まずは基本的なリファクタリングから始める方が動き出しやすいです。</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="まとめ">まとめ<a href="https://ks6088ts.github.io/en/blog/terraform-import-block#%E3%81%BE%E3%81%A8%E3%82%81" class="hash-link" aria-label="Direct link to まとめ" title="Direct link to まとめ">​</a></h2>
-<p>本記事では、Terraform import block と生成 AI を組み合わせて、既存クラウドリソースから効率的に Terraform コードを作成する方法を解説しました。Azure Portal からコンテナアプリをデプロイして、上記プロセスを経て Terraform 管理下に移行する具体的な作業詳細は <a href="https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app" target="_blank" rel="noopener noreferrer">こちら</a> で公開しています。</p>
+<p>本記事では、Terraform import block と生成 AI を組み合わせて、既存 Azure リソースから効率的に Terraform コードを作成する方法を解説しました。Azure Portal からコンテナアプリをデプロイして、上記プロセスを経て Terraform 管理下に移行する具体的な作業詳細は <a href="https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app" target="_blank" rel="noopener noreferrer">こちら</a> で公開しています。</p>
 <p>今回のリファクタを通じて、個人的に感じた生成 AI を効果的に活用するためのポイントを整理します。</p>
 <ol>
 <li>
