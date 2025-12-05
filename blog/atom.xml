@@ -49,15 +49,12 @@ import block を使用することで、既存リソースのインポート情�
 <li><strong>ID の調査コスト</strong>: リソースごとに import block の <code>id</code> を調べてコード化する作業が煩雑</li>
 <li><strong>出力コードの可読性</strong>: 自動生成されるコードはすべてのパラメータをハードコードするため、冗長で保守性が低い</li>
 </ol>
-<p>以下では、生成 AI を活用してこれらの課題を解決する方法を紹介します。</p>
-<p>例として以下 2 つのシナリオを取り上げます。</p>
+<p>以下では、生成 AI を活用してこれらの課題を解決するシナリオを 2 つ紹介します。</p>
 <ol>
 <li>Azure 上に既にデプロイ済の Azure Container Apps で構築された Web アプリを Terraform 管理下に移行する</li>
 <li>既存の GitHub リポジトリ群を Terraform 管理下に移行する</li>
 </ol>
-<p>なお、既存 Azure リソースを Terraform に export する方法として、</p>
-<p><a href="https://github.com/Azure/aztfexport" target="_blank" rel="noopener noreferrer">aztfexport</a> や <a href="https://learn.microsoft.com/ja-jp/azure/developer/terraform/azure-export-for-terraform/get-started-export-resources-portal?tabs=azure-cli" target="_blank" rel="noopener noreferrer">Azure Portal から直接エクスポートする方法</a> や、<a href="https://learn.microsoft.com/ja-jp/azure/developer/terraform/azure-export-for-terraform/export-terraform-overview" target="_blank" rel="noopener noreferrer">Azure Export for Terraform</a> などがあります。</p>
-<p>Azure 専用のツールを利用する方法も有効ですが、今回は汎用的に他のクラウドサービスやリソースにも応用できる方法として、固有ツールに依存しないアプローチを紹介します。</p>
+<p>(※ Azure に関しては、既存 Azure リソースを Terraform に export する方法として、<a href="https://learn.microsoft.com/ja-jp/azure/developer/terraform/azure-export-for-terraform/get-started-export-resources-portal?tabs=azure-cli" target="_blank" rel="noopener noreferrer">Azure Portal から直接エクスポートする方法</a> や、<a href="https://learn.microsoft.com/ja-jp/azure/developer/terraform/azure-export-for-terraform/export-terraform-overview" target="_blank" rel="noopener noreferrer">Azure Export for Terraform を使ってリソース情報を取得する方法</a> もあります。こういったプラットフォーム固有のツールを利用する方法も有効ですが、今回は他のクラウドサービスやリソースにも応用できる方法として、標準的なツールを組み合わせた汎用的なアプローチを紹介します。)</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="azure-での活用例">Azure での活用例<a href="https://ks6088ts.github.io/blog/terraform-import-block#azure-%E3%81%A7%E3%81%AE%E6%B4%BB%E7%94%A8%E4%BE%8B" class="hash-link" aria-label="Azure での活用例 への直接リンク" title="Azure での活用例 への直接リンク">​</a></h3>
 <p>Azure (<a href="https://github.com/hashicorp/terraform-provider-azurerm" target="_blank" rel="noopener noreferrer">terraform-provider-azurerm</a>) での活用例として、ここでは Azure Container Apps で構築された Web アプリをコード化するシナリオを紹介します。
 具体的な作業詳細は <a href="https://github.com/ks6088ts-labs/baseline-environment-on-azure-terraform/tree/main/infra/scenarios/create_container_app" target="_blank" rel="noopener noreferrer">ks6088ts-labs/baseline-environment-on-azure-terraform</a> で公開しています。</p>
